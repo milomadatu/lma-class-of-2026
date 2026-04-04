@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMA Class of 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-cloud@1/build/d3.layout.cloud.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+</head>
+<body>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f5f7;
+    --surface: #ffffff;
+    --ink: #1d1d1f;
+    --ink-2: #6e6e73;
+    --ink-3: #aeaeb2;
+    --border: rgba(0,0,0,0.08);
+    --shadow-sm: 0 1px 4px rgba(0,0,0,0.06), 0 0 0 0.5px rgba(0,0,0,0.04);
+    --shadow-md: 0 8px 24px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(0,0,0,0.04);
+    --gold: #b07830;
+    --gold-lt: #fdf3e3;
+    --radius: 16px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body { cursor: none; background: var(--bg); overflow-y: scroll; }
+  * { cursor: none !important; }
+  .site { min-height: 600px; }
+
+  /* ── Cursor follower (people grid only) ── */
+  #cursor-follower {
+    position: fixed;
+    width: 14px; height: 14px;
+    background: #1d1d1f;
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    display: flex; align-items: center; justify-content: center;
+    left: -100px; top: -100px;
+    transition: width 0.2s cubic-bezier(0.34,1.56,0.64,1),
+                height 0.2s cubic-bezier(0.34,1.56,0.64,1),
+                border-radius 0.2s ease;
+  }
+  #cursor-follower.expanded { width: 116px; height: 30px; border-radius: 20px; }
+  #cursor-text {
+    color: #fff; font-size: 11px; font-weight: 500;
+    white-space: nowrap; pointer-events: none;
+    opacity: 0; transition: opacity 0.12s ease 0.06s;
+  }
+  #cursor-follower.expanded #cursor-text { opacity: 1; }
+
+  /* ── Nav ── */
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 1.75rem; height: 52px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-bottom: 0.5px solid rgba(0,0,0,0.1);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .nav-logo { font-size: 15px; font-weight: 600; color: var(--ink); letter-spacing: -0.02em; }
+  .nav-links { display: flex; gap: 2px; }
+  .nav-link {
+    padding: 5px 13px; font-size: 13px; font-weight: 500; border-radius: 8px;
+    background: transparent; border: none; cursor: pointer;
+    color: var(--ink-2); transition: background 0.15s, color 0.15s;
+  }
+  .nav-link:hover { background: rgba(0,0,0,0.05); color: var(--ink); }
+  .nav-link.active { background: var(--ink); color: #fff; }
+  .nav-link.active:hover { background: #333; }
+
+  /* ── Pages ── */
+  .page { display: none; padding: 2.5rem 2rem; animation: fadeIn 0.25s ease; }
+  .page.active { display: block; }
+  #page-landing { padding: 0; }
+  #page-landing .quick-grid { margin: 0 2rem 2rem; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── Hero ── */
+  .hero-section {
+    position: relative; width: 100%; margin: 0 0 1.75rem;
+    height: 84vh; min-height: 540px;
+    display: flex; align-items: flex-start; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('images/IMG_0112.jpg');
+    background-size: cover; background-position: center 30%;
+    transform: scale(1.04); transition: transform 9s ease;
+  }
+  .hero-section:hover .hero-bg { transform: scale(1); }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom,
+      rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.45) 38%,
+      transparent 60%);
+  }
+  .hero-content {
+    position: relative; z-index: 1;
+    width: 100%; padding: 3.5rem 2.5rem 0;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(255,255,255,0.55);
+    display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;
+    opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards;
+  }
+  .hero-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: rgba(255,255,255,0.4); }
+  .hero-h1 {
+    font-size: clamp(44px, 7vw, 82px); font-weight: 700;
+    color: #fff; line-height: 1.06; letter-spacing: -0.03em;
+    margin-bottom: 1.1rem; max-width: 760px;
+    opacity: 0; animation: fadeUp 0.65s ease 0.38s forwards;
+  }
+  .hero-h1 em { color: var(--gold); font-style: normal; }
+  .hero-sub {
+    font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.55);
+    max-width: 440px; line-height: 1.65; margin-bottom: 2rem;
+    text-align: center;
+    opacity: 0; animation: fadeUp 0.65s ease 0.55s forwards;
+  }
+  .hero-actions {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2.5rem;
+    opacity: 0; animation: fadeUp 0.65s ease 0.72s forwards;
+  }
+  .hero-btn-primary {
+    padding: 10px 22px; border-radius: 980px; font-size: 13px; font-weight: 600;
+    background: #fff; color: var(--ink); border: none; cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .hero-btn-primary:hover { background: rgba(255,255,255,0.88); transform: scale(1.02); }
+  .hero-btn-secondary {
+    padding: 10px 22px; border-radius: 980px; font-size: 13px; font-weight: 600;
+    background: rgba(255,255,255,0.12); color: #fff;
+    border: 1px solid rgba(255,255,255,0.2); cursor: pointer;
+    backdrop-filter: blur(10px); transition: background 0.15s, transform 0.15s;
+  }
+  .hero-btn-secondary:hover { background: rgba(255,255,255,0.2); transform: scale(1.02); }
+  .hero-meta {
+    display: flex; align-items: center; gap: 20px;
+    opacity: 0; animation: fadeUp 0.65s ease 0.88s forwards;
+  }
+  .hero-ig {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: rgba(255,255,255,0.4); font-size: 12px; font-weight: 500;
+    transition: color 0.15s; cursor: pointer;
+  }
+  .hero-ig:hover { color: rgba(255,255,255,0.75); }
+  .hero-divider { width: 1px; height: 14px; background: rgba(255,255,255,0.15); }
+  .hero-quote-sm { font-size: 12px; color: rgba(255,255,255,0.3); font-style: italic; max-width: 260px; line-height: 1.5; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Quick cards ── */
+  .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .quick-card {
+    background: var(--surface); border-radius: var(--radius);
+    cursor: pointer; overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .quick-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .quick-card-img {
+    width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;
+    background: var(--bg);
+  }
+  .quick-card-body { padding: 1rem 1.25rem 1.25rem; }
+  .quick-label { font-size: 11px; color: var(--ink-3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 5px; }
+  .quick-title { font-size: 15px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+
+  /* ── Archive ── */
+  .section-label { font-size: 11px; font-weight: 500; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+  .section-title { font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 4px; }
+  .archive-section { margin-bottom: 2.25rem; }
+  .archive-grid { display: grid; gap: 8px; }
+  .archive-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .archive-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .thumb {
+    aspect-ratio: 4/3; border-radius: 12px; cursor: pointer;
+    overflow: hidden; position: relative; background: #e5e5ea;
+    transition: transform 0.22s, box-shadow 0.22s;
+    box-shadow: var(--shadow-sm);
+  }
+  .thumb:hover { transform: scale(1.025); box-shadow: var(--shadow-md); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb.video-thumb .play-overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.22);
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.18s;
+  }
+  .thumb.video-thumb:hover .play-overlay { background: rgba(0,0,0,0.12); }
+  .thumb.video-thumb .play-overlay svg { width: 34px; height: 34px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4)); }
+  .archive-note { font-size: 12px; color: var(--ink-3); margin-top: 8px; }
+
+  /* ── People ── */
+  .people-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px; }
+  .people-search {
+    background: var(--surface); color: var(--ink); font-size: 13px;
+    border: none; border-radius: 980px; padding: 7px 16px 7px 36px; outline: none;
+    box-shadow: var(--shadow-sm); width: 200px;
+    transition: box-shadow 0.18s, width 0.2s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: 14px center;
+  }
+  .people-search:focus { box-shadow: var(--shadow-md); width: 240px; }
+  .people-search::placeholder { color: var(--ink-3); }
+  .people-no-results { grid-column: 1/-1; text-align: center; color: var(--ink-3); padding: 2rem 0; font-size: 14px; }
+
+  /* ── People paywall ── */
+  #page-people { position: relative; }
+  .people-paywall {
+    position: fixed; top: 52px; left: 0; right: 0; bottom: 0;
+    backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+    background: rgba(245,245,247,0.72);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 9; gap: 18px; text-align: center; padding: 2rem;
+  }
+  .paywall-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #fff8e1; color: #b07830; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    border-radius: 980px; padding: 5px 14px;
+    box-shadow: 0 0 0 1.5px rgba(176,120,48,0.25);
+  }
+  .paywall-title {
+    font-size: clamp(28px, 5vw, 48px); font-weight: 800;
+    color: var(--ink); letter-spacing: -0.03em; line-height: 1.1;
+  }
+  .paywall-sub {
+    font-size: 14px; color: var(--ink-2); max-width: 320px; line-height: 1.6;
+  }
+  .paywall-tape {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.18em;
+    text-transform: uppercase; color: #fff;
+    background: #0e1b2e; padding: 8px 22px; border-radius: 6px;
+    transform: rotate(-1.5deg); display: inline-block;
+  }
+  .shuffle-btn {
+    background: var(--surface); color: var(--ink); font-size: 12px; font-weight: 600;
+    border: none; border-radius: 980px; padding: 7px 16px; cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.18s, transform 0.15s;
+  }
+  .shuffle-btn:hover { box-shadow: var(--shadow-md); transform: scale(1.03); }
+  .shuffle-btn:active { transform: scale(0.97); }
+  .people-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; cursor: none; }
+  .person-card {
+    aspect-ratio: 1; border-radius: 12px; overflow: hidden; cursor: none;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .person-card:hover { transform: scale(1.03); box-shadow: var(--shadow-md); }
+  .person-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  @keyframes cardFadeUp {
+    from { opacity: 0; transform: translateY(14px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .card-enter { animation: cardFadeUp 0.38s ease both; }
+
+  /* ── Popup ── */
+  .popup-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0);
+    z-index: 50; display: flex; align-items: center; justify-content: center;
+    pointer-events: none; transition: background 0.25s ease;
+  }
+  .popup-overlay.open { background: rgba(0,0,0,0.4); pointer-events: all; }
+  .popup {
+    background: var(--surface); border-radius: 22px; width: 360px;
+    position: relative; box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+    overflow: hidden;
+    opacity: 0; transform: scale(0.92) translateY(10px);
+    transition: opacity 0.22s ease, transform 0.26s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .popup-overlay.open .popup { opacity: 1; transform: scale(1) translateY(0); }
+  .popup-photo {
+    width: 100%; aspect-ratio: 4/3; overflow: hidden; background: var(--bg);
+  }
+  .popup-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .popup-body { padding: 1.5rem; }
+  .popup-close {
+    position: absolute; top: 12px; right: 12px;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(0,0,0,0.35); backdrop-filter: blur(8px);
+    border: none; font-size: 13px;
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .popup-close:hover { background: rgba(0,0,0,0.55); }
+  .popup-name { font-size: 19px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 2px; }
+  .popup-detail { font-size: 12px; font-weight: 500; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .popup-bio { font-size: 13px; color: var(--ink-2); line-height: 1.65; padding-top: 10px; border-top: 0.5px solid var(--border); margin-bottom: 12px; }
+  .popup-ig { display: inline-block; font-size: 12px; font-weight: 500; color: var(--gold); }
+
+  /* ── Stats fade-in ── */
+  .stat-block {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .stat-block.visible { opacity: 1; }
+
+  /* ── Stats ── */
+  .map-box { background: var(--surface); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow-sm); }
+  .map-row { display: flex; gap: 12px; align-items: stretch; height: 280px; }
+  .map-wrap { flex: 1 1 0; min-width: 0; position: relative; }
+  #us-map { height: 100% !important; }
+  .map-zoom-btns { position: absolute; bottom: 10px; left: 10px; z-index: 4; display: flex; flex-direction: column; gap: 4px; }
+  .map-zoom-btn { width: 28px; height: 28px; border-radius: 6px; background: #fff; border: none; box-shadow: var(--shadow-sm); font-size: 16px; cursor: pointer; color: var(--ink); display: flex; align-items: center; justify-content: center; transition: box-shadow 0.15s; }
+  .map-zoom-btn:hover { box-shadow: var(--shadow-md); }
+  .uni-card { flex: 1 1 0; min-width: 0; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); position: relative; display: flex; flex-direction: column; overflow: hidden; }
+  .uni-card-placeholder { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--ink-3); font-size: 12px; gap: 8px; padding: 1rem; text-align: center; }
+  .uni-card-placeholder svg { opacity: 0.3; }
+  .uni-card-content { display: none; flex-direction: row; height: 100%; }
+  .uni-card.open .uni-card-placeholder { display: none; }
+  .uni-card.open .uni-card-content { display: flex; }
+  .uni-card-img { width: 35%; flex-shrink: 0; object-fit: cover; display: block; height: 100%; }
+  .uni-card-body { padding: 12px 14px 14px; flex: 1; overflow-y: auto; }
+  .uni-card-name { font-size: 14px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; margin-bottom: 2px; line-height: 1.3; }
+  .uni-card-city { font-size: 10px; color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .uni-card-desc { font-size: 12px; color: var(--ink-2); line-height: 1.6; }
+  .uni-card-close { position: absolute; top: 7px; right: 7px; z-index: 2; background: rgba(0,0,0,0.35); border: none; color: #fff; width: 22px; height: 22px; border-radius: 50%; font-size: 10px; cursor: pointer; }
+  .uni-card-close:hover { background: rgba(0,0,0,0.6); }
+  .stat-card { font-size: 11px; font-weight: 500; background: var(--gold-lt); color: var(--gold); border-radius: 10px; padding: 8px 12px; position: absolute; top: 12px; right: 12px; }
+  .stat-card strong { display: block; font-size: 20px; font-weight: 700; color: var(--ink); }
+  .word-cloud { width: 100%; margin-bottom: 1.5rem; }
+  .word-cloud svg { display: block; width: 100%; height: auto; }
+  .pie-section { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pie-card { background: var(--surface); border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow-sm); }
+  .pie-title { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 12px; letter-spacing: -0.01em; }
+  .pie-chart { position: relative; width: 90px; height: 90px; margin: 0 auto 12px; }
+  .pie-legend { font-size: 11px; color: var(--ink-2); display: flex; flex-direction: column; gap: 5px; }
+  .legend-row { display: flex; align-items: center; gap: 7px; }
+  .legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+</style>
+
+<!-- Custom cursor follower -->
+<div id="cursor-follower"><span id="cursor-text"></span></div>
+
+<div class="site">
+  <nav class="nav">
+    <span class="nav-logo">LMA '26</span>
+    <div class="nav-links">
+      <button class="nav-link active" onclick="showPage('landing', this)">Home</button>
+      <button class="nav-link" onclick="showPage('archive', this)">Archive</button>
+      <button class="nav-link" onclick="showPage('people', this)">People</button>
+      <button class="nav-link" onclick="showPage('stats', this)">Stats</button>
+    </div>
+  </nav>
+
+  <!-- LANDING -->
+  <div class="page active" id="page-landing">
+    <div class="hero-section">
+      <div class="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow">Legacy Magnet Academy · Developed by Milo & Claude</div>
+        <h1 class="hero-h1"> LMA Class of <em>2026</em></h1>
+        <p class="hero-sub">Legacy Magnet Academy's class of 2026 is full of scholars with memories, ideas, and plans for the future. </p>
+        <div class="hero-actions">
+          <button class="hero-btn-primary" onclick="showPage('archive', document.querySelectorAll('.nav-link')[1])">Browse Gallery</button>
+          <button class="hero-btn-secondary" onclick="showPage('people', document.querySelectorAll('.nav-link')[2])">Meet the Class</button>
+        </div>
+        <div class="hero-meta">
+          <div class="hero-ig">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            <a href="https://www.instagram.com/26seniorarchives/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">@26seniorarchives</a>
+          </div>
+          <div class="hero-divider"></div>
+          <div class="hero-quote-sm">"Diamonds are made under pressure."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-grid">
+      <div class="quick-card" onclick="showPage('archive', document.querySelectorAll('.nav-link')[1])">
+        <img class="quick-card-img" src="" alt="Graduation Gallery" onerror="this.style.display='none'">
+        <div class="quick-card-body">
+          <div class="quick-label">Memories</div>
+          <div class="quick-title">Graduation Gallery</div>
+        </div>
+      </div>
+      <div class="quick-card" onclick="showPage('archive', document.querySelectorAll('.nav-link')[1])">
+        <img class="quick-card-img" src="" alt="Senior Sunrise" onerror="this.style.display='none'">
+        <div class="quick-card-body">
+          <div class="quick-label">Event</div>
+          <div class="quick-title">Senior Sunrise</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARCHIVE -->
+  <div class="page" id="page-archive">
+    <div class="archive-section">
+      <div class="section-label">Videos</div>
+      <div class="archive-grid cols-2" style="align-items:start;">
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DNv8MtA5NXn/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote>
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DOEzRUkkgSU/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote>
+      </div>
+    </div>
+    <script async src="https://www.instagram.com/embed.js"></script>
+
+    <div class="archive-section">
+      <div class="section-label">Senior Sunrise</div>
+      <div class="archive-grid cols-3" style="align-items:start;">
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DN9BSGjku2q/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote>
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DOB8x_PEk9L/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote>
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DN9BCTPEgg8/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote>
+      </div>
+    </div>
+
+    <div class="archive-section">
+      <div class="section-label">Senior Blues</div>
+      <div class="archive-grid cols-3" style="align-items:start;">
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DPJvRivkS6v/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote>
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DPJuwpAka9y/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote>
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DPJ7ob0D2Us/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote>
+      </div>
+    </div>
+
+    <div class="archive-section">
+      <div class="section-label">Senior Bonfire</div>
+      <div class="archive-grid cols-3">
+        <div class="thumb" data-cursor-text="Open"><img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80" alt="Before"></div>
+        <div class="thumb" data-cursor-text="Open"><img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80" alt="Before"></div>
+        <div class="thumb" data-cursor-text="Open"><img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=400&q=80" alt="Before"></div>
+      </div>
+    </div>
+
+    <div class="archive-section">
+      <div class="section-label">idk whats next</div>
+      <div class="archive-grid cols-3">
+        <div class="thumb" data-cursor-text="Open"><img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=400&q=80" alt="Graduation"></div>
+        <div class="thumb" data-cursor-text="Open"><img src="https://images.unsplash.com/photo-1598032895397-b9472444bf93?auto=format&fit=crop&w=400&q=80" alt="After graduation"></div>
+        <div class="thumb" data-cursor-text="Open"><img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80" alt="Future"></div>
+      </div>
+    </div>
+    <div class="archive-note">Hover any photo to enlarge — click to open full gallery</div>
+  </div>
+
+  <!-- PEOPLE -->
+  <div class="page" id="page-people">
+    <div class="people-paywall">
+      <div class="paywall-tape">🚧 Under Construction 🚧</div>
+      <div class="paywall-title">Coming Soon</div>
+      <p class="paywall-sub">The class directory is being put together. Check back soon to see everyone from LMA '26.</p>
+      <div class="paywall-badge">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Not available yet
+      </div>
+    </div>
+    <div class="people-header">
+      <div>
+        <div class="section-label">Class of 2026</div>
+        <div class="section-title">Everyone Behind '26</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <input class="people-search" id="people-search" type="search" placeholder="Search people…" oninput="renderGrid()" autocomplete="off">
+        <button class="shuffle-btn" onclick="shuffleGrid()">Shuffle</button>
+      </div>
+    </div>
+    <div class="people-grid" id="people-grid"></div>
+  </div>
+
+  <!-- STATS -->
+  <div class="page" id="page-stats">
+    <div class="stat-block" style="transition-delay:0ms">
+      <div class="section-label">Data</div>
+      <div class="section-title" style="margin-bottom:1.25rem">Words to describe LMA</div>
+      <div class="word-cloud" id="wordcloud"></div>
+    </div>
+
+    <div class="stat-block" style="transition-delay:120ms">
+    <div class="map-box">
+      <div class="section-label" style="margin-bottom:10px">Where we're going</div>
+      <div class="map-row">
+        <div class="map-wrap">
+          <div id="us-map" style="width:100%;border-radius:10px;overflow:hidden;background:#eef2f7;"></div>
+          <div class="map-zoom-btns">
+            <button class="map-zoom-btn" onclick="mapZoom(1.4)" title="Zoom in">+</button>
+            <button class="map-zoom-btn" onclick="mapZoom(1/1.4)" title="Zoom out">−</button>
+            <button class="map-zoom-btn" onclick="mapReset()" title="Reset" style="font-size:11px;font-weight:700;">↺</button>
+          </div>
+        </div>
+        <div class="uni-card" id="uni-card">
+          <div class="uni-card-placeholder">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+            Click a pin to see where we're going
+          </div>
+          <div class="uni-card-content">
+            <button class="uni-card-close" onclick="closeUniCard()">✕</button>
+            <img id="uni-img" class="uni-card-img" src="" alt="">
+            <div class="uni-card-body">
+              <div id="uni-name" class="uni-card-name"></div>
+              <div id="uni-city" class="uni-card-city"></div>
+              <p id="uni-desc" class="uni-card-desc"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="map-tooltip" style="position:fixed;pointer-events:none;background:#0e1b2e;color:#fff;font-size:11px;font-weight:600;padding:5px 10px;border-radius:6px;opacity:0;transition:opacity 0.15s;z-index:200;white-space:nowrap;"></div>
+    </div>
+    </div>
+
+    <div class="stat-block" style="transition-delay:240ms">
+    <div class="section-label" style="margin-bottom:12px">By the numbers</div>
+    <div class="pie-section">
+      <div class="pie-card">
+        <div class="pie-title">College commitments</div>
+        <div class="pie-chart">
+          <svg viewBox="0 0 90 90">
+            <circle cx="45" cy="45" r="38" fill="none" stroke="#e5e7eb" stroke-width="14"/>
+            <circle cx="45" cy="45" r="38" fill="none" stroke="#0e1b2e" stroke-width="14" stroke-dasharray="143 96" stroke-dashoffset="0" transform="rotate(-90 45 45)"/>
+            <circle cx="45" cy="45" r="38" fill="none" stroke="#c8a84b" stroke-width="14" stroke-dasharray="57 182" stroke-dashoffset="-143" transform="rotate(-90 45 45)"/>
+            <text x="45" y="49" text-anchor="middle" font-size="14" font-weight="500" fill="#0e1b2e">60%</text>
+          </svg>
+        </div>
+        <div class="pie-legend">
+          <div class="legend-row"><div class="legend-dot" style="background:#0e1b2e"></div>4-year university</div>
+          <div class="legend-row"><div class="legend-dot" style="background:#c8a84b"></div>Community college</div>
+        </div>
+      </div>
+      <div class="pie-card">
+        <div class="pie-title">Post-grad plans</div>
+        <div class="pie-chart">
+          <svg viewBox="0 0 90 90">
+            <circle cx="45" cy="45" r="38" fill="none" stroke="#e5e7eb" stroke-width="14"/>
+            <circle cx="45" cy="45" r="38" fill="none" stroke="#0e1b2e" stroke-width="14" stroke-dasharray="120 120" stroke-dashoffset="0" transform="rotate(-90 45 45)"/>
+            <circle cx="45" cy="45" r="38" fill="none" stroke="#c8a84b" stroke-width="14" stroke-dasharray="60 180" stroke-dashoffset="-120" transform="rotate(-90 45 45)"/>
+            <circle cx="45" cy="45" r="38" fill="none" stroke="#b0c0d8" stroke-width="14" stroke-dasharray="60 180" stroke-dashoffset="-180" transform="rotate(-90 45 45)"/>
+            <text x="45" y="49" text-anchor="middle" font-size="14" font-weight="500" fill="#0e1b2e">50%</text>
+          </svg>
+        </div>
+        <div class="pie-legend">
+          <div class="legend-row"><div class="legend-dot" style="background:#0e1b2e"></div>College</div>
+          <div class="legend-row"><div class="legend-dot" style="background:#c8a84b"></div>Work / gap year</div>
+          <div class="legend-row"><div class="legend-dot" style="background:#b0c0d8"></div>Military / other</div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP -->
+<div class="popup-overlay" id="popup" onclick="if(event.target===this)closePopup()">
+  <div class="popup">
+    <button class="popup-close" onclick="closePopup()">✕</button>
+    <div class="popup-photo"><img id="popup-avatar-img" src="" alt=""></div>
+    <div class="popup-body">
+      <div class="popup-name" id="popup-name"></div>
+      <div class="popup-detail" id="popup-detail"></div>
+      <div class="popup-bio" id="popup-bio"></div>
+      <div class="popup-ig" id="popup-ig"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Cursor follower elements (declared first so renderGrid() closures can use them) ── */
+const cursorEl   = document.getElementById('cursor-follower');
+const cursorText = document.getElementById('cursor-text');
+
+/* ── People with stock portrait images ── */
+const people = [
+  {img:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=450&fit=crop&q=80',name:'Jordan A.',role:'Student Body President',ig:'@jordan_lma',bio:'Led school-wide initiatives on mental health awareness and peer mentorship. Known for bringing the whole class together — whether it was spirit week or finals week.'},
+  {img:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=450&fit=crop&q=80',name:'Maya B.',role:'Art Club President',ig:'@mayaart',bio:'Muralist, illustrator, and the creative force behind this year\'s senior banner. Her work has been featured in two local galleries and she\'s headed to RISD in the fall.'},
+  {img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=450&fit=crop&q=80',name:'Carlos C.',role:'Varsity Soccer',ig:'@carlosc26',bio:'Three-year varsity starter with 24 goals this season. Off the field, Carlos volunteers coaching youth soccer on weekends and plans to study sports medicine.'},
+  {img:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=450&fit=crop&q=80',name:'Priya D.',role:'Orchestra Lead',ig:'@priyamusic',bio:'First-chair violinist since sophomore year. Priya composed an original piece performed at winter showcase that left the whole auditorium speechless.'},
+  {img:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=450&fit=crop&q=80',name:'Ethan E.',role:'Science Olympiad',ig:'@ethan_sci',bio:'State champion in two Science Olympiad events. Ethan spent last summer interning at a biotech lab and already has two research papers in progress.'},
+  {img:'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=450&fit=crop&q=80',name:'Sofia F.',role:'Yearbook Editor',ig:'@sofia_snaps',bio:'The person behind this very yearbook. Sofia shot over 2,000 photos this year and somehow made every single one of us look good. We owe her everything.'},
+  {img:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=450&fit=crop&q=80',name:'Marcus G.',role:'Varsity Basketball',ig:'@marcusg',bio:'All-district guard with a 3.9 GPA. Marcus is proof you can dominate on the court and in the classroom. Committed to play Division I next year.'},
+  {img:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=450&fit=crop&q=80',name:'Aisha H.',role:'Robotics Club',ig:'@aisha.codes',bio:'Built her first robot at 12. Led the team to regionals this year and landed a full scholarship in computer engineering. Future is bright doesn\'t even cover it.'},
+  {img:'https://images.unsplash.com/photo-1463453091185-61582044d556?w=600&h=450&fit=crop&q=80',name:'Lena I.',role:'Literary Magazine',ig:'@lenawrites',bio:'Published poet and fiction writer. Lena\'s short story won the state young writers award this spring. She reads everything and remembers all of it.'},
+  {img:'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&h=450&fit=crop&q=80',name:'Dana J.',role:'Drama Club Lead',ig:'@danaj',bio:'Lead in every school production since freshman year. Dana directed the fall one-act festival herself this year and had the whole cast in tears by closing night.'},
+  {img:'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=600&h=450&fit=crop&q=80',name:'Ryan K.',role:'Cross Country',ig:'@ryank26',bio:'Ran his first marathon junior year just to see if he could. He finished in under four hours. Ryan is the person who shows up early and stays late — always.'},
+  {img:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=450&fit=crop&q=80',name:'Nadia L.',role:'Debate Team',ig:'@nadial',bio:'Undefeated in her last 14 rounds. Nadia argues both sides of any issue with equal conviction and plans to study political science and international law.'},
+  {img:'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=600&h=450&fit=crop&q=80',name:'Tyler M.',role:'Chess Club',ig:'@tylerm',bio:'Ranked in the top 50 juniors nationally. Tyler is quiet in the halls but absolutely ruthless at the board. He\'s also surprisingly good at ping pong.'},
+  {img:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&h=450&fit=crop&q=80',name:'Zoe N.',role:'Environmental Club',ig:'@zoen',bio:'Organized the campus sustainability audit that led to the school\'s first composting program. Zoe believes small actions add up and she has the receipts to prove it.'},
+  {img:'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&h=450&fit=crop&q=80',name:'Omar P.',role:'Varsity Football',ig:'@omarp',bio:'Two-way starter who never missed a practice in four years. Omar is the teammate everyone wants in their corner — on the field and off it.'},
+  {img:'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&h=450&fit=crop&q=80',name:'Isla Q.',role:'Student Council',ig:'@islaq',bio:'The one who actually gets things done at student council. Isla pushed through the new open campus lunch policy and organized three community service events this year.'},
+  {img:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=600&h=450&fit=crop&q=80',name:'Devon R.',role:'Swim Team',ig:'@devonr',bio:'Broke the school record in the 200 freestyle. Devon trains twice a day and somehow still manages to be the most relaxed person in any room. It\'s a gift.'},
+  {img:'https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?w=600&h=450&fit=crop&q=80',name:'Mia S.',role:'NHS President',ig:'@mias',bio:'Organized 400+ volunteer hours for the senior class this year alone. Mia leads by example — she was always the first to sign up and the last to leave.'},
+  {img:'https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=600&h=450&fit=crop&q=80',name:'Jake T.',role:'Band Captain',ig:'@jaket',bio:'Plays four instruments. Led the marching band to their best competition finish in a decade. Jake\'s warmups are legendary and so is his halftime choreography.'},
+  {img:'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&h=450&fit=crop&q=80',name:'Ava U.',role:'Cheer Captain',ig:'@avau',bio:'Choreographed every routine this season from scratch. Ava brings energy to every room she walks into and somehow makes everyone around her better at what they do.'},
+  {img:'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=600&h=450&fit=crop&q=80',name:'Kai V.',role:'Volleyball',ig:'@kaiv',bio:'Six-rotation player with a serve that clears the net like it has something to prove. Kai is the steady presence the team leans on when the score gets tight.'},
+  {img:'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&h=450&fit=crop&q=80',name:'Luna W.',role:'Photography Club',ig:'@lunaw',bio:'Shot over half the photos in this yearbook. Luna sees things others walk past. Her senior project — a portrait series of school staff — stopped everyone in the hallway.'},
+  {img:'https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=600&h=450&fit=crop&q=80',name:'Andre X.',role:'Track & Field',ig:'@andrex',bio:'Long jump and triple jump specialist. Andre holds two regional records and has the kind of acceleration that makes people stop and look twice.'},
+  {img:'https://images.unsplash.com/photo-1541823709867-1b206113eafd?w=600&h=450&fit=crop&q=80',name:'Fiona Y.',role:'Model UN',ig:'@fionay',bio:'Best delegate at two conferences this year. Fiona researches every position paper like she\'s going to testify before the actual UN. She probably will one day.'},
+  {img:'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=600&h=450&fit=crop&q=80',name:'Leo Z.',role:'Film Club',ig:'@leoz',bio:'Directed a short film that screened at a regional youth festival. Leo has watched more movies than anyone in this school and has an opinion about every single one.'},
+];
+
+function renderGrid() {
+  const grid = document.getElementById('people-grid');
+  const q = (document.getElementById('people-search')?.value || '').toLowerCase().trim();
+  const filtered = q
+    ? people.filter(p => p.name.toLowerCase().includes(q) || p.role.toLowerCase().includes(q))
+    : people;
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="people-no-results">No people found.</div>';
+    return;
+  }
+  grid.innerHTML = filtered.map((p,i) => `
+    <div class="person-card card-enter" onclick="openPopup(${people.indexOf(p)})" data-cursor-text="${p.name}"
+         style="animation-delay:${i * 30}ms">
+      <img src="${p.img}" alt="${p.name}">
+    </div>`).join('');
+}
+
+function shuffleGrid() {
+  for(let i=people.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[people[i],people[j]]=[people[j],people[i]];}
+  renderGrid();
+}
+
+function openPopup(i) {
+  const p = people[i];
+  document.getElementById('popup-avatar-img').src = p.img;
+  document.getElementById('popup-avatar-img').alt = p.name;
+  document.getElementById('popup-name').textContent = p.name;
+  document.getElementById('popup-detail').textContent = p.role;
+  document.getElementById('popup-bio').textContent = p.bio;
+  document.getElementById('popup-ig').textContent = p.ig;
+  document.getElementById('popup').classList.add('open');
+}
+function closePopup() {
+  const overlay = document.getElementById('popup');
+  overlay.classList.remove('open');
+}
+
+renderGrid();
+
+/* ── Word cloud (d3-cloud) ── */
+(function buildWordCloud() {
+  const wcWords = [
+    {text:'Community',value:28},{text:'Legacy',value:22},{text:'Growth',value:18},
+    {text:'Family',value:24},{text:'Pride',value:16},{text:'Resilient',value:20},
+    {text:'Creative',value:15},{text:'Bold',value:26},{text:'United',value:17},
+    {text:'Driven',value:19},{text:'Diverse',value:21},{text:'Bright',value:14},
+    {text:'Future',value:23},{text:'Together',value:18},{text:'Excellence',value:16},
+    {text:'LMA',value:30},{text:"'26",value:32},{text:'Seniors',value:20},
+    {text:'Scholars',value:17},{text:'Leaders',value:19},
+  ];
+  const colors = ['#0e1b2e','#c8a84b','#4a6fa5','#b07830','#2d4a6e','#6e6e73'];
+  const container = document.getElementById('wordcloud');
+  const W = container.offsetWidth || 560;
+  const H = 180;
+  d3.layout.cloud()
+    .size([W, H])
+    .words(wcWords.map(d => ({ text: d.text, size: d.value })))
+    .padding(6)
+    .rotate(() => (Math.random() > 0.75 ? (Math.random() > 0.5 ? 90 : -90) : 0))
+    .font('Inter, sans-serif')
+    .fontWeight('700')
+    .fontSize(d => d.size * (W / 560))
+    .random(() => 0.5)
+    .on('end', function(cloudWords) {
+      const svg = d3.select('#wordcloud').append('svg')
+        .attr('viewBox', `0 0 ${W} ${H}`)
+        .attr('width', W).attr('height', H);
+      svg.append('g')
+        .attr('transform', `translate(${W/2},${H/2})`)
+        .selectAll('text')
+        .data(cloudWords)
+        .join('text')
+          .style('font-family', d => d.font)
+          .style('font-weight', '700')
+          .style('font-size', d => d.size + 'px')
+          .style('fill', (_, i) => colors[i % colors.length])
+          .style('opacity', d => 0.55 + (d.size / 60) * 0.45)
+          .attr('text-anchor', 'middle')
+          .attr('transform', d => `translate(${d.x},${d.y}) rotate(${d.rotate})`)
+          .text(d => d.text);
+    })
+    .start();
+})();
+
+/* ── US Map ── */
+const universities = [
+  { name:'Stanford University', city:'Palo Alto, CA', lat:37.4275, lng:-122.1697,
+    desc:'One of the world\'s leading research universities in the heart of Silicon Valley. Known for innovation, entrepreneurship, and its iconic sandstone architecture.',
+    img:'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=500&q=80' },
+  { name:'UCLA', city:'Los Angeles, CA', lat:34.0689, lng:-118.4452,
+    desc:'A flagship UC campus known for academics, athletics, and its iconic Royce Hall. One of the most applied-to universities in the country.',
+    img:'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=500&q=80' },
+  { name:'UC Irvine', city:'Irvine, CA', lat:33.6405, lng:-117.8443,
+    desc:'A rising UC powerhouse in the heart of Orange County, known for research, gaming, and one of the most unique circular campus layouts in the US.',
+    img:'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=500&q=80' },
+  { name:'UC San Diego', city:'La Jolla, CA', lat:32.8801, lng:-117.2340,
+    desc:'Perched above the Pacific Ocean, UCSD is renowned for science, engineering, and the landmark Geisel Library.',
+    img:'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=500&q=80' },
+  { name:'UC Berkeley', city:'Berkeley, CA', lat:37.8724, lng:-122.2595,
+    desc:'The original UC flagship and a global top-10 university. Home to Nobel laureates, Sather Tower, and a storied history of student activism.',
+    img:'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=500&q=80' },
+  { name:'USC', city:'Los Angeles, CA', lat:34.0224, lng:-118.2851,
+    desc:'A private research powerhouse in the heart of LA. Home to one of the top film schools in the world and the legendary Tommy Trojan.',
+    img:'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=500&q=80' },
+  { name:'USF', city:'San Francisco, CA', lat:37.7764, lng:-122.4506,
+    desc:'A Jesuit university set in one of the world\'s most vibrant cities. Known for social justice, law, and stunning views of the Golden Gate.',
+    img:'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=500&q=80' },
+  { name:'LMU', city:'Los Angeles, CA', lat:33.9694, lng:-118.4165,
+    desc:'A Jesuit university on the bluffs above Marina del Rey with ocean views and a tight-knit community focused on ethics and service.',
+    img:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=500&q=80' },
+  { name:'Colorado State', city:'Fort Collins, CO', lat:40.5734, lng:-105.0865,
+    desc:'A land-grant university in the Rocky Mountain foothills. Known for agriculture, engineering, outdoor culture, and vibrant campus life.',
+    img:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=500&q=80' },
+  { name:'University of Utah', city:'Salt Lake City, UT', lat:40.7649, lng:-111.8421,
+    desc:'Utah\'s flagship university set against the Wasatch Mountains. Strong programs in health sciences, tech, and engineering with ski slopes minutes away.',
+    img:'https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=500&q=80' },
+];
+
+function closeUniCard() {
+  document.getElementById('uni-card').classList.remove('open');
+}
+
+let mapSvgSelection, mapZoomBehavior;
+
+function mapZoom(factor) {
+  if (mapSvgSelection && mapZoomBehavior) {
+    mapSvgSelection.transition().duration(300).call(
+      mapZoomBehavior.scaleBy, factor
+    );
+  }
+}
+
+function mapReset() {
+  if (mapSvgSelection && mapZoomBehavior) {
+    mapSvgSelection.transition().duration(400).call(
+      mapZoomBehavior.transform, d3.zoomIdentity
+    );
+  }
+}
+
+(function buildUSMap() {
+  const mapEl = document.getElementById('us-map');
+  if (!mapEl) return;
+  const tooltip = document.getElementById('map-tooltip');
+  const W = mapEl.offsetWidth || 480;
+  const H = mapEl.offsetHeight || 280;
+
+  const svg = d3.select('#us-map').append('svg')
+    .attr('width', W).attr('height', H).style('display','block');
+  mapSvgSelection = svg;
+
+  const g = svg.append('g');
+
+  const projection = d3.geoAlbersUsa()
+    .scale(W * 0.95).translate([W / 2, H / 2]);
+  const path = d3.geoPath().projection(projection);
+
+  // Zoom behaviour
+  mapZoomBehavior = d3.zoom()
+    .scaleExtent([1, 40])
+    .on('zoom', function(event) {
+      g.attr('transform', event.transform);
+    });
+  svg.call(mapZoomBehavior);
+
+  fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
+    .then(r => r.json())
+    .then(us => {
+      g.selectAll('path.state')
+        .data(topojson.feature(us, us.objects.states).features)
+        .join('path').attr('class','state')
+        .attr('d', path).attr('fill','#dce3ed')
+        .attr('stroke','#fff').attr('stroke-width', 0.6)
+        .style('cursor','pointer')
+        .on('click', function(event, d) {
+          event.stopPropagation();
+          const [[x0,y0],[x1,y1]] = path.bounds(d);
+          const scale = Math.min(8, 0.85 / Math.max((x1-x0)/W, (y1-y0)/H));
+          const tx = W/2 - scale*(x0+x1)/2;
+          const ty = H/2 - scale*(y0+y1)/2;
+          svg.transition().duration(500).call(
+            mapZoomBehavior.transform,
+            d3.zoomIdentity.translate(tx, ty).scale(scale)
+          );
+        });
+
+      universities.forEach(u => {
+        const coords = projection([u.lng, u.lat]);
+        if (!coords) return;
+        const dot = g.append('g').style('cursor','pointer')
+          .on('mouseover', function() {
+            d3.select(this).select('.dot-outer').attr('r', 7).attr('fill','#c8a84b');
+            tooltip.textContent = u.name;
+            tooltip.style.opacity = '1';
+          })
+          .on('mousemove', function(event) {
+            tooltip.style.left = (event.clientX + 12) + 'px';
+            tooltip.style.top  = (event.clientY - 28) + 'px';
+          })
+          .on('mouseout', function() {
+            d3.select(this).select('.dot-outer').attr('r', 6).attr('fill','#0e1b2e');
+            tooltip.style.opacity = '0';
+          })
+          .on('click', function(event) {
+            event.stopPropagation();
+            tooltip.style.opacity = '0';
+            document.getElementById('uni-name').textContent = u.name;
+            document.getElementById('uni-city').textContent = u.city;
+            document.getElementById('uni-desc').textContent = u.desc;
+            const img = document.getElementById('uni-img');
+            img.src = u.img; img.alt = u.name;
+            document.getElementById('uni-card').classList.add('open');
+          });
+
+        dot.append('circle').attr('class','dot-outer')
+          .attr('cx', coords[0]).attr('cy', coords[1])
+          .attr('r', 6).attr('fill','#0e1b2e')
+          .attr('stroke','#fff').attr('stroke-width', 1.5);
+
+        dot.append('circle')
+          .attr('cx', coords[0]).attr('cy', coords[1])
+          .attr('r', 2.5).attr('fill','#c8a84b')
+          .attr('pointer-events','none');
+      });
+    });
+})();
+
+/* ── Page navigation ── */
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  const page = document.getElementById('page-'+id);
+  page.classList.add('active');
+  btn.classList.add('active');
+  if (id === 'stats') {
+    // reset then re-trigger so animation replays each visit
+    page.querySelectorAll('.stat-block').forEach(el => el.classList.remove('visible'));
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      page.querySelectorAll('.stat-block').forEach(el => el.classList.add('visible'));
+    }));
+  }
+}
+
+/* ── Custom cursor follower (site-wide, expands with name on people grid) ── */
+const peopleGrid = document.getElementById('people-grid');
+
+let mouseX = -200, mouseY = -200;
+let curX = -200, curY = -200;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+
+peopleGrid.addEventListener('mousemove', e => {
+  const card = e.target.closest('.person-card');
+  if (card) {
+    cursorText.textContent = card.getAttribute('data-cursor-text');
+    cursorEl.classList.add('expanded');
+  } else {
+    cursorEl.classList.remove('expanded');
+    cursorText.textContent = '';
+  }
+});
+
+peopleGrid.addEventListener('mouseleave', () => {
+  cursorEl.classList.remove('expanded');
+  cursorText.textContent = '';
+});
+
+(function tick() {
+  curX += (mouseX - curX) * 0.18;
+  curY += (mouseY - curY) * 0.18;
+  cursorEl.style.left = curX + 'px';
+  cursorEl.style.top  = curY + 'px';
+  requestAnimationFrame(tick);
+})();
+
+</script>
+</body>
+</html>
