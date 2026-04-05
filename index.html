@@ -377,7 +377,11 @@
   .popup-detail { font-size: 12px; font-weight: 500; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
   .popup-bio { font-size: 13px; color: var(--ink-2); line-height: 1.65; padding-top: 10px; border-top: 0.5px solid var(--border); margin-bottom: 12px; }
   .popup-birthday { font-size: 12px; color: var(--ink-3); display: flex; align-items: center; gap: 5px; margin-bottom: 10px; }
-  .popup-ig { display: inline-block; font-size: 12px; font-weight: 500; color: var(--gold); }
+  .popup-links { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .popup-ig { font-size: 12px; font-weight: 500; color: var(--gold); text-decoration: none; }
+  .popup-ig:hover { text-decoration: underline; }
+  .popup-email { font-size: 12px; font-weight: 500; color: var(--ink-2); text-decoration: none; }
+  .popup-email:hover { color: var(--ink); text-decoration: underline; }
 
   /* ── Stats fade-in ── */
   .stat-block {
@@ -853,7 +857,10 @@
       <div class="popup-detail" id="popup-detail"></div>
       <div class="popup-birthday" id="popup-birthday"></div>
       <div class="popup-bio" id="popup-bio"></div>
-      <div class="popup-ig" id="popup-ig"></div>
+      <div class="popup-links">
+        <a class="popup-ig" id="popup-ig" target="_blank" rel="noopener"></a>
+        <a class="popup-email" id="popup-email"></a>
+      </div>
     </div>
   </div>
 </div>
@@ -868,31 +875,31 @@ const cursorText = document.getElementById('cursor-text');
 
 /* ── People with stock portrait images ── */
 const people = [
-  {img:'https://media.licdn.com/dms/image/v2/D4E03AQEJB8NVvyanBg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1726208211125?e=2147483647&v=beta&t=BV1Eix_RjkDMIU3LPjpib-XFGHNnoKZH-bCoegaXGaM',name:'Artin Rastegar',role:'UC Berkeley — Business Administration',ig:'@artin_4097',birthday:'Jan 30, 2008',bio:'Artin Rastegar is committed to UC Berkeley for Business Administration, planning to _____. His favorite memory has been ____ and he will miss _____ the most. Artin is most excited for ____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'https://media.licdn.com/dms/image/v2/D4E03AQEJB8NVvyanBg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1726208211125?e=2147483647&v=beta&t=BV1Eix_RjkDMIU3LPjpib-XFGHNnoKZH-bCoegaXGaM',name:'Artin Rastegar',role:'UC Berkeley — Business Administration',ig:'@artin_4097',email:'',birthday:'Jan 30, 2008',bio:'Artin Rastegar is committed to UC Berkeley for Business Administration, planning to _____. His favorite memory has been ____ and he will miss _____ the most. Artin is most excited for ____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
 ];
 
 function renderGrid() {
@@ -927,7 +934,14 @@ function openPopup(i) {
   bdEl.style.display = p.birthday ? '' : 'none';
   bdEl.innerHTML = p.birthday ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> ${p.birthday}` : '';
   document.getElementById('popup-bio').textContent = p.bio;
-  document.getElementById('popup-ig').textContent = p.ig;
+  const igEl = document.getElementById('popup-ig');
+  igEl.style.display = p.ig ? '' : 'none';
+  igEl.textContent = p.ig;
+  igEl.href = p.ig ? `https://www.instagram.com/${p.ig.replace('@','')}` : '#';
+  const emailEl = document.getElementById('popup-email');
+  emailEl.style.display = p.email ? '' : 'none';
+  emailEl.textContent = p.email || '';
+  emailEl.href = p.email ? `mailto:${p.email}` : '#';
   document.getElementById('popup').classList.add('open');
 }
 function closePopup() {
@@ -1229,12 +1243,10 @@ function buildRegionalMap(elId, countyIds, uniNames) {
 }
 
 // Lazy init — maps built only when Stats page is visible (real offsetWidth)
-let mapsBuilt = false;
 const mapBuiltFor = { usa: false, bayarea: false, socal: false };
 
 function initMapsOnce() {
-  if (mapsBuilt) return;
-  mapsBuilt = true;
+  if (mapBuiltFor.usa) return;
   buildUSMap();
   mapBuiltFor.usa = true;
 }
@@ -1443,8 +1455,19 @@ function buildArchive() {
         </div>`;
   }).join('');
   initCarousels();
-  if (window.instgrm) window.instgrm.Embeds.process();
+  processEmbeds();
 }
+
+function processEmbeds() {
+  if (window.instgrm) {
+    window.instgrm.Embeds.process();
+  } else {
+    setTimeout(processEmbeds, 150);
+  }
+}
+
+// Threshold: only use clone-wrap for small carousels, avoid cloning hundreds of IG blockquotes
+const INFINITE_THRESHOLD = 8;
 
 function initCarousels(root) {
   (root || document).querySelectorAll('.carousel-outer').forEach(outer => {
@@ -1453,54 +1476,55 @@ function initCarousels(root) {
     const prev = outer.querySelector('.prev-arrow');
     const next = outer.querySelector('.next-arrow');
     if (!viewport || !track) return;
-    if (prev) prev.disabled = false;
-    if (next) next.disabled = false;
 
     const origSlides = Array.from(track.querySelectorAll('.carousel-slide'));
     if (origSlides.length < 2) return;
     const n = origSlides.length;
-
-    // Prepend + append full copy of slides for seamless wrap
-    origSlides.slice().reverse().forEach(s => {
-      const c = s.cloneNode(true); c.setAttribute('aria-hidden','true');
-      track.insertBefore(c, track.firstChild);
-    });
-    origSlides.forEach(s => {
-      const c = s.cloneNode(true); c.setAttribute('aria-hidden','true');
-      track.appendChild(c);
-    });
 
     function sw() {
       const s = track.querySelector('.carousel-slide');
       return s ? s.offsetWidth + 8 : viewport.clientWidth;
     }
 
-    // Start at first real slide (past the prepended clones)
-    viewport.scrollLeft = sw() * n;
-
-    // After smooth scroll settles, silently jump back into the real zone
-    // The jump is invisible because the clone is pixel-identical
-    let scrollTimer;
-    function reposition() {
-      const w = sw();
-      const sl = viewport.scrollLeft;
-      if (sl < w * n)       viewport.scrollLeft = sl + w * n;
-      else if (sl >= w * n * 2) viewport.scrollLeft = sl - w * n;
+    if (n <= INFINITE_THRESHOLD) {
+      // Clone-based infinite wrap for small carousels (no IG blockquotes to clone)
+      if (prev) prev.disabled = false;
+      if (next) next.disabled = false;
+      origSlides.slice().reverse().forEach(s => {
+        const c = s.cloneNode(true); c.setAttribute('aria-hidden','true');
+        track.insertBefore(c, track.firstChild);
+      });
+      origSlides.forEach(s => {
+        const c = s.cloneNode(true); c.setAttribute('aria-hidden','true');
+        track.appendChild(c);
+      });
+      viewport.scrollLeft = sw() * n;
+      let scrollTimer;
+      function reposition() {
+        const w = sw(), sl = viewport.scrollLeft;
+        if (sl < w * n)         viewport.scrollLeft = sl + w * n;
+        else if (sl >= w*n*2)   viewport.scrollLeft = sl - w * n;
+      }
+      viewport.addEventListener('scroll', () => { clearTimeout(scrollTimer); scrollTimer = setTimeout(reposition, 80); }, { passive: true });
+      new ResizeObserver(() => { viewport.scrollLeft = sw() * n; }).observe(viewport);
+    } else {
+      // Large carousels: standard arrows, disable at ends
+      function update() {
+        const sl = viewport.scrollLeft, max = viewport.scrollWidth - viewport.clientWidth;
+        if (prev) prev.disabled = sl <= 1;
+        if (next) next.disabled = max <= 1 || sl >= max - 1;
+      }
+      viewport.addEventListener('scroll', update, { passive: true });
+      update();
+      new ResizeObserver(update).observe(viewport);
     }
-    viewport.addEventListener('scroll', () => {
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(reposition, 80);
-    }, { passive: true });
 
     if (prev) prev.addEventListener('click', () => viewport.scrollBy({ left: -sw(), behavior: 'smooth' }));
     if (next) next.addEventListener('click', () => viewport.scrollBy({ left:  sw(), behavior: 'smooth' }));
-
-    new ResizeObserver(() => { viewport.scrollLeft = sw() * n; }).observe(viewport);
   });
 }
 
 buildArchive();
-initCarousels();
 
 /* ── Graduation countdown ── */
 (function() {
