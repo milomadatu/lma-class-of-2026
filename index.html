@@ -1348,7 +1348,7 @@ const ARCHIVE_SECTIONS = [
             'DNq7RZO5CEC'] },
   { id: 'arc-sunrise', label: 'Senior Sunrise',   cols: 3, type: 'p',    comingSoon: false,
     posts: ['DN8_N1Akuef','DN8_QHVkuYa','DN8_Sc1Ev7T','DN8_Tf0kimC','DN8_VSsEn4s',
-            'DN8_WjhkrM','DN8_YrXEks8','DN8_aPFElbH','DN8_cgUEjzB','DN8_dvIkqqF',
+            'DN8_YrXEks8','DN8_aPFElbH','DN8_cgUEjzB','DN8_dvIkqqF',
             'DN8_e6Bkn_3','DN8_gEhEqeM','DN8_hdqEjL3','DN8_iZDEiyE','DN8_jY8knnz',
             'DN8_kj1Elhl','DN8_nizEh7v','DN8_pDEEtsn','DN8_qgjEn8h','DN8_vW0kiGQ',
             'DN8_wnDEmU0','DN8_xqMElCV','DN8_zY8kvCp','DN8_0sUklBe','DN8_2M6ku3p',
@@ -1364,7 +1364,13 @@ const ARCHIVE_SECTIONS = [
             'DOB8z9EEpRt','DOB80pckv33','DOB81OskhxT','DOB83u5Ek_8','DOB84ZBEvJX',
             'DOB85dokmQZ'] },
   { id: 'arc-events',  label: 'In School Events', cols: 3, type: 'p',    comingSoon: false,
-    posts: [] },
+    posts: ['DPFGrwUkmxw','DPFGs0hkrF2','DPFGuAAEiJq','DPFGvmNEpqi','DPFGycbEiK2',
+            'DPFG0NNkuH_','DPFG1GTEk7y','DPFG4FUElPx','DPFG40hEqjW','DPFG5v5kpJ9',
+            'DPFG8h-knpa','DPFG9nMEg4o','DPFG-pekpZL','DPFHAlZksC1','DPFHB1zEigR',
+            'DPFHEnkEs_o','DPFHGq6ktSy','DPFHJOKkoXi','DPFHKyZkp4f','DPFHMYYEpeA',
+            'DPFHNfokuPL','DPFHP0ZkoP6','DPFHTV_Es8g','DPFHVI4Ei3G','DPFHcN1Ek_n',
+            'DPFHdB_kjZF','DPFHegLkuc3','DPFHfypEiCi','DPFHjUeknIt','DPFHnrHEtEU',
+            'DPFHuFOkmQ1','DPFHxG4kr9z','DPFHza2Ehhx','DPFH4VUkiwd','DPFH5zxkgME'] },
   { id: 'arc-blues',   label: 'Senior Blues',     cols: 3, type: 'p',    comingSoon: false,
     posts: ['DPJs-XeEdqo','DPJtCTUkb_f','DPJtJbeERrr','DPJtNvfkTvk','DPJtQ5pkSpz',
             'DPJtbCkkfm5','DPJteT8kbfY','DPJthE-EVNc','DPJti-lkaJ_','DPJtmFrkdhD',
@@ -1417,21 +1423,29 @@ function initCarousels(root) {
     const prev = outer.querySelector('.prev-arrow');
     const next = outer.querySelector('.next-arrow');
     if (!viewport) return;
+    // Always enable arrows — carousel wraps infinitely
+    if (prev) prev.disabled = false;
+    if (next) next.disabled = false;
     function slideWidth() {
       const s = viewport.querySelector('.carousel-slide');
       return s ? s.offsetWidth + 8 : viewport.clientWidth;
     }
-    function update() {
-      const sl = viewport.scrollLeft;
-      const max = viewport.scrollWidth - viewport.clientWidth;
-      if (prev) prev.disabled = sl <= 1;
-      if (next) next.disabled = max <= 1 || sl >= max - 1;
+    function scrollPrev() {
+      if (viewport.scrollLeft <= 1) {
+        viewport.scrollLeft = viewport.scrollWidth;
+      }
+      viewport.scrollBy({ left: -slideWidth(), behavior: 'smooth' });
     }
-    if (prev) prev.addEventListener('click', () => viewport.scrollBy({ left: -slideWidth(), behavior: 'smooth' }));
-    if (next) next.addEventListener('click', () => viewport.scrollBy({ left: slideWidth(), behavior: 'smooth' }));
-    viewport.addEventListener('scroll', update, { passive: true });
-    update();
-    new ResizeObserver(update).observe(viewport);
+    function scrollNext() {
+      const max = viewport.scrollWidth - viewport.clientWidth;
+      if (viewport.scrollLeft >= max - 1) {
+        viewport.scrollLeft = 0;
+      }
+      viewport.scrollBy({ left: slideWidth(), behavior: 'smooth' });
+    }
+    if (prev) prev.addEventListener('click', scrollPrev);
+    if (next) next.addEventListener('click', scrollNext);
+    new ResizeObserver(() => {}).observe(viewport);
   });
 }
 
