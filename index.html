@@ -78,7 +78,7 @@
     border-bottom: 0.5px solid rgba(0,0,0,0.1);
     position: sticky; top: 0; z-index: 10;
   }
-  .nav-logo { font-size: 15px; font-weight: 600; color: var(--ink); letter-spacing: -0.02em; }
+  .nav-logo { font-size: 15px; font-weight: 600; color: var(--ink); letter-spacing: -0.02em; cursor: pointer; }
   .nav-links { display: flex; gap: 2px; }
   .nav-link {
     padding: 5px 13px; font-size: 13px; font-weight: 500; border-radius: 8px;
@@ -415,6 +415,105 @@
   .pie-legend { font-size: 11px; color: var(--ink-2); display: flex; flex-direction: column; gap: 5px; }
   .legend-row { display: flex; align-items: center; gap: 7px; }
   .legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── Timeline ── */
+  .archive-layout { display: flex; gap: 2rem; align-items: flex-start; }
+  .timeline-sidebar { flex: 0 0 180px; position: sticky; top: 64px; }
+  .archive-carousels { flex: 1; min-width: 0; }
+  .timeline { position: relative; padding: 0 0 1rem; }
+  .timeline::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 1.5px; background: var(--border); }
+  .timeline-item { position: relative; padding-left: 28px; margin-bottom: 0; }
+  .timeline-dot {
+    position: absolute; left: 0; top: 15px;
+    width: 13px; height: 13px; border-radius: 50%;
+    background: var(--ink); border: 2px solid var(--bg);
+    box-shadow: 0 0 0 1.5px var(--ink);
+    transition: transform 0.18s, background 0.18s;
+  }
+  .timeline-item.upcoming .timeline-dot { background: var(--bg); box-shadow: 0 0 0 1.5px var(--ink-3); }
+  .timeline-card {
+    padding: 10px 10px 10px 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    border-bottom: 0.5px solid var(--border);
+    transition: padding-left 0.18s;
+  }
+  .timeline-item:last-child .timeline-card { border-bottom: none; }
+  .timeline-item.has-anchor .timeline-card { cursor: pointer; }
+  .timeline-item.has-anchor:hover .timeline-card { padding-left: 4px; }
+  .timeline-item.has-anchor:hover .timeline-dot { transform: scale(1.2); background: var(--gold); box-shadow: 0 0 0 1.5px var(--gold); }
+  .timeline-left { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .timeline-title { font-size: 13px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+  .timeline-item.upcoming .timeline-title { color: var(--ink-3); }
+  .timeline-date { font-size: 11px; color: var(--ink-3); font-weight: 400; }
+  .timeline-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .timeline-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; }
+  .timeline-badge.soon { background: var(--gold-lt); color: var(--gold); }
+  .timeline-arrow { color: var(--ink-3); font-size: 13px; line-height: 1; }
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    /* Archive layout — stack on mobile */
+    .archive-layout { flex-direction: column; gap: 1.5rem; }
+    .timeline-sidebar { position: static; flex: none; width: 100%; }
+
+    /* Hide custom cursor on touch devices */
+    body { cursor: auto; }
+    * { cursor: auto !important; }
+    #cursor-follower { display: none; }
+
+    /* Nav */
+    .nav { padding: 0 1rem; }
+    .nav-link { padding: 5px 9px; font-size: 12px; }
+
+    /* Pages */
+    .page { padding: 1.5rem 1rem; }
+
+    /* Hero */
+    .hero-section { height: 72vh; min-height: 420px; margin-bottom: 0; }
+    .hero-content { padding: 2.5rem 1.25rem 0; }
+    .hero-sub { font-size: 14px; margin-bottom: 1.5rem; }
+    .hero-actions { margin-bottom: 1.75rem; }
+    .hero-quote-sm { display: none; }
+    .hero-divider { display: none; }
+
+    /* Landing extras — stack vertically */
+    .landing-extra { grid-template-columns: 1fr; margin: 12px 1rem 1.5rem; }
+    .landing-photo { height: 220px; }
+    .quote-stack-wrap { min-height: 260px; }
+    .quote-card { padding: 20px; }
+    .quote-name { font-size: 15px; }
+    .quote-text { font-size: 14px; }
+
+    /* Carousels — 1 per page, arrows inside */
+    .carousel-track.cols-3 .carousel-slide { flex: 0 0 calc(100% - 0px); scroll-snap-align: start; }
+    .carousel-track.cols-2 .carousel-slide { flex: 0 0 calc(100% - 0px); scroll-snap-align: start; }
+    .carousel-arrow { width: 36px; height: 36px; }
+    .carousel-arrow.prev-arrow { left: 6px; }
+    .carousel-arrow.next-arrow { right: 6px; }
+
+    /* Map — stack vertically */
+    .map-box { padding: 1rem; }
+    .map-row { flex-direction: column; height: auto; gap: 10px; }
+    .map-section { height: 260px; flex: none; }
+    .map-panel { flex: none; min-height: 300px; }
+    .map-panel-content { flex-direction: column; height: auto; }
+    .map-panel-header { flex: none; }
+    .map-panel-img { height: 140px; }
+    .map-panel-text { padding-right: 0; }
+    .map-panel-ig { zoom: 1; }
+
+    /* People */
+    .people-grid { grid-template-columns: repeat(3, 1fr); }
+    .people-search { width: 160px; }
+    .people-search:focus { width: 180px; }
+
+    /* Popup */
+    .popup { width: calc(100vw - 2rem); }
+
+    /* Stats */
+    .pie-section { grid-template-columns: 1fr; }
+    .word-cloud { max-width: 100%; }
+  }
 </style>
 
 <!-- Custom cursor follower -->
@@ -422,7 +521,7 @@
 
 <div class="site">
   <nav class="nav">
-    <span class="nav-logo">LMA '26</span>
+    <span class="nav-logo" onclick="showPage('landing', document.querySelector('.nav-link'))">LMA '26</span>
     <div class="nav-links">
       <button class="nav-link active" onclick="showPage('landing', this)">Home</button>
       <button class="nav-link" onclick="showPage('archive', this)">Archive</button>
@@ -493,8 +592,84 @@
 
   <!-- ARCHIVE -->
   <div class="page" id="page-archive">
+  <div class="archive-layout">
+    <div class="timeline-sidebar">
+    <div class="timeline" id="archive-timeline">
+      <div class="timeline-item has-anchor" onclick="scrollToSection('arc-videos')">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-left">
+            <div class="timeline-title">Videos</div>
+            <div class="timeline-date">2025 – 2026</div>
+          </div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
+        </div>
+      </div>
+      <div class="timeline-item has-anchor" onclick="scrollToSection('arc-lfd')">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-left">
+            <div class="timeline-title">Last First Day</div>
+            <div class="timeline-date">Aug 2025</div>
+          </div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
+        </div>
+      </div>
+      <div class="timeline-item has-anchor" onclick="scrollToSection('arc-sunrise')">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-left">
+            <div class="timeline-title">Senior Sunrise</div>
+            <div class="timeline-date">Apr 2026</div>
+          </div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
+        </div>
+      </div>
+      <div class="timeline-item has-anchor" onclick="scrollToSection('arc-events')">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-left">
+            <div class="timeline-title">In School Events</div>
+            <div class="timeline-date">Fall – Spring</div>
+          </div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
+        </div>
+      </div>
+      <div class="timeline-item has-anchor" onclick="scrollToSection('arc-blues')">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-left">
+            <div class="timeline-title">Senior Blues</div>
+            <div class="timeline-date">Apr 2026</div>
+          </div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
+        </div>
+      </div>
+      <div class="timeline-item upcoming">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-left">
+            <div class="timeline-title">Senior Bonfire</div>
+            <div class="timeline-date">May 2026</div>
+          </div>
+          <div class="timeline-right"><span class="timeline-badge soon">Soon</span></div>
+        </div>
+      </div>
+      <div class="timeline-item upcoming">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-left">
+            <div class="timeline-title">Graduation</div>
+            <div class="timeline-date">May 30, 2026</div>
+          </div>
+          <div class="timeline-right"><span class="timeline-badge soon">Soon</span></div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /.timeline-sidebar -->
+    <div class="archive-carousels">
 
-    <div class="archive-section">
+    <div class="archive-section" id="arc-videos">
       <div class="section-label">Videos</div>
       <div class="carousel-outer">
         <button class="carousel-arrow prev-arrow" disabled aria-label="Previous"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -509,7 +684,7 @@
       </div>
     </div>
 
-    <div class="archive-section">
+    <div class="archive-section" id="arc-lfd">
       <div class="section-label">Last First Day</div>
       <div class="carousel-outer">
         <button class="carousel-arrow prev-arrow" disabled aria-label="Previous"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -535,7 +710,7 @@
       </div>
     </div>
 
-    <div class="archive-section">
+    <div class="archive-section" id="arc-sunrise">
       <div class="section-label">Senior Sunrise</div>
       <div class="carousel-outer">
         <button class="carousel-arrow prev-arrow" disabled aria-label="Previous"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -553,7 +728,7 @@
       </div>
     </div>
 
-    <div class="archive-section">
+    <div class="archive-section" id="arc-events">
       <div class="section-label">In School Events</div>
       <div class="carousel-outer">
         <button class="carousel-arrow prev-arrow" disabled aria-label="Previous"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -571,7 +746,7 @@
       </div>
     </div>
 
-    <div class="archive-section">
+    <div class="archive-section" id="arc-blues">
       <div class="section-label">Senior Blues</div>
       <div class="carousel-outer">
         <button class="carousel-arrow prev-arrow" disabled aria-label="Previous"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -610,6 +785,8 @@
       </div>
     </div>
 
+    </div><!-- /.archive-carousels -->
+  </div><!-- /.archive-layout -->
   </div>
 
   <!-- PEOPLE -->
@@ -1094,6 +1271,14 @@ function switchMapView(view) {
 }
 
 /* ── Page navigation ── */
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const navH = document.querySelector('nav')?.offsetHeight || 52;
+  const top = el.getBoundingClientRect().top + window.scrollY - navH - 16;
+  window.scrollTo({ top, behavior: 'smooth' });
+}
+
 function showPage(id, btn) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
