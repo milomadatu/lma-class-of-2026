@@ -369,6 +369,7 @@
   .popup-name { font-size: 19px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 2px; }
   .popup-detail { font-size: 12px; font-weight: 500; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
   .popup-bio { font-size: 13px; color: var(--ink-2); line-height: 1.65; padding-top: 10px; border-top: 0.5px solid var(--border); margin-bottom: 12px; }
+  .popup-birthday { font-size: 12px; color: var(--ink-3); display: flex; align-items: center; gap: 5px; margin-bottom: 10px; }
   .popup-ig { display: inline-block; font-size: 12px; font-weight: 500; color: var(--gold); }
 
   /* ── Stats fade-in ── */
@@ -635,6 +636,7 @@
     <button onclick="scrollToSection('arc-sunrise')">Senior Sunrise</button>
     <button onclick="scrollToSection('arc-events')">In School Events</button>
     <button onclick="scrollToSection('arc-blues')">Senior Blues</button>
+    <button onclick="scrollToSection('arc-bonfire')">Senior Bonfire</button>
   </div>
   <div class="archive-layout">
     <div class="timeline-sidebar">
@@ -689,14 +691,14 @@
           <div class="timeline-right"><span class="timeline-arrow">›</span></div>
         </div>
       </div>
-      <div class="timeline-item upcoming">
+      <div class="timeline-item has-anchor" onclick="scrollToSection('arc-bonfire')">
         <div class="timeline-dot"></div>
         <div class="timeline-card">
           <div class="timeline-left">
             <div class="timeline-title">Senior Bonfire</div>
             <div class="timeline-date">Jan 2026</div>
           </div>
-          <div class="timeline-right"><span class="timeline-badge soon">Soon</span></div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
         </div>
       </div>
       <div class="timeline-item upcoming">
@@ -711,125 +713,7 @@
       </div>
     </div>
     </div><!-- /.timeline-sidebar -->
-    <div class="archive-carousels">
-
-    <div class="archive-section" id="arc-videos">
-      <div class="section-label">Videos</div>
-      <div class="carousel-outer">
-        <button class="carousel-arrow prev-arrow" disabled aria-label="Previous"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <div class="carousel-viewport">
-          <div class="carousel-track cols-2">
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DNv8MtA5NXn/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DOEzRUkkgSU/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><div class="ig-placeholder">+ Add video</div></div>
-          </div>
-        </div>
-        <button class="carousel-arrow next-arrow" aria-label="Next"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
-      </div>
-    </div>
-
-    <div class="archive-section" id="arc-lfd">
-      <div class="section-label">Last First Day</div>
-      <div class="carousel-outer">
-        <button class="carousel-arrow prev-arrow" disabled aria-label="Previous"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <div class="carousel-viewport">
-          <div class="carousel-track cols-3">
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DNUB7KkyalX/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DNUB9K7Sx2j/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DNUB_73yeFA/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DNUCCwkSi87/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DNUCNj-yfNa/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DNUCRxKyoEP/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DNUCfiRycuY/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DNUChePy_0N/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DNUCkxHSfKL/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DNUCm4SSlnj/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DNUCoqHy0Wg/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DNUCq9rSHDu/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DNUCsfqyf7l/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DNUDBQkyAYE/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-          </div>
-        </div>
-        <button class="carousel-arrow next-arrow" aria-label="Next"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
-      </div>
-    </div>
-
-    <div class="archive-section" id="arc-sunrise">
-      <div class="section-label">Senior Sunrise</div>
-      <div class="carousel-outer">
-        <button class="carousel-arrow prev-arrow" disabled aria-label="Previous"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <div class="carousel-viewport">
-          <div class="carousel-track cols-3">
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DN9BSGjku2q/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DOB8x_PEk9L/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DN9BCTPEgg8/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-            <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-            <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-          </div>
-        </div>
-        <button class="carousel-arrow next-arrow" aria-label="Next"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
-      </div>
-    </div>
-
-    <div class="archive-section" id="arc-events">
-      <div class="section-label">In School Events</div>
-      <div class="carousel-outer">
-        <button class="carousel-arrow prev-arrow" disabled aria-label="Previous"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <div class="carousel-viewport">
-          <div class="carousel-track cols-3">
-            <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-            <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-            <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-            <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-            <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-            <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-          </div>
-        </div>
-        <button class="carousel-arrow next-arrow" aria-label="Next"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
-      </div>
-    </div>
-
-    <div class="archive-section" id="arc-blues">
-      <div class="section-label">Senior Blues</div>
-      <div class="carousel-outer">
-        <button class="carousel-arrow prev-arrow" disabled aria-label="Previous"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <div class="carousel-viewport">
-          <div class="carousel-track cols-3">
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DPJvRivkS6v/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DPJuwpAka9y/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DPJ7ob0D2Us/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>
-            <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-            <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-            <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-          </div>
-        </div>
-        <button class="carousel-arrow next-arrow" aria-label="Next"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
-      </div>
-    </div>
-
-    <div class="archive-section">
-      <div class="section-label">Senior Bonfire</div>
-      <div class="coming-soon-box">
-        <div class="coming-soon-cover">
-          <div class="coming-soon-badge">Coming Soon</div>
-          <div class="coming-soon-sub">Photos dropping after the event</div>
-        </div>
-        <div class="carousel-outer">
-          <button class="carousel-arrow prev-arrow" disabled aria-label="Previous"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
-          <div class="carousel-viewport">
-            <div class="carousel-track cols-3">
-              <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-              <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-              <div class="carousel-slide"><div class="ig-placeholder">+ Add post</div></div>
-            </div>
-          </div>
-          <button class="carousel-arrow next-arrow" aria-label="Next"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
-        </div>
-      </div>
-    </div>
-
-    </div><!-- /.archive-carousels -->
+    <div class="archive-carousels" id="archive-carousels"></div><!-- /.archive-carousels -->
   </div><!-- /.archive-layout -->
   </div>
 
@@ -954,6 +838,7 @@
     <div class="popup-body">
       <div class="popup-name" id="popup-name"></div>
       <div class="popup-detail" id="popup-detail"></div>
+      <div class="popup-birthday" id="popup-birthday"></div>
       <div class="popup-bio" id="popup-bio"></div>
       <div class="popup-ig" id="popup-ig"></div>
     </div>
@@ -970,31 +855,31 @@ const cursorText = document.getElementById('cursor-text');
 
 /* ── People with stock portrait images ── */
 const people = [
-  {img:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=450&fit=crop&q=80',name:'Jordan A.',role:'Student Body President',ig:'@jordan_lma',bio:'Led school-wide initiatives on mental health awareness and peer mentorship. Known for bringing the whole class together — whether it was spirit week or finals week.'},
-  {img:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=450&fit=crop&q=80',name:'Maya B.',role:'Art Club President',ig:'@mayaart',bio:'Muralist, illustrator, and the creative force behind this year\'s senior banner. Her work has been featured in two local galleries and she\'s headed to RISD in the fall.'},
-  {img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=450&fit=crop&q=80',name:'Carlos C.',role:'Varsity Soccer',ig:'@carlosc26',bio:'Three-year varsity starter with 24 goals this season. Off the field, Carlos volunteers coaching youth soccer on weekends and plans to study sports medicine.'},
-  {img:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=450&fit=crop&q=80',name:'Priya D.',role:'Orchestra Lead',ig:'@priyamusic',bio:'First-chair violinist since sophomore year. Priya composed an original piece performed at winter showcase that left the whole auditorium speechless.'},
-  {img:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=450&fit=crop&q=80',name:'Ethan E.',role:'Science Olympiad',ig:'@ethan_sci',bio:'State champion in two Science Olympiad events. Ethan spent last summer interning at a biotech lab and already has two research papers in progress.'},
-  {img:'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=450&fit=crop&q=80',name:'Sofia F.',role:'Yearbook Editor',ig:'@sofia_snaps',bio:'The person behind this very yearbook. Sofia shot over 2,000 photos this year and somehow made every single one of us look good. We owe her everything.'},
-  {img:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=450&fit=crop&q=80',name:'Marcus G.',role:'Varsity Basketball',ig:'@marcusg',bio:'All-district guard with a 3.9 GPA. Marcus is proof you can dominate on the court and in the classroom. Committed to play Division I next year.'},
-  {img:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=450&fit=crop&q=80',name:'Aisha H.',role:'Robotics Club',ig:'@aisha.codes',bio:'Built her first robot at 12. Led the team to regionals this year and landed a full scholarship in computer engineering. Future is bright doesn\'t even cover it.'},
-  {img:'https://images.unsplash.com/photo-1463453091185-61582044d556?w=600&h=450&fit=crop&q=80',name:'Lena I.',role:'Literary Magazine',ig:'@lenawrites',bio:'Published poet and fiction writer. Lena\'s short story won the state young writers award this spring. She reads everything and remembers all of it.'},
-  {img:'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&h=450&fit=crop&q=80',name:'Dana J.',role:'Drama Club Lead',ig:'@danaj',bio:'Lead in every school production since freshman year. Dana directed the fall one-act festival herself this year and had the whole cast in tears by closing night.'},
-  {img:'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=600&h=450&fit=crop&q=80',name:'Ryan K.',role:'Cross Country',ig:'@ryank26',bio:'Ran his first marathon junior year just to see if he could. He finished in under four hours. Ryan is the person who shows up early and stays late — always.'},
-  {img:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=450&fit=crop&q=80',name:'Nadia L.',role:'Debate Team',ig:'@nadial',bio:'Undefeated in her last 14 rounds. Nadia argues both sides of any issue with equal conviction and plans to study political science and international law.'},
-  {img:'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=600&h=450&fit=crop&q=80',name:'Tyler M.',role:'Chess Club',ig:'@tylerm',bio:'Ranked in the top 50 juniors nationally. Tyler is quiet in the halls but absolutely ruthless at the board. He\'s also surprisingly good at ping pong.'},
-  {img:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&h=450&fit=crop&q=80',name:'Zoe N.',role:'Environmental Club',ig:'@zoen',bio:'Organized the campus sustainability audit that led to the school\'s first composting program. Zoe believes small actions add up and she has the receipts to prove it.'},
-  {img:'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&h=450&fit=crop&q=80',name:'Omar P.',role:'Varsity Football',ig:'@omarp',bio:'Two-way starter who never missed a practice in four years. Omar is the teammate everyone wants in their corner — on the field and off it.'},
-  {img:'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&h=450&fit=crop&q=80',name:'Isla Q.',role:'Student Council',ig:'@islaq',bio:'The one who actually gets things done at student council. Isla pushed through the new open campus lunch policy and organized three community service events this year.'},
-  {img:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=600&h=450&fit=crop&q=80',name:'Devon R.',role:'Swim Team',ig:'@devonr',bio:'Broke the school record in the 200 freestyle. Devon trains twice a day and somehow still manages to be the most relaxed person in any room. It\'s a gift.'},
-  {img:'https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?w=600&h=450&fit=crop&q=80',name:'Mia S.',role:'NHS President',ig:'@mias',bio:'Organized 400+ volunteer hours for the senior class this year alone. Mia leads by example — she was always the first to sign up and the last to leave.'},
-  {img:'https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=600&h=450&fit=crop&q=80',name:'Jake T.',role:'Band Captain',ig:'@jaket',bio:'Plays four instruments. Led the marching band to their best competition finish in a decade. Jake\'s warmups are legendary and so is his halftime choreography.'},
-  {img:'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&h=450&fit=crop&q=80',name:'Ava U.',role:'Cheer Captain',ig:'@avau',bio:'Choreographed every routine this season from scratch. Ava brings energy to every room she walks into and somehow makes everyone around her better at what they do.'},
-  {img:'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=600&h=450&fit=crop&q=80',name:'Kai V.',role:'Volleyball',ig:'@kaiv',bio:'Six-rotation player with a serve that clears the net like it has something to prove. Kai is the steady presence the team leans on when the score gets tight.'},
-  {img:'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&h=450&fit=crop&q=80',name:'Luna W.',role:'Photography Club',ig:'@lunaw',bio:'Shot over half the photos in this yearbook. Luna sees things others walk past. Her senior project — a portrait series of school staff — stopped everyone in the hallway.'},
-  {img:'https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=600&h=450&fit=crop&q=80',name:'Andre X.',role:'Track & Field',ig:'@andrex',bio:'Long jump and triple jump specialist. Andre holds two regional records and has the kind of acceleration that makes people stop and look twice.'},
-  {img:'https://images.unsplash.com/photo-1541823709867-1b206113eafd?w=600&h=450&fit=crop&q=80',name:'Fiona Y.',role:'Model UN',ig:'@fionay',bio:'Best delegate at two conferences this year. Fiona researches every position paper like she\'s going to testify before the actual UN. She probably will one day.'},
-  {img:'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=600&h=450&fit=crop&q=80',name:'Leo Z.',role:'Film Club',ig:'@leoz',bio:'Directed a short film that screened at a regional youth festival. Leo has watched more movies than anyone in this school and has an opinion about every single one.'},
+  {img:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=450&fit=crop&q=80',name:'Jordan A.',role:'Student Body President',ig:'@jordan_lma',birthday:'',bio:'Led school-wide initiatives on mental health awareness and peer mentorship. Known for bringing the whole class together — whether it was spirit week or finals week.'},
+  {img:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=450&fit=crop&q=80',name:'Maya B.',role:'Art Club President',ig:'@mayaart',birthday:'',bio:'Muralist, illustrator, and the creative force behind this year\'s senior banner. Her work has been featured in two local galleries and she\'s headed to RISD in the fall.'},
+  {img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=450&fit=crop&q=80',name:'Carlos C.',role:'Varsity Soccer',ig:'@carlosc26',birthday:'',bio:'Three-year varsity starter with 24 goals this season. Off the field, Carlos volunteers coaching youth soccer on weekends and plans to study sports medicine.'},
+  {img:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=450&fit=crop&q=80',name:'Priya D.',role:'Orchestra Lead',ig:'@priyamusic',birthday:'',bio:'First-chair violinist since sophomore year. Priya composed an original piece performed at winter showcase that left the whole auditorium speechless.'},
+  {img:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=450&fit=crop&q=80',name:'Ethan E.',role:'Science Olympiad',ig:'@ethan_sci',birthday:'',bio:'State champion in two Science Olympiad events. Ethan spent last summer interning at a biotech lab and already has two research papers in progress.'},
+  {img:'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=450&fit=crop&q=80',name:'Sofia F.',role:'Yearbook Editor',ig:'@sofia_snaps',birthday:'',bio:'The person behind this very yearbook. Sofia shot over 2,000 photos this year and somehow made every single one of us look good. We owe her everything.'},
+  {img:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=450&fit=crop&q=80',name:'Marcus G.',role:'Varsity Basketball',ig:'@marcusg',birthday:'',bio:'All-district guard with a 3.9 GPA. Marcus is proof you can dominate on the court and in the classroom. Committed to play Division I next year.'},
+  {img:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=450&fit=crop&q=80',name:'Aisha H.',role:'Robotics Club',ig:'@aisha.codes',birthday:'',bio:'Built her first robot at 12. Led the team to regionals this year and landed a full scholarship in computer engineering. Future is bright doesn\'t even cover it.'},
+  {img:'https://images.unsplash.com/photo-1463453091185-61582044d556?w=600&h=450&fit=crop&q=80',name:'Lena I.',role:'Literary Magazine',ig:'@lenawrites',birthday:'',bio:'Published poet and fiction writer. Lena\'s short story won the state young writers award this spring. She reads everything and remembers all of it.'},
+  {img:'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&h=450&fit=crop&q=80',name:'Dana J.',role:'Drama Club Lead',ig:'@danaj',birthday:'',bio:'Lead in every school production since freshman year. Dana directed the fall one-act festival herself this year and had the whole cast in tears by closing night.'},
+  {img:'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=600&h=450&fit=crop&q=80',name:'Ryan K.',role:'Cross Country',ig:'@ryank26',birthday:'',bio:'Ran his first marathon junior year just to see if he could. He finished in under four hours. Ryan is the person who shows up early and stays late — always.'},
+  {img:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=450&fit=crop&q=80',name:'Nadia L.',role:'Debate Team',ig:'@nadial',birthday:'',bio:'Undefeated in her last 14 rounds. Nadia argues both sides of any issue with equal conviction and plans to study political science and international law.'},
+  {img:'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=600&h=450&fit=crop&q=80',name:'Tyler M.',role:'Chess Club',ig:'@tylerm',birthday:'',bio:'Ranked in the top 50 juniors nationally. Tyler is quiet in the halls but absolutely ruthless at the board. He\'s also surprisingly good at ping pong.'},
+  {img:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&h=450&fit=crop&q=80',name:'Zoe N.',role:'Environmental Club',ig:'@zoen',birthday:'',bio:'Organized the campus sustainability audit that led to the school\'s first composting program. Zoe believes small actions add up and she has the receipts to prove it.'},
+  {img:'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&h=450&fit=crop&q=80',name:'Omar P.',role:'Varsity Football',ig:'@omarp',birthday:'',bio:'Two-way starter who never missed a practice in four years. Omar is the teammate everyone wants in their corner — on the field and off it.'},
+  {img:'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&h=450&fit=crop&q=80',name:'Isla Q.',role:'Student Council',ig:'@islaq',birthday:'',bio:'The one who actually gets things done at student council. Isla pushed through the new open campus lunch policy and organized three community service events this year.'},
+  {img:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=600&h=450&fit=crop&q=80',name:'Devon R.',role:'Swim Team',ig:'@devonr',birthday:'',bio:'Broke the school record in the 200 freestyle. Devon trains twice a day and somehow still manages to be the most relaxed person in any room. It\'s a gift.'},
+  {img:'https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?w=600&h=450&fit=crop&q=80',name:'Mia S.',role:'NHS President',ig:'@mias',birthday:'',bio:'Organized 400+ volunteer hours for the senior class this year alone. Mia leads by example — she was always the first to sign up and the last to leave.'},
+  {img:'https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=600&h=450&fit=crop&q=80',name:'Jake T.',role:'Band Captain',ig:'@jaket',birthday:'',bio:'Plays four instruments. Led the marching band to their best competition finish in a decade. Jake\'s warmups are legendary and so is his halftime choreography.'},
+  {img:'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&h=450&fit=crop&q=80',name:'Ava U.',role:'Cheer Captain',ig:'@avau',birthday:'',bio:'Choreographed every routine this season from scratch. Ava brings energy to every room she walks into and somehow makes everyone around her better at what they do.'},
+  {img:'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=600&h=450&fit=crop&q=80',name:'Kai V.',role:'Volleyball',ig:'@kaiv',birthday:'',bio:'Six-rotation player with a serve that clears the net like it has something to prove. Kai is the steady presence the team leans on when the score gets tight.'},
+  {img:'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&h=450&fit=crop&q=80',name:'Luna W.',role:'Photography Club',ig:'@lunaw',birthday:'',bio:'Shot over half the photos in this yearbook. Luna sees things others walk past. Her senior project — a portrait series of school staff — stopped everyone in the hallway.'},
+  {img:'https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=600&h=450&fit=crop&q=80',name:'Andre X.',role:'Track & Field',ig:'@andrex',birthday:'',bio:'Long jump and triple jump specialist. Andre holds two regional records and has the kind of acceleration that makes people stop and look twice.'},
+  {img:'https://images.unsplash.com/photo-1541823709867-1b206113eafd?w=600&h=450&fit=crop&q=80',name:'Fiona Y.',role:'Model UN',ig:'@fionay',birthday:'',bio:'Best delegate at two conferences this year. Fiona researches every position paper like she\'s going to testify before the actual UN. She probably will one day.'},
+  {img:'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=600&h=450&fit=crop&q=80',name:'Leo Z.',role:'Film Club',ig:'@leoz',birthday:'',bio:'Directed a short film that screened at a regional youth festival. Leo has watched more movies than anyone in this school and has an opinion about every single one.'},
 ];
 
 function renderGrid() {
@@ -1025,6 +910,9 @@ function openPopup(i) {
   document.getElementById('popup-avatar-img').alt = p.name;
   document.getElementById('popup-name').textContent = p.name;
   document.getElementById('popup-detail').textContent = p.role;
+  const bdEl = document.getElementById('popup-birthday');
+  bdEl.style.display = p.birthday ? '' : 'none';
+  bdEl.innerHTML = p.birthday ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> ${p.birthday}` : '';
   document.getElementById('popup-bio').textContent = p.bio;
   document.getElementById('popup-ig').textContent = p.ig;
   document.getElementById('popup').classList.add('open');
@@ -1443,27 +1331,112 @@ document.addEventListener('mouseover', e => {
 })();
 
 /* ── Carousels ── */
-document.querySelectorAll('.carousel-outer').forEach(outer => {
-  const viewport = outer.querySelector('.carousel-viewport');
-  const prev = outer.querySelector('.prev-arrow');
-  const next = outer.querySelector('.next-arrow');
-  if (!viewport) return;
-  function slideWidth() {
-    const s = viewport.querySelector('.carousel-slide');
-    return s ? s.offsetWidth + 8 : viewport.clientWidth;
-  }
-  function update() {
-    const sl = viewport.scrollLeft;
-    const max = viewport.scrollWidth - viewport.clientWidth;
-    if (prev) prev.disabled = sl <= 1;
-    if (next) next.disabled = max <= 1 || sl >= max - 1;
-  }
-  if (prev) prev.addEventListener('click', () => viewport.scrollBy({ left: -slideWidth(), behavior: 'smooth' }));
-  if (next) next.addEventListener('click', () => viewport.scrollBy({ left: slideWidth(), behavior: 'smooth' }));
-  viewport.addEventListener('scroll', update, { passive: true });
-  update();
-  new ResizeObserver(update).observe(viewport);
-});
+/* ── Archive data — add/remove shortcodes here to update carousels ── */
+const ARCHIVE_SECTIONS = [
+  { id: 'arc-videos',  label: 'Videos',          cols: 2, type: 'reel', comingSoon: false,
+    posts: ['DNv8MtA5NXn', 'DOEzRUkkgSU'] },
+  { id: 'arc-lfd',     label: 'Last First Day',   cols: 3, type: 'p',    comingSoon: false,
+    posts: ['DNUB7KkyalX','DNUB9K7Sx2j','DNUB_73yeFA','DNUCCwkSi87','DNUCNj-yfNa',
+            'DNUCRxKyoEP','DNUCUMyyYzW','DNUCWO4yh64','DNUCYSjyPJ0','DNUCaOWyDog',
+            'DNUCb8ASpOa','DNUCeLly97V','DNUCfiRycuY','DNUChePy_0N','DNUCkxHSfKL',
+            'DNUCm4SSlnj','DNUCoqHy0Wg','DNUCq9rSHDu','DNUCsfqyf7l','DNUDBQkyAYE',
+            'DNUDC5iSVCv','DNUDEZLyBEi','DNWTYnPyU_w','DNWTZyMy9R1','DNWTa7QSkBV',
+            'DNWTcIIyaF9','DNWTd3FSMCz','DNWTfrqyKLw','DNWThc5yGcl','DNWTkATySFx',
+            'DNWTlJtSNzi','DNWTl68yYd6','DNWTqcPSxv9','DNWTucSy3X7','DNWTvyDyxrb',
+            'DNWTw5uSvqe','DNWTyZsynVH','DNWT0SJyNnl','DNkPOaZOPEl','DNq6x8Ay98T',
+            'DNq6yhPS4wy','DNq6z4iy7zV','DNq6212S8HV','DNq63GYy13T','DNq63xVS-DF',
+            'DNq7RZO5CEC'] },
+  { id: 'arc-sunrise', label: 'Senior Sunrise',   cols: 3, type: 'p',    comingSoon: false,
+    posts: ['DN8_N1Akuef','DN8_QHVkuYa','DN8_Sc1Ev7T','DN8_Tf0kimC','DN8_VSsEn4s',
+            'DN8_WjhkrM','DN8_YrXEks8','DN8_aPFElbH','DN8_cgUEjzB','DN8_dvIkqqF',
+            'DN8_e6Bkn_3','DN8_gEhEqeM','DN8_hdqEjL3','DN8_iZDEiyE','DN8_jY8knnz',
+            'DN8_kj1Elhl','DN8_nizEh7v','DN8_pDEEtsn','DN8_qgjEn8h','DN8_vW0kiGQ',
+            'DN8_wnDEmU0','DN8_xqMElCV','DN8_zY8kvCp','DN8_0sUklBe','DN8_2M6ku3p',
+            'DN8_4mJkoUx','DN8_58mkvRe','DN8_7mYkv3c','DN8__W2kjSz','DN9AArwkpgG',
+            'DN9ACBqkj-H','DN9AC_bEub5','DN9AEPtkllV','DN9AFTrkvLI','DN9AHoLkkyj',
+            'DN9AI73EpZm','DN9AKmtkoVV','DN9AL7rkkfB','DN9AO-wknQr','DN9AP_-EiE9',
+            'DN9AS_rkg47','DN9AUSfEth3','DN9AVcNEiPW','DN9AW_Qktnh','DN9AXnuErE9',
+            'DN9AZfZEo5i','DN9AcXQEjCk','DN9Adi5ksgf','DN9AmJmkmtc','DN9AoNmEuwQ',
+            'DN9Api0ElNF','DN9ArE9EnjZ','DN9Asdckjin','DN9AuRSkt1C','DN9AzTukrjS',
+            'DN9A0XyEm5C','DN9A2siEiBE','DN9BARhEmqO','DN9BCTPEgg8','DN9BEjpEo-k',
+            'DN9BF5CksEg','DN9BJzpEvgf','DN9BMuaEgZE','DN9BQVvEqpY','DN9BSGjku2q',
+            'DOB8w5wks1m','DOB8xX1kv3h','DOB8x_PEk9L','DOB8y0PElt4','DOB8zYmEi_c',
+            'DOB8z9EEpRt','DOB80pckv33','DOB81OskhxT','DOB83u5Ek_8','DOB84ZBEvJX',
+            'DOB85dokmQZ'] },
+  { id: 'arc-events',  label: 'In School Events', cols: 3, type: 'p',    comingSoon: false,
+    posts: [] },
+  { id: 'arc-blues',   label: 'Senior Blues',     cols: 3, type: 'p',    comingSoon: false,
+    posts: ['DPJs-XeEdqo','DPJtCTUkb_f','DPJtJbeERrr','DPJtNvfkTvk','DPJtQ5pkSpz',
+            'DPJtbCkkfm5','DPJteT8kbfY','DPJthE-EVNc','DPJti-lkaJ_','DPJtmFrkdhD',
+            'DPJts4SEd9B','DPJtvALETG8','DPJtwuDEQTk','DPJt9v4kR44','DPJt_JqEQgw',
+            'DPJuD3fkdGV','DPJuKkkkdpJ','DPJuM_dkb9h','DPJuaqIkb9S','DPJucoVETz5',
+            'DPJufAkkY30','DPJugORET4W','DPJupQOkfji','DPJuqMNkYk0','DPJurutEanH',
+            'DPJuwpAka9y','DPJu83NkdoG','DPJvBnDkSb2','DPJvFJ5kS7Z','DPJvPPqka05',
+            'DPJvRivkS6v','DPJ3wRMDxo9','DPJ7ob0D2Us'] },
+  { id: 'arc-bonfire', label: 'Senior Bonfire',   cols: 3, type: 'p',    comingSoon: false,
+    posts: ['DT80kSoEjCv','DT80peRkvm0','DT80slykpUD','DT80vCMkqc2','DT80xMDEkHy',
+            'DT80zJzknVq','DT801bBEuFI','DT807LjEvAW','DT80-ktEsQ3','DT81IGoEos_',
+            'DT81Ma2kqM5'] },
+];
+
+const ARROW_PREV = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>`;
+const ARROW_NEXT = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>`;
+
+function buildArchive() {
+  const container = document.getElementById('archive-carousels');
+  if (!container) return;
+  container.innerHTML = ARCHIVE_SECTIONS.map(sec => {
+    const slides = sec.posts.map(id =>
+      `<div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/${sec.type}/${id}/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>`
+    ).join('');
+    const carousel = `<div class="carousel-outer">
+        <button class="carousel-arrow prev-arrow" disabled aria-label="Previous">${ARROW_PREV}</button>
+        <div class="carousel-viewport"><div class="carousel-track cols-${sec.cols}">${slides}</div></div>
+        <button class="carousel-arrow next-arrow" aria-label="Next">${ARROW_NEXT}</button>
+      </div>`;
+    return sec.comingSoon
+      ? `<div class="archive-section" id="${sec.id}">
+          <div class="section-label">${sec.label}</div>
+          <div class="coming-soon-box">
+            <div class="coming-soon-cover"><div class="coming-soon-badge">Coming Soon</div><div class="coming-soon-sub">Photos dropping after the event</div></div>
+            ${carousel}
+          </div>
+        </div>`
+      : `<div class="archive-section" id="${sec.id}">
+          <div class="section-label">${sec.label}</div>
+          ${carousel}
+        </div>`;
+  }).join('');
+  initCarousels();
+  if (window.instgrm) window.instgrm.Embeds.process();
+}
+
+function initCarousels(root) {
+  (root || document).querySelectorAll('.carousel-outer').forEach(outer => {
+    const viewport = outer.querySelector('.carousel-viewport');
+    const prev = outer.querySelector('.prev-arrow');
+    const next = outer.querySelector('.next-arrow');
+    if (!viewport) return;
+    function slideWidth() {
+      const s = viewport.querySelector('.carousel-slide');
+      return s ? s.offsetWidth + 8 : viewport.clientWidth;
+    }
+    function update() {
+      const sl = viewport.scrollLeft;
+      const max = viewport.scrollWidth - viewport.clientWidth;
+      if (prev) prev.disabled = sl <= 1;
+      if (next) next.disabled = max <= 1 || sl >= max - 1;
+    }
+    if (prev) prev.addEventListener('click', () => viewport.scrollBy({ left: -slideWidth(), behavior: 'smooth' }));
+    if (next) next.addEventListener('click', () => viewport.scrollBy({ left: slideWidth(), behavior: 'smooth' }));
+    viewport.addEventListener('scroll', update, { passive: true });
+    update();
+    new ResizeObserver(update).observe(viewport);
+  });
+}
+
+buildArchive();
+initCarousels();
 
 /* ── Graduation countdown ── */
 (function() {
