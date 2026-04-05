@@ -279,30 +279,39 @@
   .people-paywall {
     position: fixed; top: 52px; left: 0; right: 0; bottom: 0;
     backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-    background: rgba(245,245,247,0.72);
+    background: rgba(245,245,247,0.82);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    z-index: 9; gap: 18px; text-align: center; padding: 2rem;
+    z-index: 9; gap: 16px; text-align: center; padding: 2rem;
+    transition: opacity 0.3s;
   }
-  .paywall-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--gold-lt); color: var(--gold); font-size: 11px; font-weight: 700;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    border-radius: 980px; padding: 5px 14px;
-    box-shadow: 0 0 0 1.5px rgba(176,120,48,0.25);
-  }
+  .people-paywall.hidden { opacity: 0; pointer-events: none; }
+  .paywall-lock { color: var(--ink-2); margin-bottom: 4px; }
   .paywall-title {
-    font-size: clamp(28px, 5vw, 48px); font-weight: 800;
+    font-size: clamp(28px, 5vw, 42px); font-weight: 800;
     color: var(--ink); letter-spacing: -0.03em; line-height: 1.1;
   }
   .paywall-sub {
-    font-size: 14px; color: var(--ink-2); max-width: 320px; line-height: 1.6;
+    font-size: 14px; color: var(--ink-2); max-width: 300px; line-height: 1.6;
   }
-  .paywall-tape {
-    font-size: 13px; font-weight: 700; letter-spacing: 0.18em;
-    text-transform: uppercase; color: var(--surface);
-    background: var(--dark); padding: 8px 22px; border-radius: 6px;
-    transform: rotate(-1.5deg); display: inline-block;
+  .paywall-form { display: flex; gap: 8px; margin-top: 4px; }
+  .paywall-input {
+    padding: 9px 14px; border-radius: 10px; font-size: 14px;
+    border: 1px solid var(--border); outline: none; background: var(--surface);
+    box-shadow: var(--shadow-sm); width: 180px; color: var(--ink);
+    transition: box-shadow 0.18s;
   }
+  .paywall-input:focus { box-shadow: var(--shadow-md); }
+  .paywall-btn {
+    padding: 9px 18px; border-radius: 10px; font-size: 14px; font-weight: 600;
+    border: none; background: var(--dark); color: #fff; cursor: pointer;
+    transition: opacity 0.18s;
+  }
+  .paywall-btn:hover { opacity: 0.85; }
+  .paywall-error {
+    font-size: 12px; color: #c0392b; font-weight: 500;
+    opacity: 0; transition: opacity 0.2s; margin-top: -8px;
+  }
+  .paywall-error.visible { opacity: 1; }
   .shuffle-btn {
     background: var(--surface); color: var(--ink); font-size: 12px; font-weight: 600;
     border: none; border-radius: 980px; padding: 7px 16px; cursor: pointer;
@@ -554,7 +563,7 @@
       <div class="hero-content">
         <div class="hero-eyebrow">Legacy Magnet Academy · Developed by Milo & Claude</div>
         <h1 class="hero-h1"> LMA Class of <em>2026</em></h1>
-        <p class="hero-sub">100 seniors. 4 years. One last look back.</p>
+        <p class="hero-sub">Legacy Magnet Academy's class of 2026 is full of scholars with memories, ideas, and plans for the future.</p>
         <div class="hero-actions">
           <button class="hero-btn-primary" onclick="showPage('archive', document.querySelectorAll('.nav-link')[1])">Browse Gallery</button>
           <button class="hero-btn-secondary" onclick="showPage('people', document.querySelectorAll('.nav-link')[2])">Meet the Class</button>
@@ -814,14 +823,17 @@
 
   <!-- PEOPLE -->
   <div class="page" id="page-people">
-    <div class="people-paywall">
-      <div class="paywall-tape">🚧 Under Construction 🚧</div>
-      <div class="paywall-title">Coming Soon</div>
-      <p class="paywall-sub">The class directory is being put together. Check back soon to see everyone from LMA '26.</p>
-      <div class="paywall-badge">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Not available yet
+    <div class="people-paywall" id="people-paywall">
+      <div class="paywall-lock">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       </div>
+      <div class="paywall-title">Class Directory</div>
+      <p class="paywall-sub">Enter the password to access the LMA '26 directory.</p>
+      <div class="paywall-form">
+        <input class="paywall-input" id="paywall-input" type="password" placeholder="Password" autocomplete="off" onkeydown="if(event.key==='Enter')checkPaywall()">
+        <button class="paywall-btn" onclick="checkPaywall()">Unlock</button>
+      </div>
+      <div class="paywall-error" id="paywall-error">Incorrect password</div>
     </div>
     <div class="people-header">
       <div>
@@ -1010,6 +1022,31 @@ function closePopup() {
 }
 
 renderGrid();
+
+/* ── People paywall ── */
+(function initPaywall() {
+  const paywall = document.getElementById('people-paywall');
+  if (!paywall) return;
+  if (sessionStorage.getItem('lma26_unlocked') === '1') {
+    paywall.style.display = 'none';
+  }
+})();
+
+function checkPaywall() {
+  const input = document.getElementById('paywall-input');
+  const error = document.getElementById('paywall-error');
+  const paywall = document.getElementById('people-paywall');
+  if (input.value === 'AyoJG') {
+    sessionStorage.setItem('lma26_unlocked', '1');
+    paywall.classList.add('hidden');
+    setTimeout(() => paywall.style.display = 'none', 320);
+  } else {
+    error.classList.add('visible');
+    input.value = '';
+    input.focus();
+    setTimeout(() => error.classList.remove('visible'), 2000);
+  }
+}
 
 /* ── Word cloud (d3-cloud) ── */
 (function buildWordCloud() {
