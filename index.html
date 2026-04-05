@@ -80,14 +80,21 @@
   }
   .nav-logo { font-size: 15px; font-weight: 600; color: var(--ink); letter-spacing: -0.02em; cursor: pointer; }
   .nav-links { display: flex; gap: 2px; }
+  .nav-links { position: relative; }
+  .nav-pill {
+    position: absolute; top: 0; height: 100%; border-radius: 8px;
+    background: var(--ink); z-index: 0;
+    transition: left 0.25s cubic-bezier(.4,0,.2,1), width 0.25s cubic-bezier(.4,0,.2,1);
+    pointer-events: none;
+  }
   .nav-link {
+    position: relative; z-index: 1;
     padding: 5px 13px; font-size: 13px; font-weight: 500; border-radius: 8px;
     background: transparent; border: none; cursor: pointer;
-    color: var(--ink-2); transition: background 0.15s, color 0.15s;
+    color: var(--ink-2); transition: color 0.2s;
   }
-  .nav-link:hover { background: rgba(0,0,0,0.05); color: var(--ink); }
-  .nav-link.active { background: var(--ink); color: #fff; }
-  .nav-link.active:hover { background: #333; }
+  .nav-link:hover { color: var(--ink); }
+  .nav-link.active { color: #fff; }
 
   /* ── Pages ── */
   .page { display: none; padding: 2.5rem 2rem; animation: fadeIn 0.25s ease; }
@@ -560,7 +567,8 @@
 <div class="site">
   <nav class="nav">
     <span class="nav-logo" onclick="showPage('landing', document.querySelector('.nav-link'))">LMA '26</span>
-    <div class="nav-links">
+    <div class="nav-links" id="nav-links">
+      <div class="nav-pill" id="nav-pill"></div>
       <button class="nav-link active" onclick="showPage('landing', this)">Home</button>
       <button class="nav-link" onclick="showPage('archive', this)">Archive</button>
       <button class="nav-link" onclick="showPage('people', this)">People</button>
@@ -621,7 +629,11 @@
       </div>
 
       <!-- Senior Quotes stack -->
-      <div class="quote-section">
+      <div class="quote-section coming-soon-box">
+        <div class="coming-soon-cover" style="border-radius:var(--radius);">
+          <div class="coming-soon-badge">Coming Soon</div>
+          <div class="coming-soon-sub">Senior quotes dropping soon</div>
+        </div>
         <div class="quote-section-label">Senior Quotes</div>
         <div class="quote-stack-wrap" id="quote-stack"></div>
       </div>
@@ -637,6 +649,7 @@
     <button onclick="scrollToSection('arc-events')">In School Events</button>
     <button onclick="scrollToSection('arc-blues')">Senior Blues</button>
     <button onclick="scrollToSection('arc-bonfire')">Senior Bonfire</button>
+    <button onclick="scrollToSection('arc-graduation')">Graduation</button>
   </div>
   <div class="archive-layout">
     <div class="timeline-sidebar">
@@ -701,7 +714,7 @@
           <div class="timeline-right"><span class="timeline-arrow">›</span></div>
         </div>
       </div>
-      <div class="timeline-item upcoming">
+      <div class="timeline-item upcoming has-anchor" onclick="scrollToSection('arc-graduation')">
         <div class="timeline-dot"></div>
         <div class="timeline-card">
           <div class="timeline-left">
@@ -855,31 +868,31 @@ const cursorText = document.getElementById('cursor-text');
 
 /* ── People with stock portrait images ── */
 const people = [
-  {img:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=450&fit=crop&q=80',name:'Jordan A.',role:'Student Body President',ig:'@jordan_lma',birthday:'',bio:'Led school-wide initiatives on mental health awareness and peer mentorship. Known for bringing the whole class together — whether it was spirit week or finals week.'},
-  {img:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=450&fit=crop&q=80',name:'Maya B.',role:'Art Club President',ig:'@mayaart',birthday:'',bio:'Muralist, illustrator, and the creative force behind this year\'s senior banner. Her work has been featured in two local galleries and she\'s headed to RISD in the fall.'},
-  {img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=450&fit=crop&q=80',name:'Carlos C.',role:'Varsity Soccer',ig:'@carlosc26',birthday:'',bio:'Three-year varsity starter with 24 goals this season. Off the field, Carlos volunteers coaching youth soccer on weekends and plans to study sports medicine.'},
-  {img:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=450&fit=crop&q=80',name:'Priya D.',role:'Orchestra Lead',ig:'@priyamusic',birthday:'',bio:'First-chair violinist since sophomore year. Priya composed an original piece performed at winter showcase that left the whole auditorium speechless.'},
-  {img:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=450&fit=crop&q=80',name:'Ethan E.',role:'Science Olympiad',ig:'@ethan_sci',birthday:'',bio:'State champion in two Science Olympiad events. Ethan spent last summer interning at a biotech lab and already has two research papers in progress.'},
-  {img:'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=450&fit=crop&q=80',name:'Sofia F.',role:'Yearbook Editor',ig:'@sofia_snaps',birthday:'',bio:'The person behind this very yearbook. Sofia shot over 2,000 photos this year and somehow made every single one of us look good. We owe her everything.'},
-  {img:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=450&fit=crop&q=80',name:'Marcus G.',role:'Varsity Basketball',ig:'@marcusg',birthday:'',bio:'All-district guard with a 3.9 GPA. Marcus is proof you can dominate on the court and in the classroom. Committed to play Division I next year.'},
-  {img:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=450&fit=crop&q=80',name:'Aisha H.',role:'Robotics Club',ig:'@aisha.codes',birthday:'',bio:'Built her first robot at 12. Led the team to regionals this year and landed a full scholarship in computer engineering. Future is bright doesn\'t even cover it.'},
-  {img:'https://images.unsplash.com/photo-1463453091185-61582044d556?w=600&h=450&fit=crop&q=80',name:'Lena I.',role:'Literary Magazine',ig:'@lenawrites',birthday:'',bio:'Published poet and fiction writer. Lena\'s short story won the state young writers award this spring. She reads everything and remembers all of it.'},
-  {img:'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&h=450&fit=crop&q=80',name:'Dana J.',role:'Drama Club Lead',ig:'@danaj',birthday:'',bio:'Lead in every school production since freshman year. Dana directed the fall one-act festival herself this year and had the whole cast in tears by closing night.'},
-  {img:'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=600&h=450&fit=crop&q=80',name:'Ryan K.',role:'Cross Country',ig:'@ryank26',birthday:'',bio:'Ran his first marathon junior year just to see if he could. He finished in under four hours. Ryan is the person who shows up early and stays late — always.'},
-  {img:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=450&fit=crop&q=80',name:'Nadia L.',role:'Debate Team',ig:'@nadial',birthday:'',bio:'Undefeated in her last 14 rounds. Nadia argues both sides of any issue with equal conviction and plans to study political science and international law.'},
-  {img:'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=600&h=450&fit=crop&q=80',name:'Tyler M.',role:'Chess Club',ig:'@tylerm',birthday:'',bio:'Ranked in the top 50 juniors nationally. Tyler is quiet in the halls but absolutely ruthless at the board. He\'s also surprisingly good at ping pong.'},
-  {img:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&h=450&fit=crop&q=80',name:'Zoe N.',role:'Environmental Club',ig:'@zoen',birthday:'',bio:'Organized the campus sustainability audit that led to the school\'s first composting program. Zoe believes small actions add up and she has the receipts to prove it.'},
-  {img:'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&h=450&fit=crop&q=80',name:'Omar P.',role:'Varsity Football',ig:'@omarp',birthday:'',bio:'Two-way starter who never missed a practice in four years. Omar is the teammate everyone wants in their corner — on the field and off it.'},
-  {img:'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&h=450&fit=crop&q=80',name:'Isla Q.',role:'Student Council',ig:'@islaq',birthday:'',bio:'The one who actually gets things done at student council. Isla pushed through the new open campus lunch policy and organized three community service events this year.'},
-  {img:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=600&h=450&fit=crop&q=80',name:'Devon R.',role:'Swim Team',ig:'@devonr',birthday:'',bio:'Broke the school record in the 200 freestyle. Devon trains twice a day and somehow still manages to be the most relaxed person in any room. It\'s a gift.'},
-  {img:'https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?w=600&h=450&fit=crop&q=80',name:'Mia S.',role:'NHS President',ig:'@mias',birthday:'',bio:'Organized 400+ volunteer hours for the senior class this year alone. Mia leads by example — she was always the first to sign up and the last to leave.'},
-  {img:'https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=600&h=450&fit=crop&q=80',name:'Jake T.',role:'Band Captain',ig:'@jaket',birthday:'',bio:'Plays four instruments. Led the marching band to their best competition finish in a decade. Jake\'s warmups are legendary and so is his halftime choreography.'},
-  {img:'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&h=450&fit=crop&q=80',name:'Ava U.',role:'Cheer Captain',ig:'@avau',birthday:'',bio:'Choreographed every routine this season from scratch. Ava brings energy to every room she walks into and somehow makes everyone around her better at what they do.'},
-  {img:'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=600&h=450&fit=crop&q=80',name:'Kai V.',role:'Volleyball',ig:'@kaiv',birthday:'',bio:'Six-rotation player with a serve that clears the net like it has something to prove. Kai is the steady presence the team leans on when the score gets tight.'},
-  {img:'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&h=450&fit=crop&q=80',name:'Luna W.',role:'Photography Club',ig:'@lunaw',birthday:'',bio:'Shot over half the photos in this yearbook. Luna sees things others walk past. Her senior project — a portrait series of school staff — stopped everyone in the hallway.'},
-  {img:'https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=600&h=450&fit=crop&q=80',name:'Andre X.',role:'Track & Field',ig:'@andrex',birthday:'',bio:'Long jump and triple jump specialist. Andre holds two regional records and has the kind of acceleration that makes people stop and look twice.'},
-  {img:'https://images.unsplash.com/photo-1541823709867-1b206113eafd?w=600&h=450&fit=crop&q=80',name:'Fiona Y.',role:'Model UN',ig:'@fionay',birthday:'',bio:'Best delegate at two conferences this year. Fiona researches every position paper like she\'s going to testify before the actual UN. She probably will one day.'},
-  {img:'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=600&h=450&fit=crop&q=80',name:'Leo Z.',role:'Film Club',ig:'@leoz',birthday:'',bio:'Directed a short film that screened at a regional youth festival. Leo has watched more movies than anyone in this school and has an opinion about every single one.'},
+  {img:'https://media.licdn.com/dms/image/v2/D4E03AQEJB8NVvyanBg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1726208211125?e=2147483647&v=beta&t=BV1Eix_RjkDMIU3LPjpib-XFGHNnoKZH-bCoegaXGaM',name:'Artin Rastegar',role:'UC Berkeley — Business Administration',ig:'@artin_4097',birthday:'Jan 30, 2008',bio:'Artin Rastegar is committed to UC Berkeley for Business Administration, planning to _____. His favorite memory has been ____ and he will miss _____ the most. Artin is most excited for ____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
 ];
 
 function renderGrid() {
@@ -895,7 +908,7 @@ function renderGrid() {
   grid.innerHTML = filtered.map((p,i) => `
     <div class="person-card card-enter" onclick="openPopup(${people.indexOf(p)})" data-cursor-text="${p.name}"
          style="animation-delay:${i * 30}ms">
-      <img src="${p.img}" alt="${p.name}">
+      ${p.img ? `<img src="${p.img}" alt="${p.name}">` : `<div style="width:100%;height:100%;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:11px;">Photo TBD</div>`}
     </div>`).join('');
 }
 
@@ -923,6 +936,9 @@ function closePopup() {
 }
 
 renderGrid();
+
+/* ── Nav pill init ── */
+requestAnimationFrame(() => movePill(document.querySelector('.nav-link.active')));
 
 /* ── People paywall ── */
 (function initPaywall() {
@@ -1244,12 +1260,23 @@ function scrollToSection(id) {
   window.scrollTo({ top, behavior: 'smooth' });
 }
 
+function movePill(btn) {
+  const pill = document.getElementById('nav-pill');
+  const nav = document.getElementById('nav-links');
+  if (!pill || !nav || !btn) return;
+  const navRect = nav.getBoundingClientRect();
+  const btnRect = btn.getBoundingClientRect();
+  pill.style.left = (btnRect.left - navRect.left) + 'px';
+  pill.style.width = btnRect.width + 'px';
+}
+
 function showPage(id, btn) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
   const page = document.getElementById('page-'+id);
   page.classList.add('active');
   btn.classList.add('active');
+  movePill(btn);
   window.scrollTo({ top: 0, behavior: 'instant' });
   if (id === 'stats') {
     // reset then re-trigger so animation replays each visit
@@ -1383,6 +1410,8 @@ const ARCHIVE_SECTIONS = [
     posts: ['DT80kSoEjCv','DT80peRkvm0','DT80slykpUD','DT80vCMkqc2','DT80xMDEkHy',
             'DT80zJzknVq','DT801bBEuFI','DT807LjEvAW','DT80-ktEsQ3','DT81IGoEos_',
             'DT81Ma2kqM5'] },
+  { id: 'arc-graduation', label: 'Graduation',      cols: 3, type: 'p',    comingSoon: true,
+    posts: [] },
 ];
 
 const ARROW_PREV = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>`;
@@ -1420,32 +1449,53 @@ function buildArchive() {
 function initCarousels(root) {
   (root || document).querySelectorAll('.carousel-outer').forEach(outer => {
     const viewport = outer.querySelector('.carousel-viewport');
+    const track = viewport?.querySelector('.carousel-track');
     const prev = outer.querySelector('.prev-arrow');
     const next = outer.querySelector('.next-arrow');
-    if (!viewport) return;
-    // Always enable arrows — carousel wraps infinitely
+    if (!viewport || !track) return;
     if (prev) prev.disabled = false;
     if (next) next.disabled = false;
-    function slideWidth() {
-      const s = viewport.querySelector('.carousel-slide');
+
+    const origSlides = Array.from(track.querySelectorAll('.carousel-slide'));
+    if (origSlides.length < 2) return;
+    const n = origSlides.length;
+
+    // Prepend + append full copy of slides for seamless wrap
+    origSlides.slice().reverse().forEach(s => {
+      const c = s.cloneNode(true); c.setAttribute('aria-hidden','true');
+      track.insertBefore(c, track.firstChild);
+    });
+    origSlides.forEach(s => {
+      const c = s.cloneNode(true); c.setAttribute('aria-hidden','true');
+      track.appendChild(c);
+    });
+
+    function sw() {
+      const s = track.querySelector('.carousel-slide');
       return s ? s.offsetWidth + 8 : viewport.clientWidth;
     }
-    function scrollPrev() {
-      if (viewport.scrollLeft <= 1) {
-        viewport.scrollLeft = viewport.scrollWidth;
-      }
-      viewport.scrollBy({ left: -slideWidth(), behavior: 'smooth' });
+
+    // Start at first real slide (past the prepended clones)
+    viewport.scrollLeft = sw() * n;
+
+    // After smooth scroll settles, silently jump back into the real zone
+    // The jump is invisible because the clone is pixel-identical
+    let scrollTimer;
+    function reposition() {
+      const w = sw();
+      const sl = viewport.scrollLeft;
+      if (sl < w * n)       viewport.scrollLeft = sl + w * n;
+      else if (sl >= w * n * 2) viewport.scrollLeft = sl - w * n;
     }
-    function scrollNext() {
-      const max = viewport.scrollWidth - viewport.clientWidth;
-      if (viewport.scrollLeft >= max - 1) {
-        viewport.scrollLeft = 0;
-      }
-      viewport.scrollBy({ left: slideWidth(), behavior: 'smooth' });
-    }
-    if (prev) prev.addEventListener('click', scrollPrev);
-    if (next) next.addEventListener('click', scrollNext);
-    new ResizeObserver(() => {}).observe(viewport);
+    viewport.addEventListener('scroll', () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(reposition, 80);
+    }, { passive: true });
+
+    if (prev) prev.addEventListener('click', () => viewport.scrollBy({ left: -sw(), behavior: 'smooth' }));
+    if (next) next.addEventListener('click', () => viewport.scrollBy({ left:  sw(), behavior: 'smooth' }));
+
+    new ResizeObserver(() => { viewport.scrollLeft = sw() * n; }).observe(viewport);
   });
 }
 
