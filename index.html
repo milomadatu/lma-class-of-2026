@@ -416,6 +416,9 @@
   .legend-row { display: flex; align-items: center; gap: 7px; }
   .legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
+  /* ── Archive mobile nav ── */
+  .archive-mobile-nav { display: none; }
+
   /* ── Timeline ── */
   .archive-layout { display: flex; gap: 2rem; align-items: flex-start; }
   .timeline-sidebar { flex: 0 0 180px; position: sticky; top: 64px; }
@@ -452,9 +455,22 @@
 
   /* ── Mobile ── */
   @media (max-width: 768px) {
-    /* Archive layout — stack on mobile */
-    .archive-layout { flex-direction: column; gap: 1.5rem; }
-    .timeline-sidebar { position: static; flex: none; width: 100%; }
+    /* Archive layout — hide sidebar, show pill nav */
+    .archive-layout { flex-direction: column; gap: 0; }
+    .timeline-sidebar { display: none; }
+    .archive-mobile-nav {
+      display: flex; gap: 6px; overflow-x: auto; padding: 0 0 12px;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .archive-mobile-nav::-webkit-scrollbar { display: none; }
+    .archive-mobile-nav button {
+      flex: 0 0 auto; padding: 6px 13px; border-radius: 20px;
+      border: 1px solid var(--border); background: var(--surface);
+      font-size: 12px; font-weight: 500; color: var(--ink-2);
+      white-space: nowrap; cursor: pointer;
+    }
+    .archive-section { margin-bottom: 1.75rem; }
+    .section-label { font-size: 10px; }
 
     /* Hide custom cursor on touch devices */
     body { cursor: auto; }
@@ -538,7 +554,7 @@
       <div class="hero-content">
         <div class="hero-eyebrow">Legacy Magnet Academy · Developed by Milo & Claude</div>
         <h1 class="hero-h1"> LMA Class of <em>2026</em></h1>
-        <p class="hero-sub">Legacy Magnet Academy's class of 2026 is full of scholars with memories, ideas, and plans for the future. </p>
+        <p class="hero-sub">100 seniors. 4 years. One last look back.</p>
         <div class="hero-actions">
           <button class="hero-btn-primary" onclick="showPage('archive', document.querySelectorAll('.nav-link')[1])">Browse Gallery</button>
           <button class="hero-btn-secondary" onclick="showPage('people', document.querySelectorAll('.nav-link')[2])">Meet the Class</button>
@@ -592,6 +608,13 @@
 
   <!-- ARCHIVE -->
   <div class="page" id="page-archive">
+  <div class="archive-mobile-nav">
+    <button onclick="scrollToSection('arc-videos')">Videos</button>
+    <button onclick="scrollToSection('arc-lfd')">Last First Day</button>
+    <button onclick="scrollToSection('arc-sunrise')">Senior Sunrise</button>
+    <button onclick="scrollToSection('arc-events')">In School Events</button>
+    <button onclick="scrollToSection('arc-blues')">Senior Blues</button>
+  </div>
   <div class="archive-layout">
     <div class="timeline-sidebar">
     <div class="timeline" id="archive-timeline">
