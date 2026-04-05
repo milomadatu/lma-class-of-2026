@@ -312,6 +312,9 @@
     opacity: 0; transition: opacity 0.2s; margin-top: -8px;
   }
   .paywall-error.visible { opacity: 1; }
+  .paywall-public-note {
+    font-size: 11px; color: var(--ink-3); margin-top: 4px;
+  }
   .shuffle-btn {
     background: var(--surface); color: var(--ink); font-size: 12px; font-weight: 600;
     border: none; border-radius: 980px; padding: 7px 16px; cursor: pointer;
@@ -467,8 +470,12 @@
     /* Archive layout — hide sidebar, show pill nav */
     .archive-layout { flex-direction: column; gap: 0; }
     .timeline-sidebar { display: none; }
+    #page-archive { padding: 0; }
     .archive-mobile-nav {
-      display: flex; gap: 6px; overflow-x: auto; padding: 0 0 12px;
+      display: flex; gap: 6px; overflow-x: auto;
+      padding: 12px 1rem 10px; margin-bottom: 4px;
+      position: sticky; top: 52px; z-index: 8;
+      background: var(--bg); border-bottom: 0.5px solid var(--border);
       -webkit-overflow-scrolling: touch; scrollbar-width: none;
     }
     .archive-mobile-nav::-webkit-scrollbar { display: none; }
@@ -478,8 +485,11 @@
       font-size: 12px; font-weight: 500; color: var(--ink-2);
       white-space: nowrap; cursor: pointer;
     }
+    .archive-carousels { padding: 1rem 1rem 1.5rem; }
     .archive-section { margin-bottom: 1.75rem; }
     .section-label { font-size: 10px; }
+    .carousel-viewport { border-radius: 10px; }
+    .carousel-outer { margin: 0 -2px; }
 
     /* Hide custom cursor on touch devices */
     body { cursor: auto; }
@@ -834,6 +844,7 @@
         <button class="paywall-btn" onclick="checkPaywall()">Unlock</button>
       </div>
       <div class="paywall-error" id="paywall-error">Incorrect password</div>
+      <div class="paywall-public-note">Public access coming soon</div>
     </div>
     <div class="people-header">
       <div>
@@ -1154,11 +1165,15 @@ const universities = [
     desc:'A community college nestled in the Santa Cruz mountains, offering a wide range of programs and a gateway to UC and CSU transfers.',
     img:'https://tpgonlinedaily.com/wp-content/uploads/2014/02/cabrillo-college-640x480.jpg',
     igPosts: ['DWqPIeBjTo1'] },
+  { name:'Irvine Valley College', city:'Irvine, CA', lat:33.6450, lng:-117.7685,
+    desc:'A top-ranked community college in Orange County known for its high transfer rates to UC and CSU campuses and strong programs in arts, science, and technology.',
+    img:'https://arquitectonica.com/architecture/wp-content/uploads/sites/2/2016/10/Irvine_Valley_College_PAC_2-1920x1080.jpg',
+    igPosts: [] },
 ];
 
 /* ── Map helpers ── */
 const BAY_AREA_UNIS = ['Stanford University', 'UC Berkeley', 'USF', 'Cabrillo College'];
-const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'USC', 'LMU', 'Pepperdine University', 'Occidental College'];
+const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'USC', 'LMU', 'Pepperdine University', 'Occidental College', 'Irvine Valley College'];
 
 // County FIPS codes (numeric). California state code = 06, so county IDs start with 6xxx.
 const BAY_AREA_COUNTIES = [6001,6013,6041,6055,6075,6081,6085,6087,6095,6097];
