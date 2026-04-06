@@ -13,11 +13,9 @@
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://milomadatu.github.io/lma-class-of-2026/images/IMG_0112.jpg">
+  <link rel="preload" as="image" href="images/IMG_0112.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/d3-cloud@1/build/d3.layout.cloud.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 </head>
 <body>
 <style>
@@ -238,6 +236,8 @@
   .section-title { font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 4px; }
   .archive-section { margin-bottom: 2.25rem; }
   .archive-section:last-child { margin-bottom: 0; }
+  .archive-skeleton { height: 320px; border-radius: 12px; background: linear-gradient(90deg, var(--bg) 25%, #ebebed 50%, var(--bg) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
   .thumb {
     aspect-ratio: 4/3; border-radius: 12px; cursor: pointer;
     overflow: hidden; position: relative; background: #e5e5ea;
@@ -345,6 +345,29 @@
   .card-enter { animation: cardFadeUp 0.38s ease both; }
 
   /* ── Popup ── */
+  /* ── Instagram embed bottom-sheet modal (mobile) ── */
+  .ig-modal { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
+  .ig-modal.open { pointer-events: all; }
+  .ig-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0); transition: background 0.28s ease; }
+  .ig-modal.open .ig-modal-backdrop { background: rgba(0,0,0,0.5); }
+  .ig-modal-sheet {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: var(--bg); border-radius: 20px 20px 0 0;
+    max-height: 92vh; display: flex; flex-direction: column;
+    transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.32,0.72,0,1);
+    box-shadow: 0 -8px 40px rgba(0,0,0,0.18);
+  }
+  .ig-modal.open .ig-modal-sheet { transform: translateY(0); }
+  .ig-modal-close {
+    position: absolute; top: 14px; right: 14px; z-index: 2;
+    width: 30px; height: 30px; border-radius: 50%; border: none;
+    background: var(--surface); box-shadow: var(--shadow-sm);
+    font-size: 14px; color: var(--ink); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ig-modal-scroll { overflow-y: auto; padding: 48px 16px 32px; -webkit-overflow-scrolling: touch; }
+  .ig-modal-scroll .instagram-media { margin: 0 auto !important; }
+
   .popup-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0);
     z-index: 50; display: flex; align-items: center; justify-content: center;
@@ -500,10 +523,13 @@
     .archive-carousels { padding: 1rem 1rem 1.5rem; }
     .archive-section { margin-bottom: 1.75rem; }
     .section-label { font-size: 10px; }
-    .carousel-viewport { border-radius: 10px; }
-    .carousel-outer { margin: 0 -2px; }
-    .archive-carousels .carousel-viewport { max-height: 420px; overflow-y: hidden; }
-    .archive-carousels .carousel-slide { zoom: 0.65; }
+    /* Mobile tap grid — 3-col Instagram-style grid, tap opens embed in modal */
+    .ig-tap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; border-radius: 10px; overflow: hidden; }
+    .ig-tap-card { display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 5px; aspect-ratio: 1/1; background: var(--surface); color: var(--ink-2);
+      text-decoration: none; font-size: 10px; font-weight: 500; cursor: pointer; border: none; padding: 0; }
+    .ig-tap-card svg { opacity: 0.35; width: 18px; height: 18px; }
+    .ig-tap-card:active { background: var(--border); }
 
     /* Hide custom cursor on touch devices */
     body { cursor: auto; }
@@ -532,13 +558,6 @@
     .quote-card { padding: 20px; }
     .quote-name { font-size: 15px; }
     .quote-text { font-size: 14px; }
-
-    /* Carousels — 1 per page, arrows inside */
-    .carousel-track.cols-3 .carousel-slide { flex: 0 0 calc(100% - 0px); scroll-snap-align: start; }
-    .carousel-track.cols-2 .carousel-slide { flex: 0 0 calc(100% - 0px); scroll-snap-align: start; }
-    .carousel-arrow { width: 36px; height: 36px; }
-    .carousel-arrow.prev-arrow { left: 6px; }
-    .carousel-arrow.next-arrow { right: 6px; }
 
     /* Map — stack vertically */
     .map-box { padding: 1rem; }
@@ -847,6 +866,15 @@
   </div>
 </div>
 
+<!-- INSTAGRAM EMBED MODAL (mobile tap-to-load) -->
+<div class="ig-modal" id="ig-modal">
+  <div class="ig-modal-backdrop" onclick="closeIgModal()"></div>
+  <div class="ig-modal-sheet">
+    <button class="ig-modal-close" onclick="closeIgModal()">✕</button>
+    <div class="ig-modal-scroll"><div id="ig-modal-content"></div></div>
+  </div>
+</div>
+
 <!-- POPUP -->
 <div class="popup-overlay" id="popup" onclick="if(event.target===this)closePopup()">
   <div class="popup">
@@ -865,6 +893,9 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-cloud@1/build/d3.layout.cloud.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 <script>
 /* ── Theme constants (mirrors CSS variables for JS use) ── */
 const C_DARK = '#0e1b2e', C_GOLD = '#c8a84b';
@@ -915,7 +946,7 @@ function renderGrid() {
   grid.innerHTML = filtered.map((p,i) => `
     <div class="person-card card-enter" onclick="openPopup(${people.indexOf(p)})" data-cursor-text="${p.name}"
          style="animation-delay:${i * 30}ms">
-      ${p.img ? `<img src="${p.img}" alt="${p.name}">` : `<div style="width:100%;height:100%;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:11px;">Photo TBD</div>`}
+      ${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async">` : `<div style="width:100%;height:100%;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:11px;">Photo TBD</div>`}
     </div>`).join('');
 }
 
@@ -1029,63 +1060,63 @@ function checkPaywall() {
 // Example: 'https://www.instagram.com/p/ABC123xyz/' → shortcode is 'ABC123xyz'
 // Add as many posts as you'd like per school and they'll appear as scrollable embeds below the map.
 const universities = [
-  { name:'Stanford University', city:'Palo Alto, CA', lat:37.4275, lng:-122.1697,
+  { name:'Stanford University', city:'Palo Alto, CA', lat:37.4275, lng:-122.1697, color:'#8C1515',
     desc:'One of the world\'s leading research universities in the heart of Silicon Valley. Known for innovation, entrepreneurship, and its iconic sandstone architecture.',
     img:'https://cdn.britannica.com/25/121725-050-8BF363EC/Hoover-Tower-Stanford-University-California.jpg',
     igPosts: ['DTzWa5YFGib'] },
-  { name:'UCLA', city:'Los Angeles, CA', lat:34.0689, lng:-118.4452,
+  { name:'UCLA', city:'Los Angeles, CA', lat:34.0689, lng:-118.4452, color:'#2D68C4',
     desc:'A flagship UC campus known for academics, athletics, and its iconic Royce Hall. One of the most applied-to universities in the country.',
     img:'https://s3.amazonaws.com/cms.ipressroom.com/173/files/20198/5d72b4772cfac209ff04c634_Royce+Quad/Royce+Quad_hero.jpg',
     igPosts: ['DWkcd4_jY97', 'DWKNRplEl5K'] },
-  { name:'UC Irvine', city:'Irvine, CA', lat:33.6405, lng:-117.8443,
+  { name:'UC Irvine', city:'Irvine, CA', lat:33.6405, lng:-117.8443, color:'#0064A4',
     desc:'A rising UC powerhouse in the heart of Orange County, known for research, gaming, and one of the most unique circular campus layouts in the US.',
     img:'https://uci.edu//visit/_imgs/visit-masthead-4.jpg',
     igPosts: ['DWazkn-Damw'] },
-  { name:'UC San Diego', city:'La Jolla, CA', lat:32.8801, lng:-117.2340,
+  { name:'UC San Diego', city:'La Jolla, CA', lat:32.8801, lng:-117.2340, color:'#182B49',
     desc:'Perched above the Pacific Ocean, UCSD is renowned for science, engineering, and the landmark Geisel Library.',
     img:'https://ucsdtritons.com/images/2020/9/1/geisel_library_1_UCSanDiego.jpg',
     igPosts: [] },
-  { name:'UC Berkeley', city:'Berkeley, CA', lat:37.8724, lng:-122.2595,
+  { name:'UC Berkeley', city:'Berkeley, CA', lat:37.8724, lng:-122.2595, color:'#003262',
     desc:'The original UC flagship and a global top-10 university. Home to Nobel laureates, Sather Tower, and a storied history of student activism.',
     img:'https://www.tclf.org/sites/default/files/thumbnails/image/CA_Berkeley_UniversityOfCaliforniaAtBerkeley_byCharlieNguyen-Flickr_2008_001_Sig.jpg',
     igPosts: ['DWvlzP3DYPO'] },
-  { name:'USC', city:'Los Angeles, CA', lat:34.0224, lng:-118.2851,
+  { name:'USC', city:'Los Angeles, CA', lat:34.0224, lng:-118.2851, color:'#990000',
     desc:'A private research powerhouse in the heart of LA. Home to one of the top film schools in the world and the legendary Tommy Trojan.',
     img:'https://i0.wp.com/calmatters.org/wp-content/uploads/2025/10/072825-USC-Campus-AP-CM.jpg?fit=2000%2C1333&ssl=1/',
     igPosts: ['DTzYn90FPnx', 'DUTuwBHks10'] },
-  { name:'USF', city:'San Francisco, CA', lat:37.7764, lng:-122.4506,
+  { name:'USF', city:'San Francisco, CA', lat:37.7764, lng:-122.4506, color:'#006A4E',
     desc:'A Jesuit university set in one of the world\'s most vibrant cities. Known for social justice, law, and stunning views of the Golden Gate.',
     img:'https://www.usfca.edu/sites/default/files/styles/16_9_768x432/public/2022-04/11_01_16_campus_beauty_selects_9826_1.jpg.jpeg?itok=63C7G3K4',
     igPosts: ['DVaL7ikjZCU'] },
-  { name:'LMU', city:'Los Angeles, CA', lat:33.9694, lng:-118.4165,
+  { name:'LMU', city:'Los Angeles, CA', lat:33.9694, lng:-118.4165, color:'#A50034',
     desc:'A Jesuit university on the bluffs above Marina del Rey with ocean views and a tight-knit community focused on ethics and service.',
     img:'https://admission.lmu.edu/media/homepage/lmu-sacred-heart-chapel.jpg',
     igPosts: ['DWKJXODksvb'] },
-  { name:'Colorado State', city:'Fort Collins, CO', lat:40.5734, lng:-105.0865,
+  { name:'Colorado State', city:'Fort Collins, CO', lat:40.5734, lng:-105.0865, color:'#1E4D2B',
     desc:'A land-grant university in the Rocky Mountain foothills. Known for agriculture, engineering, outdoor culture, and vibrant campus life.',
     img:'https://www.usnews.com/dims4/USNEWS/90b4c6a/17177859217/resize/800x540%3E/quality/85/?url=https%3A%2F%2Fwww.usnews.com%2Fcmsmedia%2F64%2Fc1ed79f7dcb3ced35b9053ae9c7abb%2F23017_06875.jpg',
     igPosts: ['DWU-jSdCdgX'] },
-  { name:'University of Utah', city:'Salt Lake City, UT', lat:40.7649, lng:-111.8421,
+  { name:'University of Utah', city:'Salt Lake City, UT', lat:40.7649, lng:-111.8421, color:'#CC0000',
     desc:'Utah\'s flagship university set against the Wasatch Mountains. Strong programs in health sciences, tech, and engineering with ski slopes minutes away.',
     img:'https://utahnewsdispatch.com/wp-content/uploads/2024/01/011524_University-of-Utah_02-scaled.jpg',
     igPosts: ['DUTn-s4kiSz'] },
-  { name:'Carnegie Mellon', city:'Pittsburgh, PA', lat:40.4432, lng:-79.9428,
+  { name:'Carnegie Mellon', city:'Pittsburgh, PA', lat:40.4432, lng:-79.9428, color:'#C41230',
     desc:'A global research university known for computer science, engineering, and the arts. CMU consistently ranks among the top schools for technology and innovation.',
     img:'https://www.cmu.edu/sites/default/files/cmu-visit-site-files/styles/large_hero_1920x1080/public/2025-08/visit_hero.jpg.webp?itok=Wj42GGPE',
     igPosts: ['DWk1z1iDX0l'] },
-  { name:'Pepperdine University', city:'Malibu, CA', lat:34.0359, lng:-118.6919,
+  { name:'Pepperdine University', city:'Malibu, CA', lat:34.0359, lng:-118.6919, color:'#00205B',
     desc:'A private Christian university perched on the Malibu coast with stunning Pacific Ocean views. Known for law, business, and a close-knit community.',
     img:'https://www.pepperdine.edu/about/images/222375-malibu-campus-full.jpg',
     igPosts: ['DV7oNUyDftU'] },
-  { name:'Occidental College', city:'Los Angeles, CA', lat:34.1184, lng:-118.2117,
+  { name:'Occidental College', city:'Los Angeles, CA', lat:34.1184, lng:-118.2117, color:'#F36C21',
     desc:'A small liberal arts college in Eagle Rock with a rigorous academic program and a strong commitment to community engagement and social justice.',
     img:'https://www.oxy.edu/sites/default/files/News_USNWR23_1440x800-2.jpg',
     igPosts: ['DTzLIvelBn3'] },
-  { name:'Cabrillo College', city:'Aptos, CA', lat:36.9741, lng:-121.9072,
+  { name:'Cabrillo College', city:'Aptos, CA', lat:36.9741, lng:-121.9072, color:'#003865',
     desc:'A community college nestled in the Santa Cruz mountains, offering a wide range of programs and a gateway to UC and CSU transfers.',
     img:'https://tpgonlinedaily.com/wp-content/uploads/2014/02/cabrillo-college-640x480.jpg',
     igPosts: ['DWqPIeBjTo1'] },
-  { name:'Irvine Valley College', city:'Irvine, CA', lat:33.6450, lng:-117.7685,
+  { name:'Irvine Valley College', city:'Irvine, CA', lat:33.6450, lng:-117.7685, color:'#005A9C',
     desc:'A top-ranked community college in Orange County known for its high transfer rates to UC and CSU campuses and strong programs in arts, science, and technology.',
     img:'https://arquitectonica.com/architecture/wp-content/uploads/sites/2/2016/10/Irvine_Valley_College_PAC_2-1920x1080.jpg',
     igPosts: [] },
@@ -1157,7 +1188,7 @@ function addPins(g, projection, uniNames) {
     const [cx, cy] = coords;
     const dot = g.append('g').style('cursor', 'pointer')
       .on('mouseover', function() {
-        d3.select(this).select('.dot-outer').attr('r', 8).attr('fill', C_GOLD);
+        d3.select(this).select('.dot-outer').attr('r', 9).attr('opacity', 0.85);
         tooltip.textContent = u.name; tooltip.style.opacity = '1';
       })
       .on('mousemove', function(event) {
@@ -1165,7 +1196,7 @@ function addPins(g, projection, uniNames) {
         tooltip.style.top  = (event.clientY - 32) + 'px';
       })
       .on('mouseout', function() {
-        d3.select(this).select('.dot-outer').attr('r', 7).attr('fill', C_DARK);
+        d3.select(this).select('.dot-outer').attr('r', 7).attr('opacity', 1);
         tooltip.style.opacity = '0';
       })
       .on('click', function(event) {
@@ -1173,13 +1204,14 @@ function addPins(g, projection, uniNames) {
         tooltip.style.opacity = '0';
         openUniInfo(u);
       });
+    const col = u.color || C_DARK;
     dot.append('circle').attr('class','dot-pulse')
-      .attr('cx',cx).attr('cy',cy).attr('r',7).attr('fill',C_GOLD).attr('pointer-events','none');
+      .attr('cx',cx).attr('cy',cy).attr('r',7).attr('fill',col).attr('pointer-events','none');
     dot.append('circle').attr('class','dot-outer')
-      .attr('cx',cx).attr('cy',cy).attr('r',7).attr('fill',C_DARK)
+      .attr('cx',cx).attr('cy',cy).attr('r',7).attr('fill',col)
       .attr('stroke','#fff').attr('stroke-width',1.8);
     dot.append('circle')
-      .attr('cx',cx).attr('cy',cy).attr('r',3).attr('fill',C_GOLD).attr('pointer-events','none');
+      .attr('cx',cx).attr('cy',cy).attr('r',3).attr('fill','#fff').attr('pointer-events','none');
   });
 }
 
@@ -1429,33 +1461,96 @@ const ARCHIVE_SECTIONS = [
 const ARROW_PREV = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>`;
 const ARROW_NEXT = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>`;
 
+
+const IG_SVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>`;
+
+function makeCarouselHTML(sec) {
+  const mobile = window.innerWidth <= 768;
+  if (mobile) {
+    // 3-col tap grid — tapping opens embed in bottom-sheet modal
+    const cards = sec.posts.map(id => {
+      const url = `https://www.instagram.com/${sec.type}/${id}/`;
+      return `<button class="ig-tap-card" onclick="openIgModal('${url}')" aria-label="View post">${IG_SVG}</button>`;
+    }).join('');
+    return `<div class="ig-tap-grid">${cards}</div>`;
+  }
+  const slides = sec.posts.map(id => {
+    const url = `https://www.instagram.com/${sec.type}/${id}/`;
+    return `<div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>`;
+  }).join('');
+  return `<div class="carousel-outer">
+    <button class="carousel-arrow prev-arrow" disabled aria-label="Previous">${ARROW_PREV}</button>
+    <div class="carousel-viewport"><div class="carousel-track cols-${sec.cols}">${slides}</div></div>
+    <button class="carousel-arrow next-arrow" aria-label="Next">${ARROW_NEXT}</button>
+  </div>`;
+}
+
+let _igEmbedJsLoaded = false;
+function _loadEmbedJs() {
+  if (_igEmbedJsLoaded) return;
+  _igEmbedJsLoaded = true;
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.instagram.com/embed.js';
+  document.body.appendChild(s);
+}
+
+function openIgModal(url) {
+  _loadEmbedJs();
+  const modal = document.getElementById('ig-modal');
+  const content = document.getElementById('ig-modal-content');
+  content.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;margin:0 auto;max-width:100%;min-width:0;width:100%;"></blockquote>`;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  processEmbeds();
+}
+
+function closeIgModal() {
+  const modal = document.getElementById('ig-modal');
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => { document.getElementById('ig-modal-content').innerHTML = ''; }, 350);
+}
+
 function buildArchive() {
   const container = document.getElementById('archive-carousels');
   if (!container) return;
+
   container.innerHTML = ARCHIVE_SECTIONS.map(sec => {
-    const slides = sec.posts.map(id =>
-      `<div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/${sec.type}/${id}/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>`
-    ).join('');
-    const carousel = `<div class="carousel-outer">
-        <button class="carousel-arrow prev-arrow" disabled aria-label="Previous">${ARROW_PREV}</button>
-        <div class="carousel-viewport"><div class="carousel-track cols-${sec.cols}">${slides}</div></div>
-        <button class="carousel-arrow next-arrow" aria-label="Next">${ARROW_NEXT}</button>
-      </div>`;
-    return sec.comingSoon
-      ? `<div class="archive-section" id="${sec.id}">
-          <div class="section-label">${sec.label}</div>
-          <div class="coming-soon-box">
-            <div class="coming-soon-cover"><div class="coming-soon-badge">Coming Soon</div><div class="coming-soon-sub">Photos dropping after the event</div></div>
-            ${carousel}
-          </div>
-        </div>`
-      : `<div class="archive-section" id="${sec.id}">
-          <div class="section-label">${sec.label}</div>
+    if (sec.comingSoon) {
+      const carousel = makeCarouselHTML(sec);
+      return `<div class="archive-section" id="${sec.id}">
+        <div class="section-label">${sec.label}</div>
+        <div class="coming-soon-box">
+          <div class="coming-soon-cover"><div class="coming-soon-badge">Coming Soon</div><div class="coming-soon-sub">Photos dropping after the event</div></div>
           ${carousel}
-        </div>`;
+        </div>
+      </div>`;
+    }
+    return `<div class="archive-section" id="${sec.id}" data-sec-id="${sec.id}">
+      <div class="section-label">${sec.label}</div>
+      <div class="archive-skeleton"></div>
+    </div>`;
   }).join('');
-  initCarousels();
-  processEmbeds();
+
+  // Lazy-load each section when it nears the viewport
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const sec = ARCHIVE_SECTIONS.find(s => s.id === el.dataset.secId);
+      if (!sec) return;
+      obs.unobserve(el);
+      const skeleton = el.querySelector('.archive-skeleton');
+      const temp = document.createElement('div');
+      temp.innerHTML = makeCarouselHTML(sec);
+      el.replaceChild(temp.firstElementChild, skeleton);
+      initCarousels(el);
+      processEmbeds();
+    });
+  }, { rootMargin: '300px 0px' });
+
+  container.querySelectorAll('[data-sec-id]').forEach(el => observer.observe(el));
 }
 
 function processEmbeds() {
@@ -1466,9 +1561,6 @@ function processEmbeds() {
   }
 }
 
-// Threshold: only use clone-wrap for small carousels, avoid cloning hundreds of IG blockquotes
-const INFINITE_THRESHOLD = 8;
-
 function initCarousels(root) {
   (root || document).querySelectorAll('.carousel-outer').forEach(outer => {
     const viewport = outer.querySelector('.carousel-viewport');
@@ -1476,49 +1568,18 @@ function initCarousels(root) {
     const prev = outer.querySelector('.prev-arrow');
     const next = outer.querySelector('.next-arrow');
     if (!viewport || !track) return;
-
-    const origSlides = Array.from(track.querySelectorAll('.carousel-slide'));
-    if (origSlides.length < 2) return;
-    const n = origSlides.length;
-
     function sw() {
       const s = track.querySelector('.carousel-slide');
       return s ? s.offsetWidth + 8 : viewport.clientWidth;
     }
-
-    if (n <= INFINITE_THRESHOLD) {
-      // Clone-based infinite wrap for small carousels (no IG blockquotes to clone)
-      if (prev) prev.disabled = false;
-      if (next) next.disabled = false;
-      origSlides.slice().reverse().forEach(s => {
-        const c = s.cloneNode(true); c.setAttribute('aria-hidden','true');
-        track.insertBefore(c, track.firstChild);
-      });
-      origSlides.forEach(s => {
-        const c = s.cloneNode(true); c.setAttribute('aria-hidden','true');
-        track.appendChild(c);
-      });
-      viewport.scrollLeft = sw() * n;
-      let scrollTimer;
-      function reposition() {
-        const w = sw(), sl = viewport.scrollLeft;
-        if (sl < w * n)         viewport.scrollLeft = sl + w * n;
-        else if (sl >= w*n*2)   viewport.scrollLeft = sl - w * n;
-      }
-      viewport.addEventListener('scroll', () => { clearTimeout(scrollTimer); scrollTimer = setTimeout(reposition, 80); }, { passive: true });
-      new ResizeObserver(() => { viewport.scrollLeft = sw() * n; }).observe(viewport);
-    } else {
-      // Large carousels: standard arrows, disable at ends
-      function update() {
-        const sl = viewport.scrollLeft, max = viewport.scrollWidth - viewport.clientWidth;
-        if (prev) prev.disabled = sl <= 1;
-        if (next) next.disabled = max <= 1 || sl >= max - 1;
-      }
-      viewport.addEventListener('scroll', update, { passive: true });
-      update();
-      new ResizeObserver(update).observe(viewport);
+    function update() {
+      const sl = viewport.scrollLeft, max = viewport.scrollWidth - viewport.clientWidth;
+      if (prev) prev.disabled = sl <= 1;
+      if (next) next.disabled = max <= 1 || sl >= max - 1;
     }
-
+    viewport.addEventListener('scroll', update, { passive: true });
+    update();
+    new ResizeObserver(update).observe(viewport);
     if (prev) prev.addEventListener('click', () => viewport.scrollBy({ left: -sw(), behavior: 'smooth' }));
     if (next) next.addEventListener('click', () => viewport.scrollBy({ left:  sw(), behavior: 'smooth' }));
   });
@@ -1608,6 +1669,14 @@ buildArchive();
   buildCards();
 })();
 </script>
-<script async src="https://www.instagram.com/embed.js"></script>
+<script>
+// Desktop: load embed.js eagerly. Mobile: deferred until user taps a post.
+if (window.innerWidth > 768) {
+  _igEmbedJsLoaded = true;
+  var s = document.createElement('script');
+  s.async = true; s.src = 'https://www.instagram.com/embed.js';
+  document.body.appendChild(s);
+}
+</script>
 </body>
 </html>
