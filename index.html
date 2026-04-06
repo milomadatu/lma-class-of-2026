@@ -97,10 +97,28 @@
   .nav-link.active { color: #fff; }
 
   /* ── Pages ── */
-  .page { display: none; padding: 2.5rem 2rem; animation: fadeIn 0.25s ease; }
-  .page.active { display: block; }
+  .page { display: none; padding: 2.5rem 2rem; }
+  .page.active { display: block; animation: pageIn 0.28s cubic-bezier(0.22,1,0.36,1); }
+  .page.leaving {
+    display: block !important; position: fixed; top: 52px; left: 0; right: 0; bottom: 0;
+    overflow: hidden; pointer-events: none; z-index: 6;
+    animation: pageOut 0.18s ease forwards;
+  }
   #page-landing { padding: 0; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pageIn  { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pageOut { from { opacity: 1; transform: translateY(0); }  to { opacity: 0; transform: translateY(-6px); } }
+  @keyframes fadeIn  { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── Carousel play/pause ── */
+  .archive-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .archive-section-header .section-label { margin-bottom: 0; }
+  .carousel-play {
+    font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 26px;
+    border: none; cursor: pointer; color: var(--ink-2); background: transparent;
+    transition: background 0.18s, color 0.18s; line-height: 1.2;
+  }
+  .carousel-play:hover { color: var(--ink); background: rgba(0,0,0,0.06); }
+  .carousel-play.playing { background: var(--ink); color: #fff; }
 
   /* ── Hero ── */
   .hero-section {
@@ -250,11 +268,10 @@
   .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   /* ── Carousel ── */
   .carousel-outer { position: relative; }
-  .carousel-viewport { overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; border-radius: 12px; }
-  .carousel-viewport::-webkit-scrollbar { display: none; }
-  .carousel-track { display: flex; gap: 8px; }
-  .carousel-track.cols-3 .carousel-slide { flex: 0 0 calc(33.333% - 5.5px); scroll-snap-align: start; min-width: 0; }
-  .carousel-track.cols-2 .carousel-slide { flex: 0 0 calc(50% - 4px); scroll-snap-align: start; min-width: 0; }
+  .carousel-viewport { overflow: hidden; border-radius: 12px; }
+  .carousel-track { display: flex; gap: 8px; will-change: transform; transition: transform 0.72s cubic-bezier(0.16,1,0.3,1); }
+  .carousel-track.cols-3 .carousel-slide { flex: 0 0 calc(33.333% - 5.5px); min-width: 0; }
+  .carousel-track.cols-2 .carousel-slide { flex: 0 0 calc(50% - 4px); min-width: 0; }
   .carousel-slide blockquote.instagram-media { border-radius: 12px !important; }
   .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; background: #fff; border: none; border-radius: 50%; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 14px rgba(0,0,0,0.13), 0 0 0 0.5px rgba(0,0,0,0.06); backdrop-filter: blur(10px); color: var(--ink); transition: box-shadow 0.2s, transform 0.2s; }
   .carousel-arrow:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(0,0,0,0.06); transform: translateY(calc(-50% - 2px)); }
@@ -533,7 +550,7 @@
 
     /* Carousels on mobile — 1 slide per page, arrows inside */
     .carousel-track.cols-3 .carousel-slide,
-    .carousel-track.cols-2 .carousel-slide { flex: 0 0 100%; scroll-snap-align: start; }
+    .carousel-track.cols-2 .carousel-slide { flex: 0 0 100%; }
     .carousel-arrow.prev-arrow { left: 8px; }
     .carousel-arrow.next-arrow { right: 8px; }
     .instagram-media { width: 100% !important; max-width: 540px; margin: auto; }
@@ -1386,17 +1403,23 @@ function movePill(btn) {
 }
 
 function showPage(id, btn) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
-  const page = document.getElementById('page-'+id);
-  page.classList.add('active');
+  const current = document.querySelector('.page.active');
+  const next = document.getElementById('page-' + id);
+  if (current === next) return;
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   btn.classList.add('active');
   movePill(btn);
+  if (current) {
+    current.classList.remove('active');
+    current.classList.add('leaving');
+    setTimeout(() => current.classList.remove('leaving'), 200);
+  }
+  next.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'instant' });
   if (id === 'stats') {
-    page.querySelectorAll('.stat-block').forEach(el => el.classList.remove('visible'));
+    next.querySelectorAll('.stat-block').forEach(el => el.classList.remove('visible'));
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      page.querySelectorAll('.stat-block').forEach(el => el.classList.add('visible'));
+      next.querySelectorAll('.stat-block').forEach(el => el.classList.add('visible'));
       initMapsOnce();
     }));
   }
@@ -1530,6 +1553,8 @@ const ARCHIVE_SECTIONS = [
 
 const ARROW_PREV = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>`;
 const ARROW_NEXT = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>`;
+const ICON_PLAY  = `<svg width="11" height="13" viewBox="0 0 11 13" fill="currentColor"><polygon points="0,0 11,6.5 0,13"/></svg>`;
+const ICON_PAUSE = `<svg width="11" height="13" viewBox="0 0 11 13" fill="currentColor"><rect x="0" y="0" width="4" height="13"/><rect x="7" y="0" width="4" height="13"/></svg>`;
 
 
 function makeCarouselHTML(sec) {
@@ -1549,8 +1574,8 @@ function buildArchive() {
   if (!container) return;
 
   container.innerHTML = ARCHIVE_SECTIONS.map(sec => {
+    const carousel = makeCarouselHTML(sec);
     if (sec.comingSoon) {
-      const carousel = makeCarouselHTML(sec);
       return `<div class="archive-section" id="${sec.id}">
         <div class="section-label">${sec.label}</div>
         <div class="coming-soon-box">
@@ -1559,30 +1584,17 @@ function buildArchive() {
         </div>
       </div>`;
     }
-    return `<div class="archive-section" id="${sec.id}" data-sec-id="${sec.id}">
-      <div class="section-label">${sec.label}</div>
-      <div class="archive-skeleton"></div>
+    return `<div class="archive-section" id="${sec.id}">
+      <div class="archive-section-header">
+        <div class="section-label">${sec.label}</div>
+        <button class="carousel-play" aria-label="Toggle slideshow">Slideshow</button>
+      </div>
+      ${carousel}
     </div>`;
   }).join('');
 
-  // Lazy-load each section when it nears the viewport
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const el = entry.target;
-      const sec = ARCHIVE_SECTIONS.find(s => s.id === el.dataset.secId);
-      if (!sec) return;
-      obs.unobserve(el);
-      const skeleton = el.querySelector('.archive-skeleton');
-      const temp = document.createElement('div');
-      temp.innerHTML = makeCarouselHTML(sec);
-      el.replaceChild(temp.firstElementChild, skeleton);
-      initCarousels(el);
-      processEmbeds();
-    });
-  }, { rootMargin: '300px 0px' });
-
-  container.querySelectorAll('[data-sec-id]').forEach(el => observer.observe(el));
+  initCarousels(container);
+  processEmbeds();
 }
 
 function processEmbeds() {
@@ -1599,25 +1611,105 @@ function initCarousels(root) {
     const track = viewport?.querySelector('.carousel-track');
     const prev = outer.querySelector('.prev-arrow');
     const next = outer.querySelector('.next-arrow');
+    const playBtn = outer.closest('.archive-section')?.querySelector('.carousel-play') || null;
     if (!viewport || !track) return;
-    function sw() {
-      const s = track.querySelector('.carousel-slide');
-      return s ? s.offsetWidth + 8 : viewport.clientWidth;
+
+    let idx = 0, timer = null;
+
+    function allSlides() { return [...track.querySelectorAll('.carousel-slide')]; }
+    function slideW() { const s = allSlides()[0]; return s ? s.offsetWidth + 8 : viewport.clientWidth; }
+
+    function goTo(i, animate) {
+      const ss = allSlides();
+      idx = Math.max(0, Math.min(i, ss.length - 1));
+      track.style.transition = animate === false ? 'none' : 'transform 0.72s cubic-bezier(0.16,1,0.3,1)';
+      track.style.transform = `translateX(-${idx * slideW()}px)`;
+      if (prev) prev.disabled = idx <= 0;
+      if (next) next.disabled = idx >= ss.length - 1;
     }
-    function update() {
-      const sl = viewport.scrollLeft, max = viewport.scrollWidth - viewport.clientWidth;
-      if (prev) prev.disabled = sl <= 1;
-      if (next) next.disabled = max <= 1 || sl >= max - 1;
+
+    // Recalc position on resize without animation
+    new ResizeObserver(() => goTo(idx, false)).observe(viewport);
+    goTo(0, false);
+
+    // Touch swipe
+    let tx0 = null;
+    viewport.addEventListener('touchstart', e => { tx0 = e.touches[0].clientX; }, { passive: true });
+    viewport.addEventListener('touchend', e => {
+      if (tx0 === null) return;
+      const dx = e.changedTouches[0].clientX - tx0;
+      tx0 = null;
+      if (Math.abs(dx) < 40) return;
+      stopSlideshow();
+      goTo(dx < 0 ? idx + 1 : idx - 1, true);
+    }, { passive: true });
+
+    if (prev) prev.addEventListener('click', () => { stopSlideshow(); goTo(idx - 1, true); });
+    if (next) next.addEventListener('click', () => { stopSlideshow(); goTo(idx + 1, true); });
+
+    function stopSlideshow() {
+      if (!timer) return;
+      clearInterval(timer);
+      timer = null;
+      if (playBtn) { playBtn.textContent = 'Slideshow'; playBtn.classList.remove('playing'); }
     }
-    viewport.addEventListener('scroll', update, { passive: true });
-    update();
-    new ResizeObserver(update).observe(viewport);
-    if (prev) prev.addEventListener('click', () => viewport.scrollBy({ left: -sw(), behavior: 'smooth' }));
-    if (next) next.addEventListener('click', () => viewport.scrollBy({ left:  sw(), behavior: 'smooth' }));
+
+    if (playBtn) {
+      playBtn.addEventListener('click', () => {
+        if (timer) {
+          stopSlideshow();
+        } else {
+          timer = setInterval(() => {
+            const ss = allSlides();
+            goTo(idx >= ss.length - 1 ? 0 : idx + 1, true);
+          }, 2800);
+          playBtn.textContent = 'Stop';
+          playBtn.classList.add('playing');
+        }
+      });
+    }
   });
 }
 
 buildArchive();
+
+/* ── Confetti ── */
+function launchConfetti() {
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:99999';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  canvas.width = innerWidth; canvas.height = innerHeight;
+  const COLORS = ['#b07830','#c8a84b','#fdf3e3','#1d1d1f','#ffffff','#6e6e73'];
+  const pieces = Array.from({length: 160}, () => ({
+    x: Math.random() * canvas.width,
+    y: -20 - Math.random() * 200,
+    r: 4 + Math.random() * 6,
+    d: 2.5 + Math.random() * 3,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    tiltSpeed: 0.1 + Math.random() * 0.15,
+    angle: 0
+  }));
+  let done = false;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+      p.angle += p.tiltSpeed;
+      p.y += p.d;
+      const tilt = Math.sin(p.angle) * 12;
+      ctx.beginPath();
+      ctx.lineWidth = p.r;
+      ctx.strokeStyle = p.color;
+      ctx.moveTo(p.x + tilt, p.y);
+      ctx.lineTo(p.x + tilt + p.r * 0.8, p.y + p.r * 1.6);
+      ctx.stroke();
+    });
+    if (!done) requestAnimationFrame(draw);
+    if (pieces.every(p => p.y > canvas.height + 20)) { done = true; canvas.remove(); }
+  }
+  draw();
+  setTimeout(() => { done = true; canvas.remove(); }, 8000);
+}
 
 /* ── Graduation countdown ── */
 (function() {
@@ -1629,9 +1721,14 @@ buildArchive();
     s: document.getElementById('cd-sec')
   };
   function pad(n) { return String(n).padStart(2, '0'); }
+  let fired = false;
   function tick() {
     const diff = target - Date.now();
-    if (diff <= 0) { els.d.textContent = els.h.textContent = els.m.textContent = els.s.textContent = '00'; return; }
+    if (diff <= 0) {
+      els.d.textContent = els.h.textContent = els.m.textContent = els.s.textContent = '00';
+      if (!fired) { fired = true; launchConfetti(); }
+      return;
+    }
     els.d.textContent = pad(Math.floor(diff / 86400000));
     els.h.textContent = pad(Math.floor((diff % 86400000) / 3600000));
     els.m.textContent = pad(Math.floor((diff % 3600000) / 60000));
