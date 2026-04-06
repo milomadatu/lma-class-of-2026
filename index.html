@@ -8,12 +8,12 @@
   <meta name="description" content="Legacy Magnet Academy Class of 2026 — memories, people, and where we're going.">
   <meta property="og:title" content="LMA Class of 2026">
   <meta property="og:description" content="Legacy Magnet Academy Class of 2026 — memories, people, and where we're going.">
-  <meta property="og:image" content="https://milomadatu.github.io/lma-class-of-2026/images/IMG_0112.jpg">
+  <meta property="og:image" content="https://milomadatu.github.io/lma-class-of-2026/images/IMG_0112.webp">
   <meta property="og:url" content="https://milomadatu.github.io/lma-class-of-2026/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://milomadatu.github.io/lma-class-of-2026/images/IMG_0112.jpg">
-  <link rel="preload" as="image" href="images/IMG_0112.jpg" fetchpriority="high">
+  <meta name="twitter:image" content="https://milomadatu.github.io/lma-class-of-2026/images/IMG_0112.webp">
+  <link rel="preload" as="image" href="images/IMG_0112.webp" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -128,7 +128,7 @@
   }
   .hero-bg {
     position: absolute; inset: 0;
-    background-image: url('images/IMG_0112.jpg');
+    background-image: url('images/IMG_0112.webp');
     background-size: cover; background-position: center 30%;
     transform: scale(1.04); transition: transform 9s ease;
   }
@@ -221,7 +221,7 @@
   .landing-photo { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); }
   .landing-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .countdown-box { background: var(--ink); border-radius: var(--radius); padding: 2rem 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); }
-  .countdown-eyebrow { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.38); margin-bottom: 1.25rem; }
+  .countdown-eyebrow { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.62); margin-bottom: 1.25rem; }
   .countdown-units { display: flex; align-items: flex-start; gap: 6px; }
   .countdown-unit { display: flex; flex-direction: column; align-items: center; min-width: 52px; }
   .countdown-num { font-size: 44px; font-weight: 700; color: #fff; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
@@ -595,6 +595,7 @@
     </div>
   </nav>
 
+  <main>
   <!-- LANDING -->
   <div class="page active" id="page-landing">
     <div class="hero-section">
@@ -644,7 +645,7 @@
 
       <!-- Photo -->
       <div class="landing-photo">
-        <img src="images/DJI_0975.jpg" alt="LMA Class of 2026">
+        <img src="images/DJI_0975.webp" alt="LMA Class of 2026">
       </div>
 
       <!-- Senior Quotes stack -->
@@ -860,6 +861,7 @@
     </div>
     </div>
   </div>
+  </main>
 </div>
 
 <!-- POPUP -->
@@ -1206,11 +1208,19 @@ const universities = [
     desc:'A top-ranked community college in Orange County known for its high transfer rates to UC and CSU campuses and strong programs in arts, science, and technology.',
     img:'https://arquitectonica.com/architecture/wp-content/uploads/sites/2/2016/10/Irvine_Valley_College_PAC_2-1920x1080.jpg',
     igPosts: [] },
+  { name:'University of La Verne', city:'La Verne, CA', lat:34.1008, lng:-117.7678, color:'#2C5234',
+    desc:'A private university in the San Gabriel Valley known for its personalized education, strong community ties, and diverse student body.',
+    img:'https://laverne.edu/news/wp-content/uploads/sites/5/2023/08/20210805-founders-hall-2-2100x1400-0230fbdf-b171-4a11-a38a-77ae84c32549-1920x1280.jpg',
+    igPosts: ['DWx4s0YjQB8'] },
+  { name:'University of Minnesota', city:'Minneapolis, MN', lat:44.9740, lng:-93.2277, color:'#7A0019',
+    desc:'A Big Ten powerhouse and one of the top public research universities in the country. Located in the Twin Cities with world-class programs across every discipline.',
+    img:'https://www.commonapp.org/static/7efac8744272bdede472f2ade1703769/university-minnesota-twin-cities_816_gallery1.jpg',
+    igPosts: ['DWx4UAHDZIH'] },
 ];
 
 /* ── Map helpers ── */
 const BAY_AREA_UNIS = ['Stanford University', 'UC Berkeley', 'USF', 'Cabrillo College'];
-const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'USC', 'LMU', 'Pepperdine University', 'Occidental College', 'Irvine Valley College'];
+const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'USC', 'LMU', 'Pepperdine University', 'Occidental College', 'Irvine Valley College', 'University of La Verne'];
 
 // County FIPS codes (numeric). California state code = 06, so county IDs start with 6xxx.
 const BAY_AREA_COUNTIES = [6001,6013,6041,6055,6075,6081,6085,6087,6095,6097];
