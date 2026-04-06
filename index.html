@@ -14,6 +14,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://milomadatu.github.io/lma-class-of-2026/images/IMG_0112.webp">
   <link rel="preload" as="image" href="images/IMG_0112.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="images/DJI_0975.webp" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -645,7 +646,7 @@
 
       <!-- Photo -->
       <div class="landing-photo">
-        <img src="images/DJI_0975.webp" alt="LMA Class of 2026">
+        <img src="images/DJI_0975.webp" alt="LMA Class of 2026" fetchpriority="high">
       </div>
 
       <!-- Senior Quotes stack -->
@@ -1624,10 +1625,13 @@ function initCarousels(root) {
     const playBtn = outer.closest('.archive-section')?.querySelector('.carousel-play') || null;
     if (!viewport || !track) return;
 
-    let idx = 0, timer = null;
+    let idx = 0, timer = null, _sw = 0;
 
     function allSlides() { return [...track.querySelectorAll('.carousel-slide')]; }
-    function slideW() { const s = allSlides()[0]; return s ? s.offsetWidth + 8 : viewport.clientWidth; }
+    function slideW() {
+      if (!_sw) { const s = allSlides()[0]; _sw = s ? s.offsetWidth + 8 : viewport.clientWidth; }
+      return _sw;
+    }
 
     function goTo(i, animate) {
       const ss = allSlides();
@@ -1638,8 +1642,8 @@ function initCarousels(root) {
       if (next) next.disabled = idx >= ss.length - 1;
     }
 
-    // Recalc position on resize without animation
-    new ResizeObserver(() => goTo(idx, false)).observe(viewport);
+    // Invalidate cached width and recalc on resize
+    new ResizeObserver(() => { _sw = 0; goTo(idx, false); }).observe(viewport);
     goTo(0, false);
 
     // Touch swipe
