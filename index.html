@@ -206,8 +206,8 @@
   .countdown-unit { display: flex; flex-direction: column; align-items: center; min-width: 52px; }
   .countdown-num { font-size: 44px; font-weight: 700; color: #fff; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
   .countdown-sep { font-size: 36px; font-weight: 300; color: rgba(255,255,255,0.22); line-height: 1; padding-top: 2px; }
-  .countdown-lbl { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.35); margin-top: 5px; }
-  .countdown-date { font-size: 11px; color: var(--gold); font-weight: 600; letter-spacing: 0.04em; margin-top: 1.25rem; }
+  .countdown-lbl { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.7); margin-top: 5px; }
+  .countdown-date { font-size: 11px; color: var(--gold-bright); font-weight: 600; letter-spacing: 0.04em; margin-top: 1.25rem; }
   /* ── Quote stack ── */
   .quote-section { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.25rem; display: flex; flex-direction: column; }
   .quote-section-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin-bottom: 1rem; }
@@ -330,7 +330,7 @@
   }
   .shuffle-btn:hover { box-shadow: var(--shadow-md); transform: scale(1.03); }
   .shuffle-btn:active { transform: scale(0.97); }
-  .people-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; cursor: none; }
+  .people-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; cursor: none; }
   .person-card {
     aspect-ratio: 1; border-radius: 12px; overflow: hidden; cursor: none;
     box-shadow: var(--shadow-sm);
@@ -446,7 +446,7 @@
   .map-panel-text { flex: 1; min-width: 0; padding-right: 20px; overflow: hidden; }
   .map-panel-name { font-size: 13px; font-weight: 700; color: var(--surface); letter-spacing: -0.02em; margin-bottom: 3px; line-height: 1.25; }
   .map-panel-city { font-size: 10px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-  .map-panel-desc { font-size: 11px; color: rgba(255,255,255,0.48); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 5; line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+  .map-panel-desc { font-size: 11px; color: rgba(255,255,255,0.48); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
   .map-panel-ig { flex: 1; overflow-x: auto; overflow-y: hidden; padding: 10px; display: flex; flex-direction: row; align-items: flex-start; gap: 8px; zoom: 0.85; }
   .map-panel-ig .instagram-media { flex: 0 0 320px; min-width: 0; }
   .map-panel-ig::-webkit-scrollbar { width: 3px; }
@@ -571,7 +571,7 @@
     .map-panel-ig { zoom: 1; }
 
     /* People */
-    .people-grid { grid-template-columns: repeat(3, 1fr); }
+    .people-grid { grid-template-columns: repeat(5, 1fr); }
     .people-search { width: 160px; }
     .people-search:focus { width: 180px; }
 
@@ -617,7 +617,7 @@
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
             <a href="https://www.instagram.com/26seniorarchives/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">@26seniorarchives</a>
             <div class="ig-peek" id="ig-peek">
-              <img id="ig-peek-img" src="" alt="@26seniorarchives preview">
+              <img id="ig-peek-img" alt="@26seniorarchives preview">
               <div class="ig-peek-footer">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
                 <span class="ig-peek-handle">@26seniorarchives</span>
@@ -804,7 +804,7 @@
           </div>
           <div class="map-panel-content">
             <div class="map-panel-header">
-              <img id="uni-img" class="map-panel-img" src="" alt="">
+              <img id="uni-img" class="map-panel-img" alt="">
               <div class="map-panel-text">
                 <div id="uni-name" class="map-panel-name"></div>
                 <div id="uni-city" class="map-panel-city"></div>
@@ -879,26 +879,40 @@
 <div class="popup-overlay" id="popup" onclick="if(event.target===this)closePopup()">
   <div class="popup">
     <button class="popup-close" onclick="closePopup()">✕</button>
-    <div class="popup-photo"><img id="popup-avatar-img" src="" alt=""></div>
+    <div class="popup-photo"><img id="popup-avatar-img" alt=""></div>
     <div class="popup-body">
       <div class="popup-name" id="popup-name"></div>
       <div class="popup-detail" id="popup-detail"></div>
       <div class="popup-birthday" id="popup-birthday"></div>
       <div class="popup-bio" id="popup-bio"></div>
       <div class="popup-links">
-        <a class="popup-ig" id="popup-ig" target="_blank" rel="noopener"></a>
+        <a class="popup-ig" id="popup-ig" href="#" target="_blank" rel="noopener"></a>
         <a class="popup-email" id="popup-email"></a>
       </div>
     </div>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3-cloud@1/build/d3.layout.cloud.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 <script>
 /* ── Theme constants (mirrors CSS variables for JS use) ── */
 const C_DARK = '#0e1b2e', C_GOLD = '#c8a84b';
+
+/* ── Lazy script loader ── */
+const _loadedScripts = {};
+function loadScript(src) {
+  if (_loadedScripts[src]) return _loadedScripts[src];
+  _loadedScripts[src] = new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = resolve; s.onerror = reject;
+    document.body.appendChild(s);
+  });
+  return _loadedScripts[src];
+}
+function loadD3() {
+  return loadScript('https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js')
+    .then(() => loadScript('https://cdn.jsdelivr.net/npm/d3-cloud@1/build/d3.layout.cloud.js'))
+    .then(() => loadScript('https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js'));
+}
 
 /* ── Cursor follower elements (declared first so renderGrid() closures can use them) ── */
 const cursorEl   = document.getElementById('cursor-follower');
@@ -906,30 +920,105 @@ const cursorText = document.getElementById('cursor-text');
 
 /* ── People with stock portrait images ── */
 const people = [
+  {img:'',name:'Nyala Ali',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Nyala is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Janae Alsabti',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Janae is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Omar Anees',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Omar is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Kai Arellano',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Kai is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Zach Avalos',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Zach is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Paloma Ayala',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Paloma is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Elijah Bagnol',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Elijah is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Jaedon Baluyut',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Jaedon is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Andrew Camacho',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Andrew is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Brandon Campos',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Brandon is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Santi Cardenas-Huerta',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Santi is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Carson Carter',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Carson is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Rebecca Casillas',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Rebecca is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Richard Casillas',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Richard is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Jayden Cerda',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Jayden is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Baran Cerrahoglu',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Baran is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Brandon Chang',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Brandon is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Max Chang',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Max is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Luna Chen',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Luna is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Ellie Chung',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Ellie is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Matt Ciecek',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Matt is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Amani Clark',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Amani is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Chris Cowdell',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Chris is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Marie-France DeMuro',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Marie-France is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Jianna Dilellio',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Jianna is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Luke Dinley',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Luke is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Alethia Duggan',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Alethia is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Rayan Garg',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Rayan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Betsy Guevara',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Betsy is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Josue Guzman',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Josue is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Logan Haney',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Logan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Jesiah Hezekiah',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Jesiah is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Nathan Hong',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Nathan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Michael Hsieh',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Michael is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Matthew Ibarra',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Matthew is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Danya Ibrahim',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Danya is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Amreen Islam',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Amreen is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Farishta Islam',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Farishta is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Uma Joshi',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Uma is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Josh Kim',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Josh is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Kailee Kwok',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Kailee is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Parin Ladva',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Parin is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Ali Aryan Lalani',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Ali Aryan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Audrey Lee',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Audrey is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Brent Limbo',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Brent is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Katally Lin',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Katally is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Ava Lorenzana',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Ava is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Milo Madolora',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Milo is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Murad Malik',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Murad is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Ary Martinez',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Ary is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Cooper Mayhew',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Cooper is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Morgan Melching',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Morgan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Ibrahim Memon',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Ibrahim is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Nico Mena',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Nico is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Abram Militante',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Abram is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Sierra Minjares',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Sierra is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Daemeon Mitchell',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Daemeon is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Evan Morones',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Evan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Shirom Mukherjee',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Shirom is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Jeromy Munguia',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Jeromy is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Samana Nadig',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Samana is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Evelynn Ngo',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Evelynn is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Mason Nguyen',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Mason is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Jayden Ohashi',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Jayden is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Sacha Papadakis',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Sacha is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Nima Partow',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Nima is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Connor Paxton',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Connor is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Destiny Perez',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Destiny is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Seth Pham',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Seth is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Kiyomi Pizarro',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Kiyomi is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Aiza Qureshi',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Aiza is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'https://media.licdn.com/dms/image/v2/D4E03AQEJB8NVvyanBg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1726208211125?e=2147483647&v=beta&t=BV1Eix_RjkDMIU3LPjpib-XFGHNnoKZH-bCoegaXGaM',name:'Artin Rastegar',role:'UC Berkeley — Business Administration',ig:'@artin_4097',email:'',birthday:'Jan 30, 2008',bio:'Artin Rastegar is committed to UC Berkeley for Business Administration, planning to _____. His favorite memory has been ____ and he will miss _____ the most. Artin is most excited for ____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Rayan Rouhizad',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Rayan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Jackson Rowland',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Jackson is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Santino Sebastian Salonga',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Santino is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Josh Saltzer',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Josh is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Nathan Saltzer',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Nathan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Ella Schubert',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Ella is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Iffah Sheikh',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Iffah is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Arnav Sheth',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Arnav is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Nancy Silva',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Nancy is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Sam Skaron',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Sam is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Hannah Spiezer',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Hannah is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Jayden Tamura',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Jayden is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Peyton Tan',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Peyton is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Justin Tangker',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Justin is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Leslie Tawagon',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Leslie is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Cash Thompson',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Cash is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Austin Van',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Austin is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Kiana Vuong',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Kiana is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Pearce Walter',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Pearce is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Emily Wang',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Emily is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'James Wang',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'James is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Hunter Williams',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Hunter is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Eden Woods',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Eden is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Logan Woods',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Logan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Ryan Yahn',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Ryan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Miriam Yassa',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Miriam is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Ruth Zhang',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'Ruth is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
 ];
 
@@ -1010,8 +1099,17 @@ function checkPaywall() {
   }
 }
 
-/* ── Word cloud (d3-cloud) ── */
-(function buildWordCloud() {
+/* ── Word cloud (d3-cloud) — lazy-loaded when scrolled into view ── */
+(function() {
+  const container = document.getElementById('wordcloud');
+  if (!container) return;
+  new IntersectionObserver((entries, obs) => {
+    if (!entries[0].isIntersecting) return;
+    obs.disconnect();
+    loadD3().then(buildWordCloud);
+  }, { rootMargin: '300px' }).observe(container);
+
+  function buildWordCloud() {
   const wcWords = [
     {text:'Community',value:28},{text:'Legacy',value:22},{text:'Growth',value:18},
     {text:'Family',value:24},{text:'Pride',value:16},{text:'Resilient',value:20},
@@ -1053,6 +1151,7 @@ function checkPaywall() {
           .text(d => d.text);
     })
     .start();
+  } // end buildWordCloud
 })();
 
 /* ── US Map ── */
@@ -1279,8 +1378,8 @@ const mapBuiltFor = { usa: false, bayarea: false, socal: false };
 
 function initMapsOnce() {
   if (mapBuiltFor.usa) return;
-  buildUSMap();
   mapBuiltFor.usa = true;
+  loadD3().then(buildUSMap);
 }
 
 function switchMapView(view) {
@@ -1290,8 +1389,10 @@ function switchMapView(view) {
   });
   if (!mapBuiltFor[view]) {
     mapBuiltFor[view] = true;
-    if (view === 'bayarea') buildRegionalMap('map-bayarea', BAY_AREA_COUNTIES, BAY_AREA_UNIS);
-    if (view === 'socal')   buildRegionalMap('map-socal',   SOCAL_COUNTIES,    SOCAL_UNIS);
+    loadD3().then(() => {
+      if (view === 'bayarea') buildRegionalMap('map-bayarea', BAY_AREA_COUNTIES, BAY_AREA_UNIS);
+      if (view === 'socal')   buildRegionalMap('map-socal',   SOCAL_COUNTIES,    SOCAL_UNIS);
+    });
   }
 }
 
@@ -1323,12 +1424,14 @@ function showPage(id, btn) {
   movePill(btn);
   window.scrollTo({ top: 0, behavior: 'instant' });
   if (id === 'stats') {
-    // reset then re-trigger so animation replays each visit
     page.querySelectorAll('.stat-block').forEach(el => el.classList.remove('visible'));
     requestAnimationFrame(() => requestAnimationFrame(() => {
       page.querySelectorAll('.stat-block').forEach(el => el.classList.add('visible'));
-      initMapsOnce(); // build US map now that dimensions are real
+      initMapsOnce();
     }));
+  }
+  if (id === 'archive') {
+    _loadEmbedJs();
   }
 }
 
@@ -1668,15 +1771,6 @@ buildArchive();
 
   buildCards();
 })();
-</script>
-<script>
-// Desktop: load embed.js eagerly. Mobile: deferred until user taps a post.
-if (window.innerWidth > 768) {
-  _igEmbedJsLoaded = true;
-  var s = document.createElement('script');
-  s.async = true; s.src = 'https://www.instagram.com/embed.js';
-  document.body.appendChild(s);
-}
 </script>
 </body>
 </html>
