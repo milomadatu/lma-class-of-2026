@@ -46,7 +46,7 @@
   * { cursor: none !important; }
   .site { min-height: 600px; }
 
-  /* â”€â”€ Cursor follower (people grid only) â”€â”€ */
+  /* ── Cursor follower (people grid only) ── */
   #cursor-follower {
     position: fixed;
     width: 14px; height: 14px;
@@ -70,7 +70,7 @@
   }
   #cursor-follower.expanded #cursor-text { opacity: 1; }
 
-  /* â”€â”€ Nav â”€â”€ */
+  /* ── Nav ── */
   .nav {
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 1.75rem; height: 52px;
@@ -97,7 +97,7 @@
   .nav-link:hover { color: var(--ink); }
   .nav-link.active { color: #fff; }
 
-  /* â”€â”€ Pages â”€â”€ */
+  /* ── Pages ── */
   .page { display: none; padding: 2.5rem 2rem; }
   .page.active { display: block; animation: pageIn 0.28s cubic-bezier(0.22,1,0.36,1); }
   .page.leaving {
@@ -110,7 +110,7 @@
   @keyframes pageOut { from { opacity: 1; transform: translateY(0); }  to { opacity: 0; transform: translateY(-6px); } }
   @keyframes fadeIn  { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* â”€â”€ Carousel play/pause â”€â”€ */
+  /* ── Carousel play/pause ── */
   .archive-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .archive-section-header .section-label { margin-bottom: 0; }
   .carousel-play {
@@ -121,7 +121,7 @@
   .carousel-play:hover { color: var(--ink); background: rgba(0,0,0,0.06); }
   .carousel-play.playing { background: var(--ink); color: #fff; }
 
-  /* â”€â”€ Hero â”€â”€ */
+  /* ── Hero ── */
   .hero-section {
     position: relative; width: 100%; margin: 0 0 1.75rem;
     height: 84vh; min-height: 540px;
@@ -217,7 +217,7 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* â”€â”€ Countdown + Quotes row â”€â”€ */
+  /* ── Countdown + Quotes row ── */
   .landing-extra { display: grid; grid-template-columns: 1fr 1.4fr; gap: 12px; margin: 12px 2rem 0; }
   .landing-photo { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); }
   .landing-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -234,7 +234,7 @@
   .landing-stat:last-child { border-right: none; }
   .landing-stat-num { font-size: 28px; font-weight: 700; color: var(--ink); letter-spacing: -0.03em; }
   .landing-stat-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin-top: 3px; }
-  /* â”€â”€ Events strip â”€â”€ */
+  /* ── Events strip ── */
   .events-strip { display: flex; gap: 10px; overflow-x: auto; padding: 1.5rem 2rem 2rem; scrollbar-width: none; }
   .events-strip::-webkit-scrollbar { display: none; }
   .event-chip {
@@ -256,7 +256,7 @@
   .event-chip.upcoming .event-chip-days { color: var(--gold); }
   .event-chip.past .event-chip-days { color: var(--ink-3); }
   .event-chip.grad-chip .event-chip-days { color: var(--gold-bright); }
-  /* â”€â”€ Quote stack â”€â”€ */
+  /* ── Quote stack ── */
   .quote-section { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.25rem; display: flex; flex-direction: column; }
   .quote-section-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin-bottom: 1rem; }
   .quote-stack-wrap { position: relative; flex: 1; min-height: 320px; }
@@ -279,7 +279,7 @@
   .quote-hint { font-size: 11px; color: var(--ink-3); text-align: right; margin-top: auto; }
   .ig-placeholder { background: #f0f0f2; border-radius: 12px; aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center; color: var(--ink-3); font-size: 11px; }
 
-  /* â”€â”€ Archive â”€â”€ */
+  /* ── Archive ── */
   .section-label { font-size: 11px; font-weight: 500; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
   .section-title { font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 4px; }
   .archive-section { margin-bottom: 2.25rem; }
@@ -294,7 +294,7 @@
   }
   .thumb:hover { transform: scale(1.025); box-shadow: var(--shadow-md); }
   .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  /* â”€â”€ Carousel â”€â”€ */
+  /* ── Carousel ── */
   .carousel-outer { position: relative; }
   .carousel-viewport { overflow: hidden; border-radius: 12px; }
   .carousel-track { display: flex; gap: 8px; will-change: transform; transition: transform 0.72s cubic-bezier(0.16,1,0.3,1); }
@@ -307,14 +307,14 @@
   .carousel-arrow.prev-arrow { left: -20px; }
   .carousel-arrow.next-arrow { right: -20px; }
   .coming-soon-box .carousel-arrow { opacity: 0.18; pointer-events: none; }
-  /* â”€â”€ Coming Soon â”€â”€ */
+  /* ── Coming Soon ── */
   .coming-soon-box { position: relative; }
   .coming-soon-box .carousel-outer { filter: blur(4px); pointer-events: none; user-select: none; }
   .coming-soon-cover { position: absolute; inset: 0; background: rgba(245,245,247,0.65); backdrop-filter: blur(6px); border-radius: 12px; z-index: 15; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; }
   .coming-soon-badge { background: var(--ink); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; padding: 7px 18px; border-radius: 20px; }
   .coming-soon-sub { font-size: 12px; color: var(--ink-2); font-weight: 500; }
 
-  /* â”€â”€ People â”€â”€ */
+  /* ── People ── */
   .people-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px; }
   .people-search {
     background: var(--surface); color: var(--ink); font-size: 13px;
@@ -328,7 +328,7 @@
   .people-search::placeholder { color: var(--ink-3); }
   .people-no-results { grid-column: 1/-1; text-align: center; color: var(--ink-3); padding: 2rem 0; font-size: 14px; }
 
-  /* â”€â”€ People paywall â”€â”€ */
+  /* ── People paywall ── */
   #page-people { position: relative; }
   .people-paywall {
     position: fixed; top: 52px; left: 0; right: 0; bottom: 0;
@@ -391,7 +391,7 @@
   }
   .card-enter { animation: cardFadeUp 0.38s ease both; }
 
-  /* â”€â”€ Popup â”€â”€ */
+  /* ── Popup ── */
   .popup-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0);
     z-index: 50; display: flex; align-items: center; justify-content: center;
@@ -432,14 +432,14 @@
   .popup-email { font-size: 12px; font-weight: 500; color: var(--ink-2); text-decoration: none; }
   .popup-email:hover { color: var(--ink); text-decoration: underline; }
 
-  /* â”€â”€ Stats fade-in â”€â”€ */
+  /* ── Stats fade-in ── */
   .stat-block {
     opacity: 0;
     transition: opacity 0.5s ease;
   }
   .stat-block.visible { opacity: 1; }
 
-  /* â”€â”€ Map section â”€â”€ */
+  /* ── Map section ── */
   .map-box { background: var(--surface); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow-sm); }
   .map-row { display: flex; gap: 12px; height: 420px; align-items: stretch; }
 
@@ -450,6 +450,11 @@
 
   /* Floating pill switcher on map */
   .map-pills { position: absolute; top: 12px; left: 12px; z-index: 20; display: flex; background: rgba(255,255,255,0.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-radius: 30px; padding: 3px; gap: 2px; box-shadow: 0 2px 14px rgba(0,0,0,0.14), 0 0 0 0.5px rgba(0,0,0,0.06); }
+  /* Zoom buttons */
+  .map-zoom-btns { position: absolute; bottom: 12px; right: 12px; z-index: 20; display: flex; flex-direction: column; gap: 4px; }
+  .map-zoom-btn { width: 30px; height: 30px; background: rgba(255,255,255,0.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: none; border-radius: 7px; font-size: 18px; font-weight: 300; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 6px rgba(0,0,0,0.16), 0 0 0 0.5px rgba(0,0,0,0.06); line-height: 1; color: var(--ink); transition: background 0.12s; }
+  .map-zoom-btn:hover { background: rgba(255,255,255,1); }
+  .map-zoom-btn:active { background: rgba(220,220,220,0.9); }
   .map-pill { font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 26px; border: none; cursor: pointer; color: var(--ink-2); background: transparent; transition: background 0.18s, color 0.18s; line-height: 1.2; }
   .map-pill.active { background: var(--ink); color: #fff; }
   .map-pill:hover:not(.active) { color: var(--ink); background: rgba(0,0,0,0.06); }
@@ -472,7 +477,7 @@
   .map-panel-text { flex: 1; min-width: 0; padding-right: 20px; overflow: hidden; }
   .map-panel-name { font-size: 13px; font-weight: 700; color: var(--surface); letter-spacing: -0.02em; margin-bottom: 3px; line-height: 1.25; }
   .map-panel-city { font-size: 10px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-  .map-panel-desc { font-size: 11px; color: rgba(255,255,255,0.48); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+  .map-panel-desc { font-size: 11px; color: rgba(255,255,255,0.48); line-height: 1.55; max-height: calc(1.55em * 5); overflow: hidden; }
   .map-panel-ig { flex: 1; overflow-x: auto; overflow-y: hidden; padding: 10px; display: flex; flex-direction: row; align-items: flex-start; gap: 8px; zoom: 0.85; }
   .map-panel-ig .instagram-media { flex: 0 0 320px; min-width: 0; }
   .map-panel-ig::-webkit-scrollbar { width: 3px; }
@@ -489,10 +494,10 @@
   .legend-row { display: flex; align-items: center; gap: 7px; }
   .legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
-  /* â”€â”€ Archive mobile nav â”€â”€ */
+  /* ── Archive mobile nav ── */
   .archive-mobile-nav { display: none; }
 
-  /* â”€â”€ Timeline â”€â”€ */
+  /* ── Timeline ── */
   .archive-layout { display: flex; gap: 2rem; align-items: flex-start; }
   .timeline-sidebar { flex: 0 0 180px; position: sticky; top: 64px; }
   .archive-carousels { flex: 1; min-width: 0; }
@@ -526,7 +531,7 @@
   .timeline-badge.soon { background: var(--gold-lt); color: var(--gold); }
   .timeline-arrow { color: var(--ink-3); font-size: 13px; line-height: 1; }
 
-  /* â”€â”€ Mobile â”€â”€ */
+  /* ── Mobile ── */
   @media (max-width: 768px) {
     /* Archive layout — hide sidebar, show pill nav */
     .archive-layout { flex-direction: column; gap: 0; }
@@ -593,13 +598,14 @@
     /* Map — stack vertically */
     .map-box { padding: 1rem; }
     .map-row { flex-direction: column; height: auto; gap: 10px; }
-    .map-section { height: 260px; flex: none; }
-    .map-panel { flex: none; min-height: 300px; }
+    .map-section { height: 380px; flex: none; }
+    .map-panel { flex: none; }
+    .map-panel-placeholder { display: none; }
     .map-panel-content { flex-direction: column; height: auto; }
-    .map-panel-header { flex: none; }
-    .map-panel-img { height: 140px; }
-    .map-panel-text { padding-right: 0; }
-    .map-panel-ig { zoom: 1; }
+    .map-panel-header { flex: 0 0 auto; flex-direction: row; align-items: center; gap: 12px; padding: 12px; }
+    .map-panel-img { width: 72px; height: 72px; border-radius: 8px; flex-shrink: 0; }
+    .map-panel-text { padding-right: 28px; }
+    .map-panel-ig { zoom: 1; max-height: 400px; }
 
     /* People */
     .people-grid { grid-template-columns: repeat(5, 1fr); }
@@ -714,9 +720,9 @@
         <div class="timeline-card">
           <div class="timeline-left">
             <div class="timeline-title">Videos</div>
-            <div class="timeline-date">2025 â€“ 2026</div>
+            <div class=”timeline-date”>2025 – 2026</div>
           </div>
-          <div class="timeline-right"><span class="timeline-arrow">â€º</span></div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
         </div>
       </div>
       <div class="timeline-item has-anchor" onclick="scrollToSection('arc-lfd')">
@@ -726,7 +732,7 @@
             <div class="timeline-title">Last First Day</div>
             <div class="timeline-date">Aug 2025</div>
           </div>
-          <div class="timeline-right"><span class="timeline-arrow">â€º</span></div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
         </div>
       </div>
       <div class="timeline-item has-anchor" onclick="scrollToSection('arc-sunrise')">
@@ -736,7 +742,7 @@
             <div class="timeline-title">Senior Sunrise</div>
             <div class="timeline-date">Sep 2025</div>
           </div>
-          <div class="timeline-right"><span class="timeline-arrow">â€º</span></div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
         </div>
       </div>
       <div class="timeline-item has-anchor" onclick="scrollToSection('arc-events')">
@@ -744,9 +750,9 @@
         <div class="timeline-card">
           <div class="timeline-left">
             <div class="timeline-title">In School Events</div>
-            <div class="timeline-date">Fall â€“ Spring</div>
+            <div class=”timeline-date”>Fall – Spring</div>
           </div>
-          <div class="timeline-right"><span class="timeline-arrow">â€º</span></div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
         </div>
       </div>
       <div class="timeline-item has-anchor" onclick="scrollToSection('arc-blues')">
@@ -756,7 +762,7 @@
             <div class="timeline-title">Senior Blues</div>
             <div class="timeline-date">Nov 2025</div>
           </div>
-          <div class="timeline-right"><span class="timeline-arrow">â€º</span></div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
         </div>
       </div>
       <div class="timeline-item has-anchor" onclick="scrollToSection('arc-bonfire')">
@@ -766,7 +772,7 @@
             <div class="timeline-title">Senior Bonfire</div>
             <div class="timeline-date">Jan 2026</div>
           </div>
-          <div class="timeline-right"><span class="timeline-arrow">â€º</span></div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
         </div>
       </div>
       <div class="timeline-item upcoming has-anchor" onclick="scrollToSection('arc-graduation')">
@@ -806,7 +812,7 @@
         <div class="section-title">Everyone Behind '26</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
-        <input class="people-search" id="people-search" type="search" placeholder="Search peopleâ€¦" oninput="renderGrid()" autocomplete="off">
+        <input class="people-search" id="people-search" type="search" placeholder="Search people…" oninput="renderGrid()" autocomplete="off">
         <button class="shuffle-btn" onclick="shuffleGrid()">Shuffle</button>
       </div>
     </div>
@@ -828,6 +834,10 @@
           <div class="map-canvas active-map" id="map-usa"></div>
           <div class="map-canvas" id="map-bayarea"></div>
           <div class="map-canvas" id="map-socal"></div>
+          <div class="map-zoom-btns">
+            <button class="map-zoom-btn" onclick="zoomMap(1.5)" aria-label="Zoom in">+</button>
+            <button class="map-zoom-btn" onclick="zoomMap(1/1.5)" aria-label="Zoom out">−</button>
+          </div>
         </div>
         <div class="map-panel" id="map-panel">
           <div class="map-panel-placeholder">
@@ -842,7 +852,7 @@
                 <div id="uni-city" class="map-panel-city"></div>
                 <p id="uni-desc" class="map-panel-desc"></p>
               </div>
-              <button class="map-panel-close" onclick="closeUniCard()">âœ•</button>
+              <button class="map-panel-close" onclick="closeUniCard()">✕</button>
             </div>
             <div class="map-panel-ig" id="uni-ig-posts"></div>
           </div>
@@ -902,7 +912,7 @@
 <!-- POPUP -->
 <div class="popup-overlay" id="popup" onclick="if(event.target===this)closePopup()">
   <div class="popup">
-    <button class="popup-close" onclick="closePopup()">âœ•</button>
+    <button class="popup-close" onclick="closePopup()">✕</button>
     <div class="popup-photo"><img id="popup-avatar-img" alt=""></div>
     <div class="popup-body">
       <div class="popup-name" id="popup-name"></div>
@@ -919,10 +929,10 @@
 </div>
 
 <script>
-/* â”€â”€ Theme constants (mirrors CSS variables for JS use) â”€â”€ */
+/* ── Theme constants (mirrors CSS variables for JS use) ── */
 const C_DARK = '#0e1b2e', C_GOLD = '#c8a84b';
 
-/* â”€â”€ Lazy script loader â”€â”€ */
+/* ── Lazy script loader ── */
 const _loadedScripts = {};
 function loadScript(src) {
   if (_loadedScripts[src]) return _loadedScripts[src];
@@ -939,11 +949,11 @@ function loadD3() {
     .then(() => loadScript('https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js'));
 }
 
-/* â”€â”€ Cursor follower elements (declared first so renderGrid() closures can use them) â”€â”€ */
+/* ── Cursor follower elements (declared first so renderGrid() closures can use them) ── */
 const cursorEl   = document.getElementById('cursor-follower');
 const cursorText = document.getElementById('cursor-text');
 
-/* â”€â”€ People with stock portrait images â”€â”€ */
+/* ── People with stock portrait images ── */
 const people = [
   {img:'',name:'Nyala Ali',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Nyala is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Janae Alsabti',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Janae is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
@@ -1100,10 +1110,10 @@ function closePopup() {
 
 renderGrid();
 
-/* â”€â”€ Nav pill init â”€â”€ */
+/* ── Nav pill init ── */
 requestAnimationFrame(() => movePill(document.querySelector('.nav-link.active')));
 
-/* â”€â”€ People paywall â”€â”€ */
+/* ── People paywall ── */
 (function initPaywall() {
   const paywall = document.getElementById('people-paywall');
   if (!paywall) return;
@@ -1128,7 +1138,7 @@ function checkPaywall() {
   }
 }
 
-/* â”€â”€ Word cloud (d3-cloud) — lazy-loaded when scrolled into view â”€â”€ */
+/* ── Word cloud (d3-cloud) — lazy-loaded when scrolled into view ── */
 (function() {
   const container = document.getElementById('wordcloud');
   if (!container) return;
@@ -1183,9 +1193,9 @@ function checkPaywall() {
   } // end buildWordCloud
 })();
 
-/* â”€â”€ US Map â”€â”€ */
+/* ── US Map ── */
 // Each university can have an igPosts array of Instagram post shortcodes (the part after /p/ in the URL).
-// Example: 'https://www.instagram.com/p/ABC123xyz/' â†’ shortcode is 'ABC123xyz'
+// Example: ‘https://www.instagram.com/p/ABC123xyz/’ → shortcode is ‘ABC123xyz’
 // Add as many posts as you'd like per school and they'll appear as scrollable embeds below the map.
 const universities = [
   { name:'Stanford University', city:'Palo Alto, CA', lat:37.4275, lng:-122.1697, color:'#8C1515',
@@ -1258,7 +1268,7 @@ const universities = [
     igPosts: ['DWx4UAHDZIH'] },
 ];
 
-/* â”€â”€ Map helpers â”€â”€ */
+/* ── Map helpers ── */
 const BAY_AREA_UNIS = ['Stanford University', 'UC Berkeley', 'USF', 'Cabrillo College'];
 const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'USC', 'LMU', 'Pepperdine University', 'Occidental College', 'Irvine Valley College', 'University of La Verne'];
 
@@ -1307,8 +1317,13 @@ function openUniInfo(u) {
     bq.style.cssText = 'flex-shrink:0;width:320px;min-width:0;';
     igEl.appendChild(bq);
   });
-  document.getElementById('map-panel').classList.add('filled');
+  const panel = document.getElementById('map-panel');
+  panel.classList.add('filled');
   if (window.instgrm) window.instgrm.Embeds.process();
+  // On mobile, scroll the panel into view after it appears
+  if (window.innerWidth <= 768) {
+    requestAnimationFrame(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+  }
 }
 
 function closeUniCard() {
@@ -1341,6 +1356,8 @@ function addPins(g, projection, uniNames) {
         openUniInfo(u);
       });
     const col = u.color || C_DARK;
+    // Transparent hit-area — larger than the visible dot for easier mobile tapping
+    dot.append('circle').attr('cx',cx).attr('cy',cy).attr('r',18).attr('fill','transparent').attr('stroke','none');
     dot.append('circle').attr('class','dot-pulse')
       .attr('cx',cx).attr('cy',cy).attr('r',7).attr('fill',col).attr('pointer-events','none');
     dot.append('circle').attr('class','dot-outer')
@@ -1354,10 +1371,17 @@ function addPins(g, projection, uniNames) {
 function buildUSMap() {
   const el = document.getElementById('map-usa');
   if (!el) return;
-  const W = el.offsetWidth || 400, H = el.offsetHeight || 320;
-  const proj = d3.geoAlbersUsa().scale(W * 0.95).translate([W/2, H/2]);
-  const svg = d3.select('#map-usa').append('svg').attr('width',W).attr('height',H).style('display','block');
+  // Fixed virtual coordinate space — SVG scales via viewBox to always fill container
+  const VW = 960, VH = 500;
+  const proj = d3.geoAlbersUsa().scale(1000).translate([VW / 2, VH / 2]);
+  const svg = d3.select('#map-usa').append('svg')
+    .attr('viewBox', `0 0 ${VW} ${VH}`)
+    .attr('width', '100%').attr('height', '100%')
+    .style('display', 'block');
   const g = svg.append('g');
+  const zoom = d3.zoom().scaleExtent([0.8, 8]).on('zoom', e => g.attr('transform', e.transform));
+  svg.call(zoom);
+  _mapRefs.usa = { svg, zoom };
   const path = d3.geoPath().projection(proj);
   getStatesTopo().then(us => {
     g.selectAll('path').data(topojson.feature(us, us.objects.states).features)
@@ -1371,8 +1395,14 @@ function buildRegionalMap(elId, countyIds, uniNames) {
   if (!el) return;
   const W = el.offsetWidth || 400, H = el.offsetHeight || 320;
   d3.select('#' + elId).selectAll('svg').remove();
-  const svg = d3.select('#' + elId).append('svg').attr('width',W).attr('height',H).style('display','block');
+  const svg = d3.select('#' + elId).append('svg')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .attr('width', '100%').attr('height', '100%')
+    .style('display', 'block');
   const g = svg.append('g');
+  const zoom = d3.zoom().scaleExtent([0.8, 10]).on('zoom', e => g.attr('transform', e.transform));
+  svg.call(zoom);
+  _mapRefs[elId.replace('map-', '')] = { svg, zoom };
 
   getCountiesTopo().then(us => {
     const all = topojson.feature(us, us.objects.counties).features;
@@ -1412,6 +1442,14 @@ function buildRegionalMap(elId, countyIds, uniNames) {
 
 // Lazy init — maps built only when Stats page is visible (real offsetWidth)
 const mapBuiltFor = { usa: false, bayarea: false, socal: false };
+const _mapRefs = {}; // view → { svg, zoom } — populated as maps are built
+
+function zoomMap(factor) {
+  const activeView = ['usa','socal','bayarea'].find(v =>
+    document.getElementById('map-' + v)?.classList.contains('active-map'));
+  const ref = _mapRefs[activeView];
+  if (ref) ref.svg.transition().duration(250).call(ref.zoom.scaleBy, factor);
+}
 
 function initMapsOnce() {
   if (mapBuiltFor.usa) return;
@@ -1433,7 +1471,7 @@ function switchMapView(view) {
   }
 }
 
-/* â”€â”€ Page navigation â”€â”€ */
+/* ── Page navigation ── */
 function scrollToSection(id) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -1475,7 +1513,7 @@ function showPage(id, btn) {
   }
 }
 
-/* â”€â”€ Custom cursor follower (site-wide, expands with name on people grid) â”€â”€ */
+/* ── Custom cursor follower (site-wide, expands with name on people grid) ── */
 const peopleGrid = document.getElementById('people-grid');
 
 let mouseX = -200, mouseY = -200;
@@ -1510,7 +1548,7 @@ peopleGrid.addEventListener('mouseleave', () => {
   requestAnimationFrame(tick);
 })();
 
-/* â”€â”€ Cursor color: white on dark sections, black on light â”€â”€ */
+/* ── Cursor color: white on dark sections, black on light ── */
 document.addEventListener('mouseover', e => {
   if (e.target.closest('.hero-section, .map-panel-header')) {
     cursorEl.classList.add('on-dark');
@@ -1519,7 +1557,7 @@ document.addEventListener('mouseover', e => {
   }
 });
 
-/* â”€â”€ Instagram hover peek â”€â”€ */
+/* ── Instagram hover peek ── */
 (function() {
   const trigger = document.getElementById('ig-trigger');
   const peek    = document.getElementById('ig-peek');
@@ -1544,8 +1582,8 @@ document.addEventListener('mouseover', e => {
   });
 })();
 
-/* â”€â”€ Carousels â”€â”€ */
-/* â”€â”€ Archive data — add/remove shortcodes here to update carousels â”€â”€ */
+/* ── Carousels ── */
+/* ── Archive data — add/remove shortcodes here to update carousels ── */
 const ARCHIVE_SECTIONS = [
   { id: 'arc-videos',  label: 'Videos',          cols: 2, type: 'reel', comingSoon: false,
     posts: ['DNv8MtA5NXn', 'DOEzRUkkgSU'] },
@@ -1726,7 +1764,7 @@ function initCarousels(root) {
 
 buildArchive();
 
-/* â”€â”€ Confetti â”€â”€ */
+/* ── Confetti ── */
 function launchConfetti() {
   const canvas = document.createElement('canvas');
   canvas.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:99999';
@@ -1764,7 +1802,7 @@ function launchConfetti() {
   setTimeout(() => { done = true; canvas.remove(); }, 8000);
 }
 
-/* â”€â”€ Events strip â”€â”€ */
+/* ── Events strip ── */
 (function() {
   const EVENTS = [
     { date:'2026-04-25T18:30:00', name:'Prom',                detail:'House of Blues Anaheim' },
@@ -1798,7 +1836,7 @@ function launchConfetti() {
   }).join('');
 })();
 
-/* â”€â”€ Graduation countdown â”€â”€ */
+/* ── Graduation countdown ── */
 (function() {
   const target = new Date('2026-05-29T15:00:00');
   const els = {
@@ -1825,7 +1863,7 @@ function launchConfetti() {
   setInterval(tick, 1000);
 })();
 
-/* â”€â”€ Senior quote stack â”€â”€ */
+/* ── Senior quote stack ── */
 (function() {
   const quotes = [
     { name:'Maya B.', role:'Art Club President', quote:'"The future belongs to those who believe in the beauty of their dreams."', img:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&q=80' },
@@ -1856,7 +1894,7 @@ function launchConfetti() {
           <div class="quote-meta"><div class="quote-name">${q.name}</div><div class="quote-role">${q.role}</div></div>
         </div>
         <div class="quote-text">${q.quote}</div>
-        ${isTop ? '<div class="quote-hint">swipe or click â†’</div>' : ''}
+        ${isTop ? '<div class="quote-hint">swipe or click →</div>' : ''}
       `;
       if (isTop) {
         let startX = null, dragging = false;
