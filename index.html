@@ -8,13 +8,13 @@
   <meta name="description" content="Legacy Magnet Academy Class of 2026 — memories, people, and where we're going.">
   <meta property="og:title" content="LMA Class of 2026">
   <meta property="og:description" content="Legacy Magnet Academy Class of 2026 — memories, people, and where we're going.">
-  <meta property="og:image" content="https://milomadatu.github.io/lma-class-of-2026/images/IMG_0112.webp">
+  <meta property="og:image" content="https://milomadatu.github.io/lma-class-of-2026/images/Class Photo.webp">
   <meta property="og:url" content="https://milomadatu.github.io/lma-class-of-2026/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://milomadatu.github.io/lma-class-of-2026/images/IMG_0112.webp">
-  <link rel="preload" as="image" href="images/IMG_0112.webp" fetchpriority="high">
-  <link rel="preload" as="image" href="images/DJI_0975.webp" fetchpriority="high">
+  <meta name="twitter:image" content="https://milomadatu.github.io/lma-class-of-2026/images/Class Photo.webp">
+  <link rel="preload" as="image" href="images/Class Photo.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="images/26.webp" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -42,7 +42,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  body { cursor: none; background: var(--bg); overflow-y: scroll; }
+  body { cursor: none; background: var(--bg); overflow-y: scroll; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; }
   * { cursor: none !important; }
   .site { min-height: 600px; }
 
@@ -57,15 +57,18 @@
     transform: translate(-50%, -50%);
     display: flex; align-items: center; justify-content: center;
     left: -100px; top: -100px;
-    transition: width 0.2s cubic-bezier(0.34,1.56,0.64,1),
+    transition: min-width 0.2s cubic-bezier(0.34,1.56,0.64,1),
+                max-width 0.2s cubic-bezier(0.34,1.56,0.64,1),
                 height 0.2s cubic-bezier(0.34,1.56,0.64,1),
+                padding 0.2s ease,
                 border-radius 0.2s ease;
   }
-  #cursor-follower.expanded { width: 116px; height: 30px; border-radius: 20px; }
+  #cursor-follower.expanded { width: auto; min-width: 30px; max-width: 160px; height: 30px; border-radius: 20px; padding: 0 12px; }
   #cursor-follower.on-dark { background: var(--surface); }
   #cursor-text {
     color: #fff; font-size: 11px; font-weight: 500;
     white-space: nowrap; pointer-events: none;
+    overflow: hidden; text-overflow: ellipsis; max-width: 136px;
     opacity: 0; transition: opacity 0.12s ease 0.06s;
   }
   #cursor-follower.expanded #cursor-text { opacity: 1; }
@@ -124,25 +127,40 @@
   /* ── Hero ── */
   .hero-section {
     position: relative; width: 100%; margin: 0 0 1.75rem;
-    height: 84vh; min-height: 540px;
-    display: flex; align-items: flex-start; overflow: hidden;
+    height: 88vh; min-height: 560px;
+    display: flex; align-items: center; overflow: hidden;
   }
-  .hero-bg {
+  /* Rotating slideshow */
+  .hero-slides { position: absolute; inset: 0; }
+  .hero-slide {
     position: absolute; inset: 0;
-    background-image: url('images/IMG_0112.webp');
     background-size: cover; background-position: center 30%;
-    transform: scale(1.04); transition: transform 9s ease;
+    opacity: 0; transform: scale(1.06);
+    transition: opacity 1.6s ease, transform 12s ease;
   }
-  .hero-section:hover .hero-bg { transform: scale(1); }
+  .hero-slide.active { opacity: 1; transform: scale(1); }
+  /* Slide indicators */
+  .hero-indicators {
+    position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 6px; z-index: 2;
+  }
+  .hero-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+    transition: background 0.3s, transform 0.3s;
+    cursor: pointer;
+  }
+  .hero-dot.active { background: #fff; transform: scale(1.3); }
   .hero-overlay {
     position: absolute; inset: 0;
-    background: linear-gradient(to bottom,
-      rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.45) 38%,
-      transparent 60%);
+    background: linear-gradient(160deg,
+      rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.52) 50%,
+      rgba(0,0,0,0.62) 100%);
   }
   .hero-content {
     position: relative; z-index: 1;
-    width: 100%; padding: 3.5rem 2.5rem 0;
+    width: 100%; max-width: 820px; margin: 0 auto;
+    padding: 0 2.5rem;
     display: flex; flex-direction: column; align-items: center;
     text-align: center;
   }
@@ -221,31 +239,31 @@
   .landing-extra { display: grid; grid-template-columns: 1fr 1.4fr; gap: 12px; margin: 12px 2rem 0; }
   .landing-photo { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); }
   .landing-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .countdown-box { background: var(--ink); border-radius: var(--radius); padding: 2.5rem 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); }
-  .countdown-eyebrow { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.62); margin-bottom: 1.5rem; }
-  .countdown-units { display: flex; align-items: flex-start; gap: 8px; }
-  .countdown-unit { display: flex; flex-direction: column; align-items: center; min-width: 64px; }
-  .countdown-num { font-size: 58px; font-weight: 700; color: #fff; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
-  .countdown-sep { font-size: 44px; font-weight: 300; color: rgba(255,255,255,0.22); line-height: 1; padding-top: 2px; }
-  .countdown-lbl { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.7); margin-top: 6px; }
-  .countdown-date { font-size: 12px; color: var(--gold-bright); font-weight: 600; letter-spacing: 0.04em; margin-top: 1.5rem; }
+  .countdown-box { background: var(--ink); border-radius: var(--radius); padding: 1.5rem 1.25rem; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); }
+  .countdown-eyebrow { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.62); margin-bottom: 1rem; }
+  .countdown-units { display: flex; align-items: flex-start; gap: 4px; }
+  .countdown-unit { display: flex; flex-direction: column; align-items: center; min-width: 48px; }
+  .countdown-num { font-size: 38px; font-weight: 700; color: #fff; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+  .countdown-sep { font-size: 28px; font-weight: 300; color: rgba(255,255,255,0.22); line-height: 1; padding-top: 2px; }
+  .countdown-lbl { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.7); margin-top: 4px; }
+  .countdown-date { font-size: 11px; color: var(--gold-bright); font-weight: 600; letter-spacing: 0.04em; margin-top: 1rem; }
   .landing-stats { display: flex; margin: 12px 2rem; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
   .landing-stat { flex: 1; padding: 1.25rem 1rem; text-align: center; border-right: 0.5px solid var(--border); }
   .landing-stat:last-child { border-right: none; }
   .landing-stat-num { font-size: 28px; font-weight: 700; color: var(--ink); letter-spacing: -0.03em; }
   .landing-stat-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin-top: 3px; }
   /* ── Events strip ── */
-  .events-strip { display: flex; gap: 10px; overflow-x: auto; padding: 1.5rem 2rem 2rem; scrollbar-width: none; }
+  .events-strip { display: flex; flex-direction: column; gap: 6px; overflow-y: auto; padding: 0.9rem; scrollbar-width: none; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
   .events-strip::-webkit-scrollbar { display: none; }
   .event-chip {
-    flex: 1 1 160px; min-width: 160px; background: var(--surface);
-    border-radius: 14px; padding: 18px 20px; box-shadow: var(--shadow-sm);
-    display: flex; flex-direction: column; gap: 4px;
+    background: var(--bg);
+    border-radius: 8px; padding: 8px 10px;
+    display: flex; flex-direction: column; gap: 2px;
     border: 1.5px solid transparent; transition: opacity 0.2s, border-color 0.2s;
   }
   .event-chip.past { opacity: 0.38; }
   .event-chip.upcoming { border-color: var(--gold); }
-  .event-chip.grad-chip { background: var(--ink); min-width: 150px; }
+  .event-chip.grad-chip { background: var(--ink); }
   .event-chip-date { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
   .event-chip.grad-chip .event-chip-date { color: rgba(255,255,255,0.45); }
   .event-chip-name { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.3; }
@@ -280,8 +298,8 @@
   .ig-placeholder { background: #f0f0f2; border-radius: 12px; aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center; color: var(--ink-3); font-size: 11px; }
 
   /* ── Archive ── */
-  .section-label { font-size: 11px; font-weight: 500; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
-  .section-title { font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 4px; }
+  .section-label { font-size: 11px; font-weight: 500; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+  .section-title { font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 4px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
   .archive-section { margin-bottom: 2.25rem; }
   .archive-section:last-child { margin-bottom: 0; }
   .archive-skeleton { height: 320px; border-radius: 12px; background: linear-gradient(90deg, var(--bg) 25%, #ebebed 50%, var(--bg) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
@@ -301,6 +319,8 @@
   .carousel-track.cols-3 .carousel-slide { flex: 0 0 calc(33.333% - 5.5px); min-width: 0; }
   .carousel-track.cols-2 .carousel-slide { flex: 0 0 calc(50% - 4px); min-width: 0; }
   .carousel-slide blockquote.instagram-media { border-radius: 12px !important; }
+  .carousel-slide a.local-img-link { display: block; border-radius: 12px; overflow: hidden; line-height: 0; }
+  .carousel-slide a.local-img-link img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; border-radius: 12px; }
   .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; background: #fff; border: none; border-radius: 50%; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 14px rgba(0,0,0,0.13), 0 0 0 0.5px rgba(0,0,0,0.06); backdrop-filter: blur(10px); color: var(--ink); transition: box-shadow 0.2s, transform 0.2s; }
   .carousel-arrow:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(0,0,0,0.06); transform: translateY(calc(-50% - 2px)); }
   .carousel-arrow:disabled { opacity: 0.18; pointer-events: none; }
@@ -523,9 +543,9 @@
   .timeline-item.has-anchor:hover .timeline-card { padding-left: 4px; }
   .timeline-item.has-anchor:hover .timeline-dot { transform: scale(1.2); background: var(--gold); box-shadow: 0 0 0 1.5px var(--gold); }
   .timeline-left { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-  .timeline-title { font-size: 13px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+  .timeline-title { font-size: 13px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
   .timeline-item.upcoming .timeline-title { color: var(--ink-3); }
-  .timeline-date { font-size: 11px; color: var(--ink-3); font-weight: 400; }
+  .timeline-date { font-size: 11px; color: var(--ink-3); font-weight: 400; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
   .timeline-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
   .timeline-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; }
   .timeline-badge.soon { background: var(--gold-lt); color: var(--gold); }
@@ -569,7 +589,7 @@
 
     /* Hero */
     .hero-section { height: 72vh; min-height: 420px; margin-bottom: 0; }
-    .hero-content { padding: 2.5rem 1.25rem 0; }
+    .hero-content { padding: 0 1.25rem; }
     .hero-sub { font-size: 14px; margin-bottom: 1.5rem; }
     .hero-actions { margin-bottom: 1.75rem; }
     .hero-quote-sm { display: none; }
@@ -577,7 +597,6 @@
 
     /* Landing extras — stack vertically */
     .landing-extra { grid-template-columns: 1fr; margin: 12px 1rem 0; }
-    .landing-photo { height: 220px; }
     .landing-stats { margin: 8px 1rem 0; }
     .landing-stat-num { font-size: 22px; }
     .countdown-num { font-size: 42px; }
@@ -640,12 +659,21 @@
   <!-- LANDING -->
   <div class="page active" id="page-landing">
     <div class="hero-section">
-      <div class="hero-bg"></div>
+      <div class="hero-slides">
+        <div class="hero-slide active" style="background-image:url('images/Class Photo.webp')"></div>
+        <div class="hero-slide" style="background-image:url('images/26.webp')"></div>
+        <div class="hero-slide" style="background-image:url('images/SeniorSunriseGroup.webp')"></div>
+      </div>
       <div class="hero-overlay"></div>
+      <div class="hero-indicators">
+        <div class="hero-dot active" onclick="goHeroSlide(0)"></div>
+        <div class="hero-dot" onclick="goHeroSlide(1)"></div>
+        <div class="hero-dot" onclick="goHeroSlide(2)"></div>
+      </div>
       <div class="hero-content">
-        <div class="hero-eyebrow">Legacy Magnet Academy Â· Developed by Milo & Claude</div>
-        <h1 class="hero-h1"> LMA Class of <em>2026</em></h1>
-        <p class="hero-sub">Legacy Magnet Academy's class of 2026 is full of scholars with memories, ideas, and plans for the future.</p>
+        <div class="hero-eyebrow">Legacy Magnet Academy</div>
+        <h1 class="hero-h1">LMA Class of <em>2026</em></h1>
+        <p class="hero-sub">100 seniors. Four years together. One story.</p>
         <div class="hero-actions">
           <button class="hero-btn-primary" onclick="showPage('archive', document.querySelectorAll('.nav-link')[1])">Browse Gallery</button>
           <button class="hero-btn-secondary" onclick="showPage('people', document.querySelectorAll('.nav-link')[2])">Meet the Class</button>
@@ -670,10 +698,9 @@
 
     <!-- Stats bar -->
     <div class="landing-stats">
-      <div class="landing-stat"><div class="landing-stat-num">99</div><div class="landing-stat-label">Seniors</div></div>
+      <div class="landing-stat"><div class="landing-stat-num">100</div><div class="landing-stat-label">Seniors</div></div>
       <div class="landing-stat"><div class="landing-stat-num">16</div><div class="landing-stat-label">Universities</div></div>
       <div class="landing-stat"><div class="landing-stat-num">5</div><div class="landing-stat-label">States</div></div>
-      <div class="landing-stat"><div class="landing-stat-num">4</div><div class="landing-stat-label">Years Together</div></div>
     </div>
 
     <div class="landing-extra">
@@ -692,13 +719,9 @@
         <div class="countdown-date">May 29, 2026</div>
       </div>
 
-      <!-- Photo -->
-      <div class="landing-photo">
-        <img src="images/DJI_0975.webp" alt="LMA Class of 2026" fetchpriority="high">
-      </div>
+      <!-- Events calendar -->
+      <div class="events-strip" id="events-strip"></div>
     </div>
-
-    <div class="events-strip" id="events-strip"></div>
   </div>
 
   <!-- ARCHIVE -->
@@ -965,20 +988,20 @@ const people = [
   {img:'',name:'Jaedon Baluyut',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Jaedon is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Andrew Camacho',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Andrew is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Brandon Campos',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Brandon is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'Santi Cardenas-Huerta',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Santi is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Santiago Cardenas-Huerta',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Santiago is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Carson Carter',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Carson is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Rebecca Casillas',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Rebecca is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Richard Casillas',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Richard is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Jayden Cerda',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Jayden is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Baran Cerrahoglu',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Baran is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Brandon Chang',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Brandon is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'Max Chang',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Max is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Max C.webp',name:'Max Chang',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Max is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Luna Chen',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Luna is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Ellie Chung',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ellie is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Matt Ciecek',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Matt is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Amani Clark',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Amani is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Chris Cowdell',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Chris is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'Marie-France DeMuro',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Marie-France is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Marie-France Demuro',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Marie-France is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Jianna Dilellio',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Jianna is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Luke Dinley',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Luke is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Alethia Duggan',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Alethia is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
@@ -997,14 +1020,14 @@ const people = [
   {img:'',name:'Josh Kim',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Josh is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Kailee Kwok',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Kailee is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Parin Ladva',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Parin is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'Ali Aryan Lalani',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ali Aryan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Aryan L.webp',name:'Ali Aryan Lalani',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ali Aryan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Audrey Lee',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Audrey is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Brent Limbo',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Brent is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Katally Lin',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Katally is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Ava Lorenzana',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ava is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Milo Madolora',role:'Kababayan at LMA Founder',ig:'@milomadatu',email:'milomadatu@gmail.com',birthday:'April 17, 2008',quote:'Everything I\'m not made me everything I am',quoteBy:'Ye',bio:'Milo Madolora is 99% committed to Northeastern University for Business Administration, planning to find a career in marketing. His favorite memory has been making beats in Mr. Jones\'s class and he will miss walking around the school with his friends the most. Milo is most excited for new experiences in the next 10 years.'},
   {img:'',name:'Murad Malik',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Murad is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'Ary Martinez',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ary is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Aryanna Martinez',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ary is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Cooper Mayhew',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Cooper is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Morgan Melching',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Morgan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Ibrahim Memon',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ibrahim is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
@@ -1030,7 +1053,7 @@ const people = [
   {img:'',name:'Rayan Rouhizad',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Rayan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Jackson Rowland',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Jackson is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Santino Sebastian Salonga',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Santino is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'Josh Saltzer',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Josh is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Joshua Saltzer',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Joshua is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Nathan Saltzer',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Nathan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Ella Schubert',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ella is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Iffah Sheikh',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Iffah is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
@@ -1055,7 +1078,6 @@ const people = [
   {img:'',name:'Ryan Yahn',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ryan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Miriam Yassa',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Miriam is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Ruth Zhang',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ruth is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'_____ _____',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'_____ is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
 ];
 
 function renderGrid() {
@@ -1205,7 +1227,7 @@ const universities = [
   { name:'UCLA', city:'Los Angeles, CA', lat:34.0689, lng:-118.4452, color:'#2D68C4',
     desc:'A flagship UC campus known for academics, athletics, and its iconic Royce Hall. One of the most applied-to universities in the country.',
     img:'https://s3.amazonaws.com/cms.ipressroom.com/173/files/20198/5d72b4772cfac209ff04c634_Royce+Quad/Royce+Quad_hero.jpg',
-    igPosts: ['DWkcd4_jY97', 'DWKNRplEl5K'] },
+    igPosts: ['DWkcd4_jY97', 'DWKNRplEl5K', 'DW0Ak31jVra'] },
   { name:'UC Irvine', city:'Irvine, CA', lat:33.6405, lng:-117.8443, color:'#0064A4',
     desc:'A rising UC powerhouse in the heart of Orange County, known for research, gaming, and one of the most unique circular campus layouts in the US.',
     img:'https://uci.edu//visit/_imgs/visit-masthead-4.jpg',
@@ -1214,6 +1236,10 @@ const universities = [
     desc:'Perched above the Pacific Ocean, UCSD is renowned for science, engineering, and the landmark Geisel Library.',
     img:'https://ucsdtritons.com/images/2020/9/1/geisel_library_1_UCSanDiego.jpg',
     igPosts: [] },
+  { name:'San Diego State', city:'San Diego, CA', lat:32.7757, lng:-117.0719, color:'#A6192E',
+    desc:'A major public research university and part of the CSU system, known for its business, public health, and engineering programs — and a passionate Aztec fanbase.',
+    img:'https://www.collegetransitions.com/wp-content/uploads/2022/04/sdsu-1200x675.png',
+    igPosts: ['DW0DfLsjQb1'] },
   { name:'UC Berkeley', city:'Berkeley, CA', lat:37.8724, lng:-122.2595, color:'#003262',
     desc:'The original UC flagship and a global top-10 university. Home to Nobel laureates, Sather Tower, and a storied history of student activism.',
     img:'https://www.tclf.org/sites/default/files/thumbnails/image/CA_Berkeley_UniversityOfCaliforniaAtBerkeley_byCharlieNguyen-Flickr_2008_001_Sig.jpg',
@@ -1257,7 +1283,7 @@ const universities = [
   { name:'Irvine Valley College', city:'Irvine, CA', lat:33.6450, lng:-117.7685, color:'#005A9C',
     desc:'A top-ranked community college in Orange County known for its high transfer rates to UC and CSU campuses and strong programs in arts, science, and technology.',
     img:'https://arquitectonica.com/architecture/wp-content/uploads/sites/2/2016/10/Irvine_Valley_College_PAC_2-1920x1080.jpg',
-    igPosts: [] },
+    igPosts: ['DW0GIYfjaFn'] },
   { name:'University of La Verne', city:'La Verne, CA', lat:34.1008, lng:-117.7678, color:'#2C5234',
     desc:'A private university in the San Gabriel Valley known for its personalized education, strong community ties, and diverse student body.',
     img:'https://laverne.edu/news/wp-content/uploads/sites/5/2023/08/20210805-founders-hall-2-2100x1400-0230fbdf-b171-4a11-a38a-77ae84c32549-1920x1280.jpg',
@@ -1270,7 +1296,7 @@ const universities = [
 
 /* ── Map helpers ── */
 const BAY_AREA_UNIS = ['Stanford University', 'UC Berkeley', 'USF', 'Cabrillo College'];
-const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'USC', 'LMU', 'Pepperdine University', 'Occidental College', 'Irvine Valley College', 'University of La Verne'];
+const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'San Diego State', 'USC', 'LMU', 'Pepperdine University', 'Occidental College', 'Irvine Valley College', 'University of La Verne'];
 
 // County FIPS codes (numeric). California state code = 06, so county IDs start with 6xxx.
 const BAY_AREA_COUNTIES = [6001,6013,6041,6055,6075,6081,6085,6087,6095,6097];
@@ -1588,41 +1614,95 @@ const ARCHIVE_SECTIONS = [
   { id: 'arc-videos',  label: 'Videos',          cols: 2, type: 'reel', comingSoon: false,
     posts: ['DNv8MtA5NXn', 'DOEzRUkkgSU'] },
   { id: 'arc-lfd',     label: 'Last First Day',   cols: 3, type: 'p',    comingSoon: false,
-    posts: ['DNUB7KkyalX','DNUB9K7Sx2j','DNUB_73yeFA','DNUCCwkSi87','DNUCNj-yfNa',
-            'DNUCRxKyoEP','DNUCUMyyYzW','DNUCWO4yh64','DNUCYSjyPJ0','DNUCaOWyDog',
-            'DNUCb8ASpOa','DNUCeLly97V','DNUCfiRycuY','DNUChePy_0N','DNUCkxHSfKL',
-            'DNUCm4SSlnj','DNUCoqHy0Wg','DNUCq9rSHDu','DNUCsfqyf7l','DNUDBQkyAYE',
-            'DNUDC5iSVCv','DNUDEZLyBEi','DNWTYnPyU_w','DNWTZyMy9R1','DNWTa7QSkBV',
-            'DNWTcIIyaF9','DNWTd3FSMCz','DNWTfrqyKLw','DNWThc5yGcl','DNWTkATySFx',
-            'DNWTlJtSNzi','DNWTl68yYd6','DNWTqcPSxv9','DNWTucSy3X7','DNWTvyDyxrb',
-            'DNWTw5uSvqe','DNWTyZsynVH','DNWT0SJyNnl','DNkPOaZOPEl','DNq6x8Ay98T',
-            'DNq6yhPS4wy','DNq6z4iy7zV','DNq6212S8HV','DNq63GYy13T','DNq63xVS-DF',
-            'DNq7RZO5CEC'] },
+    images: [
+      {file:'DNUB7KkyalX.webp', post:'DNUB7KkyalX'},{file:'DNUB9K7Sx2j.webp', post:'DNUB9K7Sx2j'},
+      {file:'DNUB_73yeFA.webp', post:'DNUB_73yeFA'},{file:'DNUCCwkSi87.webp', post:'DNUCCwkSi87'},
+      {file:'DNUCNj-yfNa.webp', post:'DNUCNj-yfNa'},{file:'DNUCRxKyoEP.webp', post:'DNUCRxKyoEP'},
+      {file:'DNUCUMyyYzW.webp', post:'DNUCUMyyYzW'},{file:'DNUCWO4yh64.webp', post:'DNUCWO4yh64'},
+      {file:'DNUCYSjyPJ0.webp', post:'DNUCYSjyPJ0'},{file:'DNUCaOWyDog.webp', post:'DNUCaOWyDog'},
+      {file:'DNUCb8ASpOa.webp', post:'DNUCb8ASpOa'},{file:'DNUCeLly97V.webp', post:'DNUCeLly97V'},
+      {file:'DNUCfiRycuY.webp', post:'DNUCfiRycuY'},{file:'DNUChePy_0N.webp', post:'DNUChePy_0N'},
+      {file:'DNUCkxHSfKL.webp', post:'DNUCkxHSfKL'},{file:'DNUCm4SSlnj.webp', post:'DNUCm4SSlnj'},
+      {file:'DNUCoqHy0Wg.webp', post:'DNUCoqHy0Wg'},{file:'DNUCq9rSHDu.webp', post:'DNUCq9rSHDu'},
+      {file:'DNUCsfqyf7l.webp', post:'DNUCsfqyf7l'},{file:'DNUDBQkyAYE.webp', post:'DNUDBQkyAYE'},
+      {file:'DNUDC5iSVCv.webp', post:'DNUDC5iSVCv'},{file:'DNUDEZLyBEi.webp', post:'DNUDEZLyBEi'},
+      {file:'DNWTYnPyU_w.webp', post:'DNWTYnPyU_w'},{file:'DNWTZyMy9R1.webp', post:'DNWTZyMy9R1'},
+      {file:'DNWTa7QSkBV.webp', post:'DNWTa7QSkBV'},{file:'DNWTcIIyaF9.webp', post:'DNWTcIIyaF9'},
+      {file:'DNWTd3FSMCz.webp', post:'DNWTd3FSMCz'},{file:'DNWTfrqyKLw.webp', post:'DNWTfrqyKLw'},
+      {file:'DNWThc5yGcl.webp', post:'DNWThc5yGcl'},{file:'DNWTkATySFx.webp', post:'DNWTkATySFx'},
+      {file:'DNWTlJtSNzi.webp', post:'DNWTlJtSNzi'},{file:'DNWTl68yYd6.webp', post:'DNWTl68yYd6'},
+      {file:'DNWTqcPSxv9.webp', post:'DNWTqcPSxv9'},{file:'DNWTucSy3X7.webp', post:'DNWTucSy3X7'},
+      {file:'DNWTvyDyxrb.webp', post:'DNWTvyDyxrb'},{file:'DNWTw5uSvqe.webp', post:'DNWTw5uSvqe'},
+      {file:'DNWTyZsynVH.webp', post:'DNWTyZsynVH'},{file:'DNWT0SJyNnl.webp', post:'DNWT0SJyNnl'},
+      {file:'DNkPOaZOPEl.webp', post:'DNkPOaZOPEl'},{file:'DNq6x8Ay98T.webp', post:'DNq6x8Ay98T'},
+      {file:'DNq6yhPS4wy.webp', post:'DNq6yhPS4wy'},{file:'DNq6z4iy7zV.webp', post:'DNq6z4iy7zV'},
+      {file:'DNq6212S8HV.webp', post:'DNq6212S8HV'},{file:'DNq63GYy13T.webp', post:'DNq63GYy13T'},
+      {file:'DNq63xVS-DF.webp', post:'DNq63xVS-DF'},{file:'DNq7RZO5CEC.webp', post:'DNq7RZO5CEC'}
+    ],
+    posts: [] },
   { id: 'arc-sunrise', label: 'Senior Sunrise',   cols: 3, type: 'p',    comingSoon: false,
-    posts: ['DN8_N1Akuef','DN8_QHVkuYa','DN8_Sc1Ev7T','DN8_Tf0kimC','DN8_VSsEn4s',
-            'DN8_YrXEks8','DN8_aPFElbH','DN8_cgUEjzB','DN8_dvIkqqF',
-            'DN8_e6Bkn_3','DN8_gEhEqeM','DN8_hdqEjL3','DN8_iZDEiyE','DN8_jY8knnz',
-            'DN8_kj1Elhl','DN8_nizEh7v','DN8_pDEEtsn','DN8_qgjEn8h','DN8_vW0kiGQ',
-            'DN8_wnDEmU0','DN8_xqMElCV','DN8_zY8kvCp','DN8_0sUklBe','DN8_2M6ku3p',
-            'DN8_4mJkoUx','DN8_58mkvRe','DN8_7mYkv3c','DN8__W2kjSz','DN9AArwkpgG',
-            'DN9ACBqkj-H','DN9AC_bEub5','DN9AEPtkllV','DN9AFTrkvLI','DN9AHoLkkyj',
-            'DN9AI73EpZm','DN9AKmtkoVV','DN9AL7rkkfB','DN9AO-wknQr','DN9AP_-EiE9',
-            'DN9AS_rkg47','DN9AUSfEth3','DN9AVcNEiPW','DN9AW_Qktnh','DN9AXnuErE9',
-            'DN9AZfZEo5i','DN9AcXQEjCk','DN9Adi5ksgf','DN9AmJmkmtc','DN9AoNmEuwQ',
-            'DN9Api0ElNF','DN9ArE9EnjZ','DN9Asdckjin','DN9AuRSkt1C','DN9AzTukrjS',
-            'DN9A0XyEm5C','DN9A2siEiBE','DN9BARhEmqO','DN9BCTPEgg8','DN9BEjpEo-k',
-            'DN9BF5CksEg','DN9BJzpEvgf','DN9BMuaEgZE','DN9BQVvEqpY','DN9BSGjku2q',
-            'DOB8w5wks1m','DOB8xX1kv3h','DOB8x_PEk9L','DOB8y0PElt4','DOB8zYmEi_c',
+    imgFolder: 'ss',
+    images: [
+      {file:'DN8_N1Akuef.webp', post:'DN8_N1Akuef'},{file:'DN8_QHVkuYa.webp', post:'DN8_QHVkuYa'},
+      {file:'DN8_Sc1Ev7T.webp', post:'DN8_Sc1Ev7T'},{file:'DN8_Tf0kimC.webp', post:'DN8_Tf0kimC'},
+      {file:'DN8_VSsEn4s.webp', post:'DN8_VSsEn4s'},{file:'DN8_WjhkrM-.webp', post:'DN8_WjhkrM-'},
+      {file:'DN8_YrXEks8.webp', post:'DN8_YrXEks8'},{file:'DN8__W2kjSz.webp', post:'DN8__W2kjSz'},
+      {file:'DN8_aPFElbH.webp', post:'DN8_aPFElbH'},{file:'DN8_cgUEjzB.webp', post:'DN8_cgUEjzB'},
+      {file:'DN8_dvIkqqF.webp', post:'DN8_dvIkqqF'},{file:'DN8_e6Bkn_3.webp', post:'DN8_e6Bkn_3'},
+      {file:'DN8_gEhEqeM.webp', post:'DN8_gEhEqeM'},{file:'DN8_hdqEjL3.webp', post:'DN8_hdqEjL3'},
+      {file:'DN8_iZDEiyE.webp', post:'DN8_iZDEiyE'},{file:'DN8_jY8knnz.webp', post:'DN8_jY8knnz'},
+      {file:'DN8_kj1Elhl.webp', post:'DN8_kj1Elhl'},{file:'DN8_nizEh7v.webp', post:'DN8_nizEh7v'},
+      {file:'DN8_pDEEtsn.webp', post:'DN8_pDEEtsn'},{file:'DN8_qgjEn8h.webp', post:'DN8_qgjEn8h'},
+      {file:'DN8_vW0kiGQ.webp', post:'DN8_vW0kiGQ'},{file:'DN8_wnDEmU0.webp', post:'DN8_wnDEmU0'},
+      {file:'DN8_xqMElCV.webp', post:'DN8_xqMElCV'},{file:'DN8_zY8kvCp.webp', post:'DN8_zY8kvCp'},
+      {file:'DN8_0sUklBe.webp', post:'DN8_0sUklBe'},{file:'DN8_2M6ku3p.webp', post:'DN8_2M6ku3p'},
+      {file:'DN8_4mJkoUx.webp', post:'DN8_4mJkoUx'},{file:'DN8_58mkvRe.webp', post:'DN8_58mkvRe'},
+      {file:'DN8_7mYkv3c.webp', post:'DN8_7mYkv3c'},{file:'DN9AArwkpgG.webp', post:'DN9AArwkpgG'},
+      {file:'DN9ACBqkj-H.webp', post:'DN9ACBqkj-H'},{file:'DN9AC_bEub5.webp', post:'DN9AC_bEub5'},
+      {file:'DN9AEPtkllV.webp', post:'DN9AEPtkllV'},{file:'DN9AFTrkvLI.webp', post:'DN9AFTrkvLI'},
+      {file:'DN9AHoLkkyj.webp', post:'DN9AHoLkkyj'},{file:'DN9AI73EpZm.webp', post:'DN9AI73EpZm'},
+      {file:'DN9AKmtkoVV.webp', post:'DN9AKmtkoVV'},{file:'DN9AL7rkkfB.webp', post:'DN9AL7rkkfB'},
+      {file:'DN9AO-wknQr.webp', post:'DN9AO-wknQr'},{file:'DN9AP_-EiE9.webp', post:'DN9AP_-EiE9'},
+      {file:'DN9AS_rkg47.webp', post:'DN9AS_rkg47'},{file:'DN9AUSfEth3.webp', post:'DN9AUSfEth3'},
+      {file:'DN9AVcNEiPW.webp', post:'DN9AVcNEiPW'},{file:'DN9AW_Qktnh.webp', post:'DN9AW_Qktnh'},
+      {file:'DN9AXnuErE9.webp', post:'DN9AXnuErE9'},{file:'DN9AZfZEo5i.webp', post:'DN9AZfZEo5i'},
+      {file:'DN9AcXQEjCk.webp', post:'DN9AcXQEjCk'},{file:'DN9Adi5ksgf.webp', post:'DN9Adi5ksgf'},
+      {file:'DN9AmJmkmtc.webp', post:'DN9AmJmkmtc'},{file:'DN9AoNmEuwQ.webp', post:'DN9AoNmEuwQ'},
+      {file:'DN9Api0ElNF.webp', post:'DN9Api0ElNF'},{file:'DN9ArE9EnjZ.webp', post:'DN9ArE9EnjZ'},
+      {file:'DN9Asdckjin.webp', post:'DN9Asdckjin'},{file:'DN9AuRSkt1C.webp', post:'DN9AuRSkt1C'},
+      {file:'DN9AzTukrjS.webp', post:'DN9AzTukrjS'},{file:'DN9A0XyEm5C.webp', post:'DN9A0XyEm5C'},
+      {file:'DN9A2siEiBE.webp', post:'DN9A2siEiBE'},{file:'DN9BARhEmqO.webp', post:'DN9BARhEmqO'},
+      {file:'DN9BCTPEgg8.webp', post:'DN9BCTPEgg8'},{file:'DN9BEjpEo-k.webp', post:'DN9BEjpEo-k'},
+      {file:'DN9BF5CksEg.webp', post:'DN9BF5CksEg'},{file:'DN9BJzpEvgf.webp', post:'DN9BJzpEvgf'},
+      {file:'DN9BMuaEgZE.webp', post:'DN9BMuaEgZE'},{file:'DN9BQVvEqpY.webp', post:'DN9BQVvEqpY'},
+      {file:'DN9BSGjku2q.webp', post:'DN9BSGjku2q'}
+    ],
+    posts: ['DOB8w5wks1m','DOB8xX1kv3h','DOB8x_PEk9L','DOB8y0PElt4','DOB8zYmEi_c',
             'DOB8z9EEpRt','DOB80pckv33','DOB81OskhxT','DOB83u5Ek_8','DOB84ZBEvJX',
             'DOB85dokmQZ'] },
   { id: 'arc-events',  label: 'In School Events', cols: 3, type: 'p',    comingSoon: false,
-    posts: ['DPFGrwUkmxw','DPFGs0hkrF2','DPFGuAAEiJq','DPFGvmNEpqi','DPFGycbEiK2',
-            'DPFG0NNkuH_','DPFG1GTEk7y','DPFG4FUElPx','DPFG40hEqjW','DPFG5v5kpJ9',
-            'DPFG8h-knpa','DPFG9nMEg4o','DPFG-pekpZL','DPFHAlZksC1','DPFHB1zEigR',
-            'DPFHEnkEs_o','DPFHGq6ktSy','DPFHJOKkoXi','DPFHKyZkp4f','DPFHMYYEpeA',
-            'DPFHNfokuPL','DPFHP0ZkoP6','DPFHTV_Es8g','DPFHVI4Ei3G','DPFHcN1Ek_n',
-            'DPFHdB_kjZF','DPFHegLkuc3','DPFHfypEiCi','DPFHjUeknIt','DPFHnrHEtEU',
-            'DPFHuFOkmQ1','DPFHxG4kr9z','DPFHza2Ehhx','DPFH4VUkiwd','DPFH5zxkgME'] },
+    imgFolder: 'inschoolevents',
+    images: [
+      {file:'DPFGrwUkmxw.webp', post:'DPFGrwUkmxw'},{file:'DPFGs0hkrF2.webp', post:'DPFGs0hkrF2'},
+      {file:'DPFGuAAEiJq.webp', post:'DPFGuAAEiJq'},{file:'DPFGvmNEpqi.webp', post:'DPFGvmNEpqi'},
+      {file:'DPFGycbEiK2.webp', post:'DPFGycbEiK2'},{file:'DPFG0NNkuH_.webp', post:'DPFG0NNkuH_'},
+      {file:'DPFG1GTEk7y.webp', post:'DPFG1GTEk7y'},{file:'DPFG4FUElPx.webp', post:'DPFG4FUElPx'},
+      {file:'DPFG40hEqjW.webp', post:'DPFG40hEqjW'},{file:'DPFG5v5kpJ9.webp', post:'DPFG5v5kpJ9'},
+      {file:'DPFG8h-knpa.webp', post:'DPFG8h-knpa'},{file:'DPFG9nMEg4o.webp', post:'DPFG9nMEg4o'},
+      {file:'DPFG-pekpZL.webp', post:'DPFG-pekpZL'},{file:'DPFHAlZksC1.webp', post:'DPFHAlZksC1'},
+      {file:'DPFHB1zEigR.webp', post:'DPFHB1zEigR'},{file:'DPFHEnkEs_o.webp', post:'DPFHEnkEs_o'},
+      {file:'DPFHGq6ktSy.webp', post:'DPFHGq6ktSy'},{file:'DPFHJOKkoXi.webp', post:'DPFHJOKkoXi'},
+      {file:'DPFHKyZkp4f.webp', post:'DPFHKyZkp4f'},{file:'DPFHMYYEpeA.webp', post:'DPFHMYYEpeA'},
+      {file:'DPFHNfokuPL.webp', post:'DPFHNfokuPL'},{file:'DPFHP0ZkoP6.webp', post:'DPFHP0ZkoP6'},
+      {file:'DPFHTV_Es8g.webp', post:'DPFHTV_Es8g'},{file:'DPFHVI4Ei3G.webp', post:'DPFHVI4Ei3G'},
+      {file:'DPFHcN1Ek_n.webp', post:'DPFHcN1Ek_n'},{file:'DPFHdB_kjZF.webp', post:'DPFHdB_kjZF'},
+      {file:'DPFHegLkuc3.webp', post:'DPFHegLkuc3'},{file:'DPFHfypEiCi.webp', post:'DPFHfypEiCi'},
+      {file:'DPFHjUeknIt.webp', post:'DPFHjUeknIt'},{file:'DPFHnrHEtEU.webp', post:'DPFHnrHEtEU'},
+      {file:'DPFHuFOkmQ1.webp', post:'DPFHuFOkmQ1'},{file:'DPFHxG4kr9z.webp', post:'DPFHxG4kr9z'},
+      {file:'DPFHza2Ehhx.webp', post:'DPFHza2Ehhx'},{file:'DPFH4VUkiwd.webp', post:'DPFH4VUkiwd'},
+      {file:'DPFH5zxkgME.webp', post:'DPFH5zxkgME'}
+    ],
+    posts: [] },
   { id: 'arc-blues',   label: 'Senior Blues',     cols: 3, type: 'p',    comingSoon: false,
     posts: ['DPJs-XeEdqo','DPJtCTUkb_f','DPJtJbeERrr','DPJtNvfkTvk','DPJtQ5pkSpz',
             'DPJtbCkkfm5','DPJteT8kbfY','DPJthE-EVNc','DPJti-lkaJ_','DPJtmFrkdhD',
@@ -1646,10 +1726,15 @@ const ICON_PAUSE = `<svg width="11" height="13" viewBox="0 0 11 13" fill="curren
 
 
 function makeCarouselHTML(sec) {
-  const slides = sec.posts.map(id => {
+  const imgSlides = (sec.images || []).map(({file, post}) => {
+    const url = `https://www.instagram.com/p/${post}/`;
+    return `<div class="carousel-slide"><a href="${url}" target="_blank" rel="noopener" class="local-img-link"><img src="images/${sec.imgFolder || 'lfd'}/${file}" loading="lazy" alt="${sec.label} photo"></a></div>`;
+  });
+  const embedSlides = (sec.posts || []).map(id => {
     const url = `https://www.instagram.com/${sec.type}/${id}/`;
     return `<div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>`;
-  }).join('');
+  });
+  const slides = [...imgSlides, ...embedSlides].join('');
   return `<div class="carousel-outer">
     <button class="carousel-arrow prev-arrow" disabled aria-label="Previous">${ARROW_PREV}</button>
     <div class="carousel-viewport"><div class="carousel-track cols-${sec.cols}">${slides}</div></div>
@@ -1735,8 +1820,21 @@ function initCarousels(root) {
       goTo(dx < 0 ? idx + 1 : idx - 1, true);
     }, { passive: true });
 
-    if (prev) prev.addEventListener('click', () => { stopSlideshow(); goTo(idx - 1, true); });
-    if (next) next.addEventListener('click', () => { stopSlideshow(); goTo(idx + 1, true); });
+    function bindArrow(btn, dir) {
+      if (!btn) return;
+      let holdTimer = null, holdInterval = null;
+      btn.addEventListener('click', () => { stopSlideshow(); goTo(idx + dir, true); });
+      btn.addEventListener('mousedown', () => {
+        holdTimer = setTimeout(() => {
+          holdInterval = setInterval(() => { stopSlideshow(); goTo(idx + dir, true); }, 150);
+        }, 400);
+      });
+      const cancel = () => { clearTimeout(holdTimer); clearInterval(holdInterval); holdTimer = holdInterval = null; };
+      btn.addEventListener('mouseup', cancel);
+      btn.addEventListener('mouseleave', cancel);
+    }
+    bindArrow(prev, -1);
+    bindArrow(next, 1);
 
     function stopSlideshow() {
       if (!timer) return;
@@ -1763,6 +1861,23 @@ function initCarousels(root) {
 }
 
 buildArchive();
+
+/* ── Hero slideshow ── */
+(function() {
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots   = document.querySelectorAll('.hero-dot');
+  let cur = 0, timer;
+  function goTo(i) {
+    slides[cur].classList.remove('active');
+    dots[cur].classList.remove('active');
+    cur = i;
+    slides[cur].classList.add('active');
+    dots[cur].classList.add('active');
+  }
+  window.goHeroSlide = function(i) { clearInterval(timer); goTo(i); timer = setInterval(next, 6000); };
+  function next() { goTo((cur + 1) % slides.length); }
+  timer = setInterval(next, 6000);
+})();
 
 /* ── Confetti ── */
 function launchConfetti() {
@@ -1865,13 +1980,7 @@ function launchConfetti() {
 
 /* ── Senior quote stack ── */
 (function() {
-  const quotes = [
-    { name:'Maya B.', role:'Art Club President', quote:'"The future belongs to those who believe in the beauty of their dreams."', img:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&q=80' },
-    { name:'Carlos C.', role:'Varsity Soccer', quote:'"Work hard in silence, let your success make the noise."', img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&q=80' },
-    { name:'Priya D.', role:'Orchestra Lead', quote:'"Be yourself; everyone else is already taken."', img:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&q=80' },
-    { name:'Ethan E.', role:'Science Olympiad', quote:'"It always seems impossible until it\'s done."', img:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&q=80' },
-    { name:'Sofia F.', role:'Yearbook Editor', quote:'"In the end, it\'s not the years in your life that count. It\'s the life in your years."', img:'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=80&h=80&fit=crop&q=80' },
-  ];
+  const quotes = [];
   const wrap = document.getElementById('quote-stack');
   if (!wrap) return;
   let current = 0;
