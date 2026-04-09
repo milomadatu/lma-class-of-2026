@@ -248,7 +248,7 @@
   .landing-stat { flex: 1; padding: 1.4rem 1rem; text-align: center; border-right: 0.5px solid var(--border); }
   .landing-stat:last-child { border-right: none; }
   .landing-stat-num { font-size: 32px; font-weight: 800; color: var(--ink); letter-spacing: -0.04em; }
-  .landing-stat-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin-top: 4px; }
+  .landing-stat-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-2); margin-top: 4px; }
   .landing-extra { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 2rem 2rem; }
   .landing-photo { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); }
   .landing-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -269,8 +269,8 @@
   .countdown-unit { display: flex; flex-direction: column; align-items: center; min-width: 52px; }
   .countdown-num { font-size: 42px; font-weight: 800; color: #fff; line-height: 1; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
   .countdown-sep { font-size: 30px; font-weight: 200; color: rgba(255,255,255,0.18); line-height: 1; padding-top: 4px; }
-  .countdown-lbl { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); margin-top: 6px; }
-  .countdown-date { font-size: 11px; color: rgba(255,255,255,0.3); font-weight: 500; margin-top: 1.25rem; letter-spacing: 0.02em; }
+  .countdown-lbl { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.78); margin-top: 6px; }
+  .countdown-date { font-size: 11px; color: var(--gold-bright); font-weight: 600; margin-top: 1.25rem; letter-spacing: 0.02em; }
   /* ── Events strip ── */
   .events-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; overflow-y: auto; padding: 0.75rem; scrollbar-width: none; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-md); }
   .events-strip::-webkit-scrollbar { display: none; }
@@ -283,16 +283,16 @@
   .event-chip.past { opacity: 0.3; }
   .event-chip.upcoming { border-color: var(--gold); background: var(--gold-lt); }
   .event-chip.grad-chip { background: var(--dark); border-color: transparent; }
-  .event-chip-date { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin-bottom: 2px; }
-  .event-chip.upcoming .event-chip-date { color: var(--gold); }
+  .event-chip-date { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-2); margin-bottom: 2px; }
+  .event-chip.upcoming .event-chip-date { color: #7a5520; }
   .event-chip.grad-chip .event-chip-date { color: var(--gold-bright); }
   .event-chip-name { font-size: 12px; font-weight: 700; color: var(--ink); line-height: 1.25; letter-spacing: -0.01em; }
   .event-chip.grad-chip .event-chip-name { color: #fff; }
-  .event-chip-detail { font-size: 10px; color: var(--ink-3); line-height: 1.4; margin-top: 2px; }
-  .event-chip.grad-chip .event-chip-detail { color: rgba(255,255,255,0.35); }
-  .event-chip-days { font-size: 10px; font-weight: 700; color: var(--ink-3); margin-top: 6px; }
-  .event-chip.upcoming .event-chip-days { color: var(--gold); }
-  .event-chip.past .event-chip-days { color: var(--ink-3); }
+  .event-chip-detail { font-size: 10px; color: var(--ink-2); line-height: 1.4; margin-top: 2px; }
+  .event-chip.grad-chip .event-chip-detail { color: rgba(255,255,255,0.7); }
+  .event-chip-days { font-size: 10px; font-weight: 700; color: var(--ink-2); margin-top: 6px; }
+  .event-chip.upcoming .event-chip-days { color: #7a5520; }
+  .event-chip.past .event-chip-days { color: var(--ink-2); }
   .event-chip.grad-chip .event-chip-days { color: var(--gold-bright); }
   /* ── Quote stack ── */
   .quote-section { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.25rem; display: flex; flex-direction: column; }
@@ -538,6 +538,26 @@
   /* ── Archive mobile nav ── */
   .archive-mobile-nav { display: none; }
 
+  /* ── Archive page header + view tabs ── */
+  .archive-page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; gap: 12px; flex-wrap: wrap; }
+  .archive-tabs { display: flex; gap: 3px; background: var(--surface); border-radius: 980px; padding: 3px; box-shadow: var(--shadow-sm); }
+  .archive-tab { padding: 6px 18px; border-radius: 980px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--ink-2); background: transparent; transition: background 0.15s, color 0.15s; white-space: nowrap; }
+  .archive-tab.active { background: var(--ink); color: #fff; }
+
+  /* ── Our Favorites ── */
+  .favorites-view { display: none; }
+  .favorites-view.visible { display: block; margin-top: 0.25rem; }
+  .favorites-grid { columns: 3; column-gap: 10px; }
+  .fav-item { break-inside: avoid; margin-bottom: 10px; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; }
+  .fav-item img { width: 100%; display: block; border-radius: 12px; transition: transform 0.3s ease; }
+  .fav-item:hover img { transform: scale(1.03); }
+  .fav-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 12px 12px;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+    border-radius: 0 0 12px 12px; }
+  .fav-event { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold-bright); }
+  .fav-caption-text { font-size: 12px; color: rgba(255,255,255,0.88); font-weight: 500; margin-top: 2px; line-height: 1.35; }
+  .favorites-empty { color: var(--ink-3); font-size: 13px; text-align: center; padding: 4rem 0; }
+
   /* ── Timeline ── */
   .archive-layout { display: flex; gap: 2rem; align-items: flex-start; }
   .timeline-sidebar { flex: 0 0 180px; position: sticky; top: 64px; }
@@ -594,6 +614,10 @@
     }
     .archive-carousels { padding: 1rem 1rem 1.5rem; }
     .archive-section { margin-bottom: 1.75rem; }
+    .archive-page-header { padding: 0 1rem; margin-bottom: 0; }
+    .favorites-view.visible { padding: 10px 1rem 1.5rem; }
+    .favorites-grid { columns: 2; column-gap: 8px; }
+    .fav-item { margin-bottom: 8px; }
     .section-label { font-size: 10px; }
     /* Mobile tap grid — 3-col Instagram-style grid, tap opens embed in modal */
     /* Hide custom cursor on touch devices */
@@ -747,6 +771,20 @@
 
   <!-- ARCHIVE -->
   <div class="page" id="page-archive">
+  <div class="archive-page-header">
+    <div>
+      <div class="section-label">Class of 2026</div>
+      <div class="section-title" style="margin-bottom:0">Archive</div>
+    </div>
+    <div class="archive-tabs">
+      <button class="archive-tab active" id="arc-tab-timeline" onclick="setArchiveView('timeline')">Timeline</button>
+      <button class="archive-tab" id="arc-tab-favorites" onclick="setArchiveView('favorites')">★ Our Favorites</button>
+    </div>
+  </div>
+  <div class="favorites-view" id="favorites-view">
+    <div class="favorites-grid" id="favorites-grid"></div>
+  </div>
+  <div id="archive-main">
   <div class="archive-mobile-nav">
     <button onclick="scrollToSection('arc-videos')">Videos</button>
     <button onclick="scrollToSection('arc-lfd')">Last First Day</button>
@@ -833,6 +871,7 @@
     </div><!-- /.timeline-sidebar -->
     <div class="archive-carousels" id="archive-carousels"></div><!-- /.archive-carousels -->
   </div><!-- /.archive-layout -->
+  </div><!-- /#archive-main -->
   </div>
 
   <!-- PEOPLE -->
@@ -1192,6 +1231,10 @@ function checkPaywall() {
   }, { rootMargin: '300px' }).observe(container);
 
   function buildWordCloud() {
+  // Read offsetWidth in rAF to avoid forced reflow during page init
+  requestAnimationFrame(_buildWordCloud);
+  }
+  function _buildWordCloud() {
   const wcWords = [
     {text:'Community',value:28},{text:'Legacy',value:22},{text:'Growth',value:18},
     {text:'Family',value:24},{text:'Pride',value:16},{text:'Resilient',value:20},
@@ -1233,7 +1276,7 @@ function checkPaywall() {
           .text(d => d.text);
     })
     .start();
-  } // end buildWordCloud
+  } // end _buildWordCloud
 })();
 
 /* ── US Map ── */
@@ -1915,7 +1958,7 @@ function initCarousels(root) {
 
     // Invalidate cached width and recalc on resize
     new ResizeObserver(() => { _sw = 0; goTo(idx, false); }).observe(viewport);
-    goTo(0, false);
+    requestAnimationFrame(() => goTo(0, false));
 
     // Touch swipe
     let tx0 = null;
@@ -1971,6 +2014,43 @@ function initCarousels(root) {
 }
 
 buildArchive();
+
+/* ── Our Favorites ── */
+// Add your favorite shots here. src = path to local image or Instagram shortcode URL.
+// event = the section label shown in gold. caption = optional overlay text.
+const FAVORITES = [
+  // { src: 'images/lfd/DNUB7KkyalX.webp', event: 'Last First Day', caption: '' },
+  // { src: 'images/ss/DOB80pckv33.webp',  event: 'Senior Sunrise',  caption: '' },
+  // { src: 'images/sb/DT80-ktEsQ3.webp',  event: 'Senior Bonfire',  caption: '' },
+];
+
+function renderFavorites() {
+  const grid = document.getElementById('favorites-grid');
+  if (!FAVORITES.length) {
+    grid.innerHTML = '<div class="favorites-empty">No favorites added yet — fill in the FAVORITES array.</div>';
+    return;
+  }
+  grid.innerHTML = FAVORITES.map(f => `
+    <div class="fav-item">
+      <img src="${f.src}" alt="${f.event}" loading="lazy" decoding="async">
+      ${(f.event || f.caption) ? `
+        <div class="fav-caption">
+          ${f.event   ? `<div class="fav-event">${f.event}</div>` : ''}
+          ${f.caption ? `<div class="fav-caption-text">${f.caption}</div>` : ''}
+        </div>` : ''}
+    </div>`).join('');
+}
+
+function setArchiveView(view) {
+  const isTimeline = view === 'timeline';
+  document.getElementById('arc-tab-timeline').classList.toggle('active', isTimeline);
+  document.getElementById('arc-tab-favorites').classList.toggle('active', !isTimeline);
+  document.getElementById('archive-main').style.display = isTimeline ? '' : 'none';
+  const fv = document.getElementById('favorites-view');
+  fv.classList.toggle('visible', !isTimeline);
+  if (!isTimeline && !document.getElementById('favorites-grid').children.length) renderFavorites();
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
 
 /* ── Hero slideshow ── */
 (function() {
