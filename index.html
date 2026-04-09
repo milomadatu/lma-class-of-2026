@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -313,7 +313,12 @@
   .countdown-num { font-size: 42px; font-weight: 800; color: #fff; line-height: 1; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
   .countdown-sep { font-size: 30px; font-weight: 200; color: rgba(255,255,255,0.18); line-height: 1; padding-top: 4px; }
   .countdown-lbl { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.78); margin-top: 6px; }
-  .countdown-date { font-size: 11px; color: var(--gold-bright); font-weight: 600; margin-top: 1.25rem; letter-spacing: 0.02em; }
+  .countdown-progress-wrap { width: 100%; margin-top: 1.25rem; }
+  .countdown-progress-bar { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .countdown-progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--gold) 0%, var(--gold-bright) 100%); width: 0%; transition: width 1.2s cubic-bezier(0.16,1,0.3,1); }
+  .countdown-progress-labels { display: flex; justify-content: space-between; margin-top: 5px; font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.35); }
+  .countdown-progress-labels #cd-pct { color: var(--gold-bright); }
+  .countdown-date { font-size: 11px; color: var(--gold-bright); font-weight: 600; margin-top: 0.75rem; letter-spacing: 0.02em; }
   /* ── Events strip ── */
   .events-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; overflow-y: auto; padding: 0.75rem; scrollbar-width: none; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-md); }
   .events-strip::-webkit-scrollbar { display: none; }
@@ -539,10 +544,10 @@
   .map-zoom-btn { width: 30px; height: 30px; background: rgba(255,255,255,0.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: none; border-radius: 7px; font-size: 18px; font-weight: 300; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 6px rgba(0,0,0,0.16), 0 0 0 0.5px rgba(0,0,0,0.06); line-height: 1; color: var(--ink); transition: background 0.12s; }
   .map-zoom-btn:hover { background: rgba(255,255,255,1); }
   .map-zoom-btn:active { background: rgba(220,220,220,0.9); }
-  .map-pill { font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 26px; border: none; cursor: pointer; color: var(--ink-2); background: transparent; transition: background 0.18s, color 0.18s; line-height: 1.2; }
-  .map-pill.active { background: var(--ink); color: #fff; }
-  .map-pill:hover:not(.active) { color: var(--ink); background: rgba(0,0,0,0.06); }
-
+  .map-pill-slider { position: absolute; top: 3px; bottom: 3px; border-radius: 26px; background: var(--ink); z-index: 0; pointer-events: none; transition: left 0.28s cubic-bezier(0.16,1,0.3,1), width 0.28s cubic-bezier(0.16,1,0.3,1); }
+  .map-pill { position: relative; z-index: 1; font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 26px; border: none; cursor: pointer; color: var(--ink-2); background: transparent; transition: color 0.22s ease; line-height: 1.2; }
+  .map-pill.active { color: #fff; }
+  .map-pill:hover:not(.active) { color: var(--ink); }
   /* Pin pulse animation */
   .dot-pulse { animation: dot-pulse 2.2s ease-out infinite; transform-box: fill-box; transform-origin: center; }
   @keyframes dot-pulse { 0% { opacity: 0.4; transform: scale(1); } 100% { opacity: 0; transform: scale(3.2); } }
@@ -592,12 +597,14 @@
   .favorites-view { display: none; transition: opacity 0.22s ease; }
   .favorites-view.visible { display: block; margin-top: 0.25rem; }
   #archive-main { transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1); }
-  .favorites-grid { columns: 3; column-gap: 10px; }
-  .fav-item { break-inside: avoid; margin-bottom: 10px; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; }
-  .fav-item img { width: 100%; display: block; border-radius: 12px; transition: transform 0.3s ease; }
+  .favorites-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .fav-col { display: flex; flex-direction: column; gap: 10px; }
+  .fav-item { border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+  .fav-item.in-view { opacity: 1; transform: translateY(0); }
+  .fav-item img { width: 100%; display: block; border-radius: 12px; transition: transform 0.4s ease; }
   .fav-item:hover img { transform: scale(1.03); }
   .fav-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 12px 12px;
-    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+    background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
     border-radius: 0 0 12px 12px; }
   .fav-event { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold-bright); }
   .fav-caption-text { font-size: 12px; color: rgba(255,255,255,0.88); font-weight: 500; margin-top: 2px; line-height: 1.35; }
@@ -661,8 +668,7 @@
     .archive-section { margin-bottom: 1.75rem; }
     .archive-page-header { padding: 0 1rem; margin-bottom: 0; }
     .favorites-view.visible { padding: 10px 1rem 1.5rem; }
-    .favorites-grid { columns: 2; column-gap: 8px; }
-    .fav-item { margin-bottom: 8px; }
+    .favorites-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .section-label { font-size: 10px; }
     /* Mobile tap grid — 3-col Instagram-style grid, tap opens embed in modal */
     /* Hide custom cursor on touch devices */
@@ -818,6 +824,14 @@
           <div class="countdown-sep">:</div>
           <div class="countdown-unit"><div class="countdown-num" id="cd-sec">00</div><div class="countdown-lbl">Sec</div></div>
         </div>
+        <div class="countdown-progress-wrap">
+          <div class="countdown-progress-bar"><div class="countdown-progress-fill" id="cd-fill"></div></div>
+          <div class="countdown-progress-labels">
+            <span>Aug 13</span>
+            <span id="cd-pct">0%</span>
+            <span>May 29</span>
+          </div>
+        </div>
         <div class="countdown-date">May 29, 2026</div>
       </div>
 
@@ -967,7 +981,8 @@
       <div class="section-label" style="margin-bottom:10px">Where we're going</div>
       <div class="map-row">
         <div class="map-section" id="map-section">
-          <div class="map-pills">
+          <div class="map-pills" id="map-pills">
+            <div class="map-pill-slider" id="map-pill-slider"></div>
             <button class="map-pill active" id="map-tab-usa" onclick="switchMapView('usa')">United States</button>
             <button class="map-pill" id="map-tab-socal" onclick="switchMapView('socal')">SoCal</button>
             <button class="map-pill" id="map-tab-bayarea" onclick="switchMapView('bayarea')">Bay Area</button>
@@ -1250,8 +1265,8 @@ function closePopup() {
 
 renderGrid();
 
-/* ── Nav pill init ── */
-requestAnimationFrame(() => movePill(document.querySelector('.nav-link.active')));
+/* ── Nav pill init — deferred so layout is stable before reading offsetLeft ── */
+requestAnimationFrame(() => requestAnimationFrame(() => movePill(document.querySelector('.nav-link.active'))));
 
 /* ── People paywall ── */
 (function initPaywall() {
@@ -1665,11 +1680,18 @@ function initMapsOnce() {
   loadD3().then(buildUSMap);
 }
 
+function moveMapSlider(tabEl) {
+  const slider = document.getElementById('map-pill-slider');
+  if (!slider || !tabEl) return;
+  slider.style.left = tabEl.offsetLeft + 'px';
+  slider.style.width = tabEl.offsetWidth + 'px';
+}
 function switchMapView(view) {
   ['usa', 'bayarea', 'socal'].forEach(v => {
     document.getElementById('map-tab-' + v).classList.toggle('active', v === view);
     document.getElementById('map-' + v).classList.toggle('active-map', v === view);
   });
+  moveMapSlider(document.getElementById('map-tab-' + view));
   if (!mapBuiltFor[view]) {
     mapBuiltFor[view] = true;
     loadD3().then(() => {
@@ -1717,6 +1739,8 @@ function showPage(id, btn) {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       next.querySelectorAll('.stat-block').forEach(el => el.classList.add('visible'));
       initMapsOnce();
+      const activeMapTab = next.querySelector('.map-pill.active');
+      if (activeMapTab) { const s = document.getElementById('map-pill-slider'); if (s) { s.style.transition = 'none'; moveMapSlider(activeMapTab); requestAnimationFrame(() => { s.style.transition = ''; }); } }
     }));
   }
   if (id === 'archive') {
@@ -2024,8 +2048,8 @@ function initCarousels(root) {
       if (resetBtn) resetBtn.classList.toggle('visible', idx > 0);
     }
 
-    // Invalidate cached width and recalc on resize
-    new ResizeObserver(() => { _sw = 0; goTo(idx, false); }).observe(viewport);
+    // Invalidate cached width and recalc on resize (defer write to next frame to avoid forced reflow)
+    new ResizeObserver(() => { _sw = 0; requestAnimationFrame(() => goTo(idx, false)); }).observe(viewport);
     requestAnimationFrame(() => goTo(0, false));
 
     // Touch swipe
@@ -2087,9 +2111,7 @@ buildArchive();
 // Add your favorite shots here. src = path to local image or Instagram shortcode URL.
 // event = the section label shown in gold. caption = optional overlay text.
 const FAVORITES = [
-  // { src: 'images/lfd/DNUB7KkyalX.webp', event: 'Last First Day', caption: '' },
-  // { src: 'images/ss/DOB80pckv33.webp',  event: 'Senior Sunrise',  caption: '' },
-  // { src: 'images/sb/DT80-ktEsQ3.webp',  event: 'Senior Bonfire',  caption: '' },
+  { src: 'images/favs/GreatestPictureOfAllTime.webp', event: '', caption: '' },
 ];
 
 function renderFavorites() {
@@ -2098,15 +2120,30 @@ function renderFavorites() {
     grid.innerHTML = '<div class="favorites-empty">No favorites added yet — fill in the FAVORITES array.</div>';
     return;
   }
-  grid.innerHTML = FAVORITES.map(f => `
-    <div class="fav-item">
-      <img src="${f.src}" alt="${f.event}" loading="lazy" decoding="async">
-      ${(f.event || f.caption) ? `
-        <div class="fav-caption">
-          ${f.event   ? `<div class="fav-event">${f.event}</div>` : ''}
-          ${f.caption ? `<div class="fav-caption-text">${f.caption}</div>` : ''}
-        </div>` : ''}
-    </div>`).join('');
+  // Build 3 columns (2 on mobile via CSS), distribute items top-to-bottom
+  const numCols = 3;
+  const cols = Array.from({ length: numCols }, () => []);
+  FAVORITES.forEach((f, i) => cols[i % numCols].push(f));
+  function itemHTML(f) {
+    return `<div class="fav-item">
+      <img src="${f.src}" alt="${f.event || 'Favorite'}" loading="lazy" decoding="async">
+      ${(f.event || f.caption) ? `<div class="fav-caption">
+        ${f.event   ? `<div class="fav-event">${f.event}</div>` : ''}
+        ${f.caption ? `<div class="fav-caption-text">${f.caption}</div>` : ''}
+      </div>` : ''}
+    </div>`;
+  }
+  grid.innerHTML = cols.map(col => `<div class="fav-col">${col.map(itemHTML).join('')}</div>`).join('');
+  // Fade-in on scroll via IntersectionObserver
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('in-view'), i * 60);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -40px 0px', threshold: 0.08 });
+  grid.querySelectorAll('.fav-item').forEach(el => obs.observe(el));
 }
 
 function moveTabSlider(tabEl) {
@@ -2237,18 +2274,25 @@ function launchConfetti() {
 /* ── Graduation countdown ── */
 (function() {
   const target = new Date('2026-05-29T15:00:00');
+  const start  = new Date('2025-08-13T00:00:00');
+  const totalMs = target - start;
   const els = {
     d: document.getElementById('cd-days'),
     h: document.getElementById('cd-hrs'),
     m: document.getElementById('cd-min'),
     s: document.getElementById('cd-sec')
   };
+  const fill = document.getElementById('cd-fill');
+  const pct  = document.getElementById('cd-pct');
   function pad(n) { return String(n).padStart(2, '0'); }
   let fired = false;
   function tick() {
-    const diff = target - Date.now();
+    const now  = Date.now();
+    const diff = target - now;
     if (diff <= 0) {
       els.d.textContent = els.h.textContent = els.m.textContent = els.s.textContent = '00';
+      if (fill) fill.style.width = '100%';
+      if (pct)  pct.textContent = '100%';
       if (!fired) { fired = true; launchConfetti(); }
       return;
     }
@@ -2256,6 +2300,9 @@ function launchConfetti() {
     els.h.textContent = pad(Math.floor((diff % 86400000) / 3600000));
     els.m.textContent = pad(Math.floor((diff % 3600000) / 60000));
     els.s.textContent = pad(Math.floor((diff % 60000) / 1000));
+    const p = Math.min(100, Math.max(0, ((now - start) / totalMs) * 100));
+    if (fill) fill.style.width = p.toFixed(2) + '%';
+    if (pct)  pct.textContent = p.toFixed(1) + '%';
   }
   tick();
   setInterval(tick, 1000);
