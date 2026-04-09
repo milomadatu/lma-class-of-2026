@@ -8,14 +8,13 @@
   <meta name="description" content="Legacy Magnet Academy Class of 2026 — memories, people, and where we're going.">
   <meta property="og:title" content="LMA Class of 2026">
   <meta property="og:description" content="Legacy Magnet Academy Class of 2026 — memories, people, and where we're going.">
-  <meta property="og:image" content="https://milomadatu.github.io/lma-class-of-2026/images/Class Photo.webp">
+  <meta property="og:image" content="https://milomadatu.github.io/lma-class-of-2026/images/Class Photo (Desktop).webp">
   <meta property="og:url" content="https://milomadatu.github.io/lma-class-of-2026/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://milomadatu.github.io/lma-class-of-2026/images/Class Photo.webp">
-  <link rel="preload" as="image" href="images/Class Photo.webp" fetchpriority="high">
-  <link rel="preload" as="image" href="images/26.webp" fetchpriority="high" media="(max-width: 768px)">
-  <link rel="preload" as="image" href="images/Class Photo.webp" fetchpriority="high" media="(min-width: 769px)">
+  <meta name="twitter:image" content="https://milomadatu.github.io/lma-class-of-2026/images/Class Photo (Desktop).webp">
+  <link rel="preload" as="image" href="images/Class Photo (Mobile).webp" fetchpriority="high" media="(max-width: 768px)">
+  <link rel="preload" as="image" href="images/Class Photo (Desktop).webp" fetchpriority="high" media="(min-width: 769px)">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://static.cdninstagram.com" crossorigin>
@@ -85,8 +84,7 @@
     position: sticky; top: 0; z-index: 10;
   }
   .nav-logo { font-size: 15px; font-weight: 600; color: var(--ink); letter-spacing: -0.02em; cursor: pointer; }
-  .nav-links { display: flex; gap: 2px; }
-  .nav-links { position: relative; }
+  .nav-links { display: flex; gap: 2px; position: relative; }
   .nav-pill {
     position: absolute; top: 0; height: 100%; border-radius: 8px;
     background: var(--ink); z-index: 0;
@@ -235,11 +233,6 @@
   .ig-peek-handle { font-size: 11px; font-weight: 600; color: var(--ink); }
   .hero-divider { width: 1px; height: 14px; background: rgba(255,255,255,0.15); }
   .hero-quote-sm { font-size: 12px; color: rgba(255,255,255,0.62); font-style: italic; line-height: 1.5; }
-  /* Hero stats bar */
-  .hero-stats {
-    position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
-    display: none;
-  }
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -363,7 +356,6 @@
   .quote-role { font-size: 12px; color: var(--ink-3); font-weight: 500; margin-top: 3px; }
   .quote-text { font-size: 16px; color: var(--ink-2); line-height: 1.65; font-style: italic; flex: 1; }
   .quote-hint { font-size: 11px; color: var(--ink-3); text-align: right; margin-top: auto; }
-  .ig-placeholder { background: #f0f0f2; border-radius: 12px; aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center; color: var(--ink-3); font-size: 11px; }
 
   /* ── Archive ── */
   #page-archive, #page-archive * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; }
@@ -455,9 +447,6 @@
     opacity: 0; transition: opacity 0.2s; margin-top: -8px;
   }
   .paywall-error.visible { opacity: 1; }
-  .paywall-public-note {
-    font-size: 11px; color: var(--ink-3); margin-top: 4px;
-  }
   .shuffle-btn {
     background: var(--surface); color: var(--ink); font-size: 12px; font-weight: 600;
     border: none; border-radius: 980px; padding: 7px 16px; cursor: pointer;
@@ -466,7 +455,7 @@
   }
   .shuffle-btn:hover { box-shadow: var(--shadow-md); transform: scale(1.03); }
   .shuffle-btn:active { transform: scale(0.97); }
-  .people-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; cursor: none; }
+  .people-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; }
   .person-card {
     aspect-ratio: 1; border-radius: 12px; overflow: hidden; cursor: none;
     box-shadow: var(--shadow-sm);
@@ -474,6 +463,7 @@
   }
   .person-card:hover { transform: scale(1.03); box-shadow: var(--shadow-md); }
   .person-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .person-card-initials { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: clamp(12px, 1.8vw, 18px); font-weight: 700; color: rgba(0,0,0,0.45); letter-spacing: -0.01em; }
   @keyframes cardFadeUp {
     from { opacity: 0; transform: translateY(14px) scale(0.97); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -737,7 +727,7 @@
 
 <div class="site">
   <nav class="nav">
-    <span class="nav-logo" onclick="showPage('landing', document.querySelector('.nav-link'))">LMA '26</span>
+    <span class="nav-logo" role="button" tabindex="0" onclick="showPage('landing', document.querySelector('.nav-link'))" onkeydown="if(event.key==='Enter')showPage('landing',document.querySelector('.nav-link'))">LMA '26</span>
     <div class="nav-links" id="nav-links">
       <div class="nav-pill" id="nav-pill"></div>
       <button class="nav-link active" onclick="showPage('landing', this)">Home</button>
@@ -753,7 +743,7 @@
 
     <!-- Mobile hero: single image, no slideshow, shown only on ≤768px -->
     <div class="mobile-hero">
-      <img class="mobile-hero-img" src="images/26.webp" alt="LMA Class of 2026" fetchpriority="high" decoding="sync">
+      <img class="mobile-hero-img" src="images/Class Photo (Mobile).webp" alt="LMA Class of 2026" fetchpriority="high" decoding="sync">
       <div class="mobile-hero-overlay"></div>
       <div class="mobile-hero-content">
         <div class="mobile-hero-eyebrow">Legacy Magnet Academy</div>
@@ -768,9 +758,9 @@
 
     <div class="hero-section">
       <div class="hero-slides">
-        <div class="hero-slide active" style="background-image:url('images/Class Photo.webp')"></div>
+        <div class="hero-slide active" style="background-image:url('images/Class Photo (Desktop).webp')"></div>
         <div class="hero-slide" style="background-image:url('images/26.webp')"></div>
-        <div class="hero-slide" style="background-image:url('images/SeniorSunriseGroup.webp')"></div>
+        <div class="hero-slide" style="background-image:url('images/SeniorSunriseGroup (Desktop).webp')"></div>
       </div>
       <div class="hero-overlay"></div>
       <div class="hero-indicators">
@@ -958,8 +948,7 @@
         <input class="paywall-input" id="paywall-input" type="password" placeholder="Password" autocomplete="off" onkeydown="if(event.key==='Enter')checkPaywall()">
         <button class="paywall-btn" onclick="checkPaywall()">Unlock</button>
       </div>
-      <div class="paywall-error" id="paywall-error">Incorrect password</div>
-      <div class="paywall-public-note">Public access coming soon</div>
+      <div class="paywall-error" id="paywall-error" role="alert">Incorrect password</div>
     </div>
     <div class="people-header">
       <div>
@@ -1223,11 +1212,15 @@ function renderGrid() {
     grid.innerHTML = '<div class="people-no-results">No people found.</div>';
     return;
   }
-  grid.innerHTML = filtered.map((p,i) => `
-    <div class="person-card card-enter" onclick="openPopup(${people.indexOf(p)})" data-cursor-text="${p.name}"
+  const pastels = ['#e8d5f5','#d5e8f5','#d5f5e8','#f5e8d5','#f5d5e8','#e8f5d5','#f5f5d5','#d5d5f5'];
+  grid.innerHTML = filtered.map((p,i) => {
+    const initials = p.name.split(' ').map(w=>w[0]).slice(0,2).join('');
+    const bg = pastels[people.indexOf(p) % pastels.length];
+    return `<div class="person-card card-enter" onclick="openPopup(${people.indexOf(p)})" data-cursor-text="${p.name}"
          style="animation-delay:${i * 30}ms">
-      ${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async">` : `<div style="width:100%;height:100%;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:11px;">Photo TBD</div>`}
-    </div>`).join('');
+      ${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async">` : `<div class="person-card-initials" style="background:${bg}">${initials}</div>`}
+    </div>`;
+  }).join('');
 }
 
 function shuffleGrid() {
@@ -1262,6 +1255,7 @@ function closePopup() {
   const overlay = document.getElementById('popup');
   overlay.classList.remove('open');
 }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
 
 renderGrid();
 
