@@ -540,13 +540,15 @@
 
   /* ── Archive page header + view tabs ── */
   .archive-page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; gap: 12px; flex-wrap: wrap; }
-  .archive-tabs { display: flex; gap: 3px; background: var(--surface); border-radius: 980px; padding: 3px; box-shadow: var(--shadow-sm); }
-  .archive-tab { padding: 6px 18px; border-radius: 980px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--ink-2); background: transparent; transition: background 0.15s, color 0.15s; white-space: nowrap; }
-  .archive-tab.active { background: var(--ink); color: #fff; }
+  .archive-tabs { position: relative; display: flex; gap: 3px; background: var(--surface); border-radius: 980px; padding: 3px; box-shadow: var(--shadow-sm); }
+  .tab-slider { position: absolute; top: 3px; bottom: 3px; border-radius: 980px; background: var(--ink); z-index: 0; pointer-events: none; transition: left 0.28s cubic-bezier(0.34,1.1,0.64,1), width 0.28s cubic-bezier(0.34,1.1,0.64,1); }
+  .archive-tab { position: relative; z-index: 1; padding: 6px 18px; border-radius: 980px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--ink-2); background: transparent; transition: color 0.22s ease; white-space: nowrap; }
+  .archive-tab.active { color: #fff; }
 
   /* ── Our Favorites ── */
-  .favorites-view { display: none; }
+  .favorites-view { display: none; transition: opacity 0.22s ease; }
   .favorites-view.visible { display: block; margin-top: 0.25rem; }
+  #archive-main { transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1); }
   .favorites-grid { columns: 3; column-gap: 10px; }
   .fav-item { break-inside: avoid; margin-bottom: 10px; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; }
   .fav-item img { width: 100%; display: block; border-radius: 12px; transition: transform 0.3s ease; }
@@ -776,7 +778,8 @@
       <div class="section-label">Class of 2026</div>
       <div class="section-title" style="margin-bottom:0">Archive</div>
     </div>
-    <div class="archive-tabs">
+    <div class="archive-tabs" id="archive-tabs">
+      <div class="tab-slider" id="arc-tab-slider"></div>
       <button class="archive-tab active" id="arc-tab-timeline" onclick="setArchiveView('timeline')">Timeline</button>
       <button class="archive-tab" id="arc-tab-favorites" onclick="setArchiveView('favorites')">★ Our Favorites</button>
     </div>
@@ -1356,6 +1359,10 @@ const universities = [
     desc:'A Big Ten powerhouse and one of the top public research universities in the country. Located in the Twin Cities with world-class programs across every discipline.',
     img:'https://www.commonapp.org/static/7efac8744272bdede472f2ade1703769/university-minnesota-twin-cities_816_gallery1.jpg',
     igPosts: ['DWx4UAHDZIH'] },
+  { name:'Oregon State University', city:'Corvallis, OR', lat:44.5638, lng:-123.2794, color:'#DC4405',
+    desc:'A Pac-12 land-grant university nestled in the Willamette Valley. Known for engineering, forestry, and oceanography — and one of the most beautiful green campuses in the Pacific Northwest.',
+    img:'https://oregonstate.edu/sites/default/files/styles/twitter_preview_image/public/2024-04/blossoms-2200w-compressed.jpg?itok=zI09oR_P',
+    igPosts: ['DW3-fTaDd4C'] },
 ];
 
 /* ── Map helpers ── */
@@ -1655,6 +1662,12 @@ function showPage(id, btn) {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       next.querySelectorAll('.stat-block').forEach(el => el.classList.add('visible'));
       initMapsOnce();
+    }));
+  }
+  if (id === 'archive') {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const activeTab = next.querySelector('.archive-tab.active');
+      if (activeTab) { const s = document.getElementById('arc-tab-slider'); if (s) { s.style.transition = 'none'; moveTabSlider(activeTab); requestAnimationFrame(() => { s.style.transition = ''; }); } }
     }));
   }
 }
@@ -2041,14 +2054,39 @@ function renderFavorites() {
     </div>`).join('');
 }
 
+function moveTabSlider(tabEl) {
+  const slider = document.getElementById('arc-tab-slider');
+  if (!slider || !tabEl) return;
+  slider.style.left = tabEl.offsetLeft + 'px';
+  slider.style.width = tabEl.offsetWidth + 'px';
+}
 function setArchiveView(view) {
   const isTimeline = view === 'timeline';
-  document.getElementById('arc-tab-timeline').classList.toggle('active', isTimeline);
-  document.getElementById('arc-tab-favorites').classList.toggle('active', !isTimeline);
-  document.getElementById('archive-main').style.display = isTimeline ? '' : 'none';
+  const tlBtn = document.getElementById('arc-tab-timeline');
+  const favBtn = document.getElementById('arc-tab-favorites');
+  tlBtn.classList.toggle('active', isTimeline);
+  favBtn.classList.toggle('active', !isTimeline);
+  moveTabSlider(isTimeline ? tlBtn : favBtn);
+  const archiveMain = document.getElementById('archive-main');
   const fv = document.getElementById('favorites-view');
-  fv.classList.toggle('visible', !isTimeline);
-  if (!isTimeline && !document.getElementById('favorites-grid').children.length) renderFavorites();
+  const outEl = isTimeline ? fv : archiveMain;
+  const inEl  = isTimeline ? archiveMain : fv;
+  // Fade out current view
+  outEl.style.opacity = '0';
+  setTimeout(() => {
+    // Hide outgoing, show incoming (opacity 0 so transition can play)
+    if (isTimeline) { fv.classList.remove('visible'); archiveMain.style.display = ''; }
+    else { archiveMain.style.display = 'none'; fv.classList.add('visible'); }
+    outEl.style.opacity = '';
+    inEl.style.opacity = '0';
+    if (isTimeline) { archiveMain.style.transform = 'translateY(10px) scale(0.985)'; }
+    if (!isTimeline && !document.getElementById('favorites-grid').children.length) renderFavorites();
+    // Double rAF so browser paints before we release opacity
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      inEl.style.opacity = '';
+      if (isTimeline) { archiveMain.style.transform = ''; }
+    }));
+  }, 220);
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
