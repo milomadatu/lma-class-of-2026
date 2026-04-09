@@ -14,9 +14,11 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://milomadatu.github.io/lma-class-of-2026/images/Class Photo.webp">
   <link rel="preload" as="image" href="images/Class Photo.webp" fetchpriority="high">
-  <link rel="preload" as="image" href="images/26.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="images/26.webp" fetchpriority="high" media="(max-width: 768px)">
+  <link rel="preload" as="image" href="images/Class Photo.webp" fetchpriority="high" media="(min-width: 769px)">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://static.cdninstagram.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
 </head>
@@ -242,6 +244,47 @@
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+
+  /* ── Mobile hero (replaces slideshow on small screens) ── */
+  .mobile-hero { display: none; position: relative; overflow: hidden; }
+  .mobile-hero-img { width: 100%; height: 58vh; min-height: 340px; object-fit: cover; object-position: center 25%; display: block; }
+  .mobile-hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0) 75%);
+  }
+  .mobile-hero-content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 1.25rem 1.25rem 1.5rem;
+    display: flex; flex-direction: column; align-items: flex-start;
+  }
+  .mobile-hero-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold-bright); margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .mobile-hero-eyebrow::before { content: ''; display: block; width: 20px; height: 1.5px; background: var(--gold-bright); }
+  .mobile-hero-h1 {
+    font-size: 38px; font-weight: 800; color: #fff;
+    line-height: 1; letter-spacing: -0.04em; margin-bottom: 6px;
+  }
+  .mobile-hero-h1 em { color: var(--gold-bright); font-style: normal; }
+  .mobile-hero-sub { font-size: 13px; color: rgba(255,255,255,0.62); margin-bottom: 1.25rem; }
+  .mobile-hero-actions { display: flex; gap: 8px; width: 100%; }
+  .mobile-hero-btn-primary {
+    flex: 1; padding: 12px; border-radius: 980px; font-size: 13px; font-weight: 700;
+    background: #fff; color: var(--ink); border: none; cursor: pointer; letter-spacing: -0.01em;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .mobile-hero-btn-primary:active { transform: scale(0.97); }
+  .mobile-hero-btn-secondary {
+    flex: 1; padding: 12px; border-radius: 980px; font-size: 13px; font-weight: 600;
+    background: rgba(255,255,255,0.12); color: #fff;
+    border: 1px solid rgba(255,255,255,0.28); cursor: pointer;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    letter-spacing: -0.01em; transition: transform 0.15s;
+  }
+  .mobile-hero-btn-secondary:active { transform: scale(0.97); }
 
   /* ── Stats + Countdown + Calendar ── */
   .landing-stats { display: flex; margin: 0 2rem; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
@@ -634,17 +677,13 @@
     /* Pages */
     .page { padding: 1.5rem 1rem; }
 
-    /* Hero */
-    .hero-section { height: 72vh; min-height: 420px; margin-bottom: 0; }
-    .hero-content { padding: 2rem 1.25rem 0; }
-    .hero-sub { font-size: 14px; margin-bottom: 1.5rem; }
-    .hero-actions { margin-bottom: 1.75rem; }
-    .hero-quote-sm { display: none; }
-    .hero-divider { display: none; }
+    /* Hero — hidden on mobile, replaced by .mobile-hero */
+    .hero-section { display: none; }
+    .mobile-hero { display: block; margin-bottom: 0; }
 
     /* Landing extras — stack vertically */
     .landing-extra { grid-template-columns: 1fr; margin: 12px 1rem 0; }
-    .landing-stats { margin: 8px 1rem 0; }
+    .landing-stats { margin: 0 0 0; border-radius: 0; box-shadow: none; border-top: 0.5px solid var(--border); }
     .landing-stat-num { font-size: 22px; }
     .countdown-num { font-size: 42px; }
     .quote-stack-wrap { min-height: 260px; }
@@ -705,6 +744,22 @@
   <main>
   <!-- LANDING -->
   <div class="page active" id="page-landing">
+
+    <!-- Mobile hero: single image, no slideshow, shown only on ≤768px -->
+    <div class="mobile-hero">
+      <img class="mobile-hero-img" src="images/26.webp" alt="LMA Class of 2026" fetchpriority="high" decoding="sync">
+      <div class="mobile-hero-overlay"></div>
+      <div class="mobile-hero-content">
+        <div class="mobile-hero-eyebrow">Legacy Magnet Academy</div>
+        <h1 class="mobile-hero-h1">Class of <em>2026</em></h1>
+        <p class="mobile-hero-sub">100 seniors. One story.</p>
+        <div class="mobile-hero-actions">
+          <button class="mobile-hero-btn-primary" onclick="showPage('archive', document.querySelectorAll('.nav-link')[1])">Browse Gallery</button>
+          <button class="mobile-hero-btn-secondary" onclick="showPage('people', document.querySelectorAll('.nav-link')[2])">Meet the Class</button>
+        </div>
+      </div>
+    </div>
+
     <div class="hero-section">
       <div class="hero-slides">
         <div class="hero-slide active" style="background-image:url('images/Class Photo.webp')"></div>
@@ -746,8 +801,8 @@
     <!-- Stats bar -->
     <div class="landing-stats">
       <div class="landing-stat"><div class="landing-stat-num">100</div><div class="landing-stat-label">Seniors</div></div>
-      <div class="landing-stat"><div class="landing-stat-num">16</div><div class="landing-stat-label">Universities</div></div>
-      <div class="landing-stat"><div class="landing-stat-num">5</div><div class="landing-stat-label">States</div></div>
+      <div class="landing-stat"><div class="landing-stat-num">19</div><div class="landing-stat-label">Universities</div></div>
+      <div class="landing-stat"><div class="landing-stat-num">6</div><div class="landing-stat-label">States</div></div>
     </div>
 
     <div class="landing-extra">
@@ -1635,12 +1690,12 @@ function scrollToSection(id) {
 
 function movePill(btn) {
   const pill = document.getElementById('nav-pill');
-  const nav = document.getElementById('nav-links');
-  if (!pill || !nav || !btn) return;
-  const navRect = nav.getBoundingClientRect();
-  const btnRect = btn.getBoundingClientRect();
-  pill.style.left = (btnRect.left - navRect.left) + 'px';
-  pill.style.width = btnRect.width + 'px';
+  if (!pill || !btn) return;
+  // Read layout in one batch before any writes to avoid forced reflow
+  const left = btn.offsetLeft;
+  const width = btn.offsetWidth;
+  pill.style.left = left + 'px';
+  pill.style.width = width + 'px';
 }
 
 function showPage(id, btn) {
