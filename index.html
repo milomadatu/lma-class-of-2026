@@ -400,12 +400,30 @@
   .shuffle-btn {
     background: var(--surface); color: var(--ink); font-size: 12px; font-weight: 600;
     border: none; border-radius: 980px; padding: 7px 16px; cursor: pointer;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-sm); min-width: 72px; text-align: center;
     transition: box-shadow 0.18s, transform 0.15s;
   }
   .shuffle-btn:hover { box-shadow: var(--shadow-md); transform: scale(1.03); }
   .shuffle-btn:active { transform: scale(0.97); }
+  .people-view-toggle { display: flex; gap: 3px; background: var(--surface); border-radius: 980px; padding: 3px; box-shadow: var(--shadow-sm); }
+  .view-btn { padding: 6px 14px; border-radius: 980px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--ink-2); background: transparent; transition: color 0.18s; white-space: nowrap; }
+  .view-btn.active { background: var(--ink); color: #fff; }
   .people-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; }
+  .person-card.drag-over { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .people-grid.rearranging .person-card { cursor: grab; }
+  .people-grid.rearranging .person-card:active { cursor: grabbing; }
+  .rearrange-btn.active { background: var(--gold-lt); color: var(--gold); box-shadow: none; }
+  .groups-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .group-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+  .group-mosaic { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; aspect-ratio: 16/9; }
+  .mosaic-cell { overflow: hidden; }
+  .mosaic-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mosaic-cell-initials { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: rgba(0,0,0,0.4); }
+  .group-body { padding: 12px 14px 14px; }
+  .group-name { font-size: 14px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; margin-bottom: 8px; }
+  .group-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .group-tag { font-size: 11px; font-weight: 500; color: var(--ink-2); background: var(--bg); border-radius: 980px; padding: 3px 10px; cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .group-tag:hover { background: var(--gold-lt); color: var(--gold); }
   .person-card {
     aspect-ratio: 1; border-radius: 12px; overflow: hidden; cursor: pointer;
     box-shadow: var(--shadow-sm); position: relative;
@@ -680,6 +698,7 @@
     .people-grid { grid-template-columns: repeat(5, 1fr); }
     .people-search { width: 160px; }
     .people-search:focus { width: 180px; }
+    .groups-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
 
     /* Popup */
     .popup { width: calc(100vw - 2rem); }
@@ -922,11 +941,17 @@
         <div class="section-title">Everyone Behind '26</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
+        <div class="people-view-toggle">
+          <button class="view-btn active" data-view="grid" onclick="setPeopleView('grid')">Grid</button>
+          <button class="view-btn" data-view="groups" onclick="setPeopleView('groups')">Groups</button>
+        </div>
         <input class="people-search" id="people-search" type="search" placeholder="Search people…" oninput="renderGrid()" autocomplete="off">
-        <button class="shuffle-btn" onclick="shuffleGrid()">Shuffle</button>
+        <button class="shuffle-btn" id="shuffle-btn" onclick="toggleShuffle()">Shuffle</button>
+        <button class="shuffle-btn rearrange-btn" id="rearrange-btn" onclick="toggleRearrange()">Rearrange</button>
       </div>
     </div>
     <div class="people-grid" id="people-grid"></div>
+    <div class="groups-grid" id="groups-grid" style="display:none"></div>
   </div>
 
   <!-- STATS -->
@@ -1197,7 +1222,9 @@ function renderGrid() {
   grid.innerHTML = filtered.map((p,i) => {
     const initials = p.name.split(' ').map(w=>w[0]).slice(0,2).join('');
     const bg = pastels[people.indexOf(p) % pastels.length];
-    return `<div class="person-card card-enter" onclick="openPopup(${people.indexOf(p)})"
+    const pidx = people.indexOf(p);
+    return `<div class="person-card card-enter"
+         ${rearranging ? `draggable="true" data-pidx="${pidx}"` : `onclick="openPopup(${pidx})"`}
          style="animation-delay:${i * 30}ms">
       ${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async">` : `<div class="person-card-initials" style="background:${bg}">${initials}</div>`}
       <div class="person-card-tag">${p.name}</div>
@@ -1205,10 +1232,80 @@ function renderGrid() {
   }).join('');
 }
 
-function shuffleGrid() {
-  for(let i=people.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[people[i],people[j]]=[people[j],people[i]];}
+let gridShuffled = false;
+function toggleShuffle() {
+  if (gridShuffled) {
+    people.sort((a, b) => a.name.split(' ').pop().localeCompare(b.name.split(' ').pop()));
+  } else {
+    for (let i = people.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [people[i],people[j]] = [people[j],people[i]]; }
+  }
+  gridShuffled = !gridShuffled;
+  document.getElementById('shuffle-btn').textContent = gridShuffled ? 'A–Z' : 'Shuffle';
   renderGrid();
 }
+
+let rearranging = false;
+let dragSrcIdx = null;
+
+function toggleRearrange() {
+  rearranging = !rearranging;
+  const btn = document.getElementById('rearrange-btn');
+  btn.textContent = rearranging ? 'Done' : 'Rearrange';
+  btn.classList.toggle('active', rearranging);
+  document.getElementById('people-grid').classList.toggle('rearranging', rearranging);
+  renderGrid();
+}
+
+(function initDrag() {
+  const grid = document.getElementById('people-grid');
+  let dragSrcEl = null;
+
+  grid.addEventListener('dragstart', e => {
+    const card = e.target.closest('[data-pidx]');
+    if (!card) return;
+    dragSrcEl = card;
+    dragSrcIdx = +card.dataset.pidx;
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  grid.addEventListener('dragover', e => {
+    e.preventDefault();
+    const card = e.target.closest('[data-pidx]');
+    grid.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+    if (card && card !== dragSrcEl) card.classList.add('drag-over');
+  });
+  grid.addEventListener('dragleave', () => {
+    grid.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+  });
+  grid.addEventListener('drop', e => {
+    e.preventDefault();
+    const dstEl = e.target.closest('[data-pidx]');
+    grid.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+    if (!dstEl || !dragSrcEl || dragSrcEl === dstEl) { dragSrcEl = null; dragSrcIdx = null; return; }
+    const dstIdx = +dstEl.dataset.pidx;
+
+    // Swap in people array
+    [people[dragSrcIdx], people[dstIdx]] = [people[dstIdx], people[dragSrcIdx]];
+
+    // Swap DOM nodes without re-rendering
+    const srcNext = dragSrcEl.nextSibling;
+    const dstNext = dstEl.nextSibling;
+    if (srcNext === dstEl) {
+      grid.insertBefore(dstEl, dragSrcEl);
+    } else if (dstNext === dragSrcEl) {
+      grid.insertBefore(dragSrcEl, dstEl);
+    } else {
+      grid.insertBefore(dragSrcEl, dstNext);
+      grid.insertBefore(dstEl, srcNext);
+    }
+
+    // Update data-pidx attributes to match new positions
+    dragSrcEl.dataset.pidx = dstIdx;
+    dstEl.dataset.pidx = dragSrcIdx;
+
+    dragSrcEl = null;
+    dragSrcIdx = null;
+  });
+})();
 
 const PLACEHOLDER_QUOTE = 'Dropped the wave runners now we run the wave';
 function isPlaceholder(s) { return !s || s.includes('_____'); }
@@ -1262,6 +1359,44 @@ document.addEventListener('keydown', e => {
 });
 
 renderGrid();
+
+/* ── Friend Groups ── */
+// Add groups here — members must match exact names in the people array.
+const GROUPS = [
+  { name: 'Sneakyboos', members: ['Nancy Silva', 'Ella Schubert', 'Aryanna Martinez', 'Miriam Yassa', 'Sierra Minjares', 'Nyala Ali'] },
+];
+
+function renderGroups() {
+  const grid = document.getElementById('groups-grid');
+  grid.innerHTML = GROUPS.map(g => {
+    const members = g.members.map(name => people.find(p => p.name === name)).filter(Boolean);
+    const cells = members.slice(0, 4).map(p => {
+      const initials = p.name.split(' ').map(w=>w[0]).slice(0,2).join('');
+      const bg = pastels[people.indexOf(p) % pastels.length];
+      return p.img
+        ? `<div class="mosaic-cell"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>`
+        : `<div class="mosaic-cell"><div class="mosaic-cell-initials" style="background:${bg}">${initials}</div></div>`;
+    });
+    while (cells.length < 4) cells.push(`<div class="mosaic-cell" style="background:var(--bg)"></div>`);
+    const tags = members.map(p =>
+      `<span class="group-tag" onclick="openPopup(${people.indexOf(p)})">${p.name.split(' ')[0]}</span>`
+    ).join('');
+    return `<div class="group-card">
+      <div class="group-mosaic">${cells.join('')}</div>
+      <div class="group-body">
+        <div class="group-name">${g.name}</div>
+        <div class="group-tags">${tags}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setPeopleView(view) {
+  document.getElementById('people-grid').style.display = view === 'grid' ? '' : 'none';
+  document.getElementById('groups-grid').style.display = view === 'groups' ? '' : 'none';
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+  if (view === 'groups') renderGroups();
+}
 
 /* ── Nav pill init — deferred so layout is stable before reading offsetLeft ── */
 requestAnimationFrame(() => requestAnimationFrame(() => movePill(document.querySelector('.nav-link.active'))));
@@ -1420,7 +1555,7 @@ const universities = [
   { name:'Irvine Valley College', city:'Irvine, CA', lat:33.6450, lng:-117.7685, color:'#005A9C',
     desc:'A top-ranked community college in Orange County known for its high transfer rates to UC and CSU campuses and strong programs in arts, science, and technology.',
     img:'https://arquitectonica.com/architecture/wp-content/uploads/sites/2/2016/10/Irvine_Valley_College_PAC_2-1920x1080.jpg',
-    igPosts: ['DW0GIYfjaFn'] },
+    igPosts: ['DW0GIYfjaFn', 'DW5tYlBDaZb'] },
   { name:'University of La Verne', city:'La Verne, CA', lat:34.1008, lng:-117.7678, color:'#2C5234',
     desc:'A private university in the San Gabriel Valley known for its personalized education, strong community ties, and diverse student body.',
     img:'https://laverne.edu/news/wp-content/uploads/sites/5/2023/08/20210805-founders-hall-2-2100x1400-0230fbdf-b171-4a11-a38a-77ae84c32549-1920x1280.jpg',
