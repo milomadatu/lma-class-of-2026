@@ -43,7 +43,8 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  body { background: var(--bg); overflow-y: scroll; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; }
+  html { overflow-y: scroll; }
+  body { background: var(--bg); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; }
   .site { min-height: 600px; }
 
   /* ── Nav ── */
@@ -570,8 +571,24 @@
   /* ── Our Favorites ── */
   .favorites-view { display: none; transition: opacity 0.22s ease; }
   .favorites-view.visible { display: block; margin-top: 0.25rem; }
+  .fav-search-bar { margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .fav-search {
+    background: var(--surface); color: var(--ink); font-size: 13px;
+    border: none; border-radius: 980px; padding: 7px 16px 7px 36px; outline: none;
+    box-shadow: var(--shadow-sm); width: 200px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23aeaeb2' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: 14px center;
+    transition: box-shadow 0.18s, width 0.22s;
+  }
+  .fav-search:focus { box-shadow: var(--shadow-md); width: 260px; }
+  .fav-search::placeholder { color: var(--ink-3); }
   #archive-main { transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1); }
-  .favorites-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .favorites-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; overflow-anchor: none; }
+  .fav-pagination { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 16px 0 4px; }
+  .fav-page-btn { background: var(--surface-2); border: none; border-radius: 8px; padding: 6px 16px; font-size: 18px; cursor: pointer; color: var(--ink-1); transition: background 0.15s; }
+  .fav-page-btn:hover:not(:disabled) { background: var(--surface-3); }
+  .fav-page-btn:disabled { opacity: 0.3; cursor: default; }
+  .fav-page-info { font-size: 13px; font-weight: 600; color: var(--ink-2); min-width: 52px; text-align: center; }
   .fav-col { display: flex; flex-direction: column; gap: 10px; }
   .fav-item { border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1); }
   .fav-item.in-view { opacity: 1; transform: translateY(0); }
@@ -657,6 +674,7 @@
     .archive-page-header { padding: 0 1rem; margin-bottom: 0; flex-direction: column; align-items: center; text-align: center; }
     .favorites-view.visible { padding: 10px 1rem 1.5rem; }
     .favorites-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .fav-page-btn { padding: 5px 13px; font-size: 16px; }
     .section-label { font-size: 10px; }
     /* Nav */
     .nav { padding: 0 1rem; }
@@ -747,7 +765,7 @@
       <div class="hero-slides">
         <div class="hero-slide active" style="background-image:url('images/Class Photo (Desktop).webp')"></div>
         <div class="hero-slide" style="background-image:url('images/26.webp')"></div>
-        <div class="hero-slide" style="background-image:url('images/SeniorSunriseGroup (Desktop).webp');background-position:20% center"></div>
+        <div class="hero-slide" style="background-image:url('images/SeniorSunriseGroup (Desktop).webp')"></div>
       </div>
       <div class="hero-overlay"></div>
       <div class="hero-indicators">
@@ -831,7 +849,21 @@
     </div>
   </div>
   <div class="favorites-view" id="favorites-view">
+    <div class="fav-search-bar">
+      <input class="fav-search" id="fav-search" type="search" placeholder="Search favorites…" oninput="favPage=0;renderFavorites()" autocomplete="off">
+      <button class="shuffle-btn" id="fav-shuffle-btn" onclick="toggleFavShuffle()" style="min-width:72px">Shuffle</button>
+      <div id="fav-pagination-top" style="display:none;align-items:center;gap:6px;margin-left:auto">
+        <button class="fav-page-btn" id="fav-prev-btn-top" onclick="favPageNav(-1)">&#8592;</button>
+        <span class="fav-page-info" id="fav-page-info-top">1 / 1</span>
+        <button class="fav-page-btn" id="fav-next-btn-top" onclick="favPageNav(1)">&#8594;</button>
+      </div>
+    </div>
     <div class="favorites-grid" id="favorites-grid"></div>
+    <div class="fav-pagination" id="fav-pagination" style="display:none">
+      <button class="fav-page-btn" id="fav-prev-btn" onclick="favPageNav(-1)">&#8592;</button>
+      <span class="fav-page-info" id="fav-page-info">1 / 1</span>
+      <button class="fav-page-btn" id="fav-next-btn" onclick="favPageNav(1)">&#8594;</button>
+    </div>
   </div>
   <div id="archive-main">
   <div class="archive-mobile-nav">
@@ -1223,7 +1255,6 @@ function renderGrid() {
     grid.innerHTML = '<div class="people-no-results">No people found.</div>';
     return;
   }
-  const pastels = ['#e8d5f5','#d5e8f5','#d5f5e8','#f5e8d5','#f5d5e8','#e8f5d5','#f5f5d5','#d5d5f5'];
   popupOrder = filtered.map(p => people.indexOf(p));
   grid.innerHTML = filtered.map((p,i) => {
     const initials = p.name.split(' ').map(w=>w[0]).slice(0,2).join('');
@@ -1238,6 +1269,7 @@ function renderGrid() {
   }).join('');
 }
 
+const pastels = ['#e8d5f5','#d5e8f5','#d5f5e8','#f5e8d5','#f5d5e8','#e8f5d5','#f5f5d5','#d5d5f5'];
 let gridShuffled = false;
 function toggleShuffle() {
   if (gridShuffled) {
@@ -1899,7 +1931,9 @@ function showPage(id, btn) {
     setTimeout(() => current.classList.remove('leaving'), 200);
   }
   next.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'instant' });
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
   if (id === 'stats') {
     next.querySelectorAll('.stat-block').forEach(el => el.classList.remove('visible'));
     requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -2248,42 +2282,116 @@ buildArchive();
 // Add your favorite shots here. src = path to local image or Instagram shortcode URL.
 // event = the section label shown in gold. caption = optional overlay text.
 const FAVORITES = [
+  // Page 1 — col0: GreatestPic+CCLabubu+BigBandJG | col1: Milo&Tino+Sunrose+FrameMog | col2: ArtinSelfie+RickysBirthday+JC911
   { src: 'images/favs/GreatestPictureOfAllTime.webp', event: 'SoFi Stadium',     caption: 'Aryan L' },
-  { src: 'images/favs/Sunrose.webp',                  event: 'Senior Sunrise',   caption: 'Kai, Jayden C, Milo, Omar, Pearce, Nathan, Sacha, Santiago, Santino, Brent, Richard C, Brandon C, Baran C, Josue G & Andrew C' },
+  { src: 'images/favs/Milo&TinoFieldTrip.webp',       event: 'Field Trip',       caption: 'Milo M & Santino S' },
+  { src: 'images/favs/ArtinSelfie.webp',              event: '',                 caption: 'Artin R, Leslie T & Evelynn N' },
+  { src: 'images/favs/CCLabubu.webp',                 event: '',                 caption: 'Carson C' },
+  { src: 'images/favs/Sunrose.webp',                  event: 'Senior Sunrise',   caption: 'Kai, Jayden C, Milo, Omar, Pearce, Nathan, Sacha, Santiago, Santino, Brent, Richard C, Brandon Ca, Baran C, Josue G & Andrew C' },
+  { src: 'images/favs/RickysBirthday.webp',           event: "Ricky's Birthday", caption: 'Arnav S, Baran C, Brandon Ca, Ricky C, James W, Aryan L, Jayden O, Pearce W, Rayan G & Katally L' },
   { src: 'images/favs/BigBandJG.webp',                event: '',                 caption: 'Baran C & Josue G' },
-  { src: 'images/favs/DMoneyTruck.webp',              event: '',                 caption: 'Daemeon M' },
+  { src: 'images/favs/FrameMog.webp',                 event: '',                 caption: 'Parin L & Aryan L' },
   { src: 'images/favs/JC911.webp',                    event: 'Shot by Jayden C', caption: '' },
+  // Page 2 — col0: BJMeet+JCSchool+KabaBonfire | col1: VEWarriors+CPWork+QZsV | col2: TrollingJH+Trunk+Artin&Rayan
+  { src: 'images/favs/BJMeet&Greet.webp',             event: "BJ's Restaurant",  caption: 'Jesiah H, Andrew C, Brandon Ca, Nolan E, Nathan H, Daemeon M, Sacha P & Milo M' },
+  { src: 'images/favs/VEWarriors.webp',               event: 'VE Warriors',      caption: 'Milo M, Santino S & James W' },
+  { src: 'images/favs/TrollingJH.webp',               event: 'Senior Assassin',  caption: 'Milo M, Jesiah H & Evelynn N' },
   { src: 'images/favs/JCSchool.webp',                 event: 'Shot by Jayden C', caption: '' },
+  { src: 'images/favs/CPWork.webp',                   event: '',                 caption: 'Jayden C, Andrew C, Brandon Ch & Evan M' },
   { src: 'images/favs/Trunk or Treat.webp',           event: 'Trunk or Treat',   caption: 'Baran C, Josue G & Daemeon M' },
+  { src: 'images/favs/KabaBonfire.webp',              event: 'Filipino Club Bonfire', caption: 'Brandon Ca, Abram M, Andrew C, Santino S, Josue G, Daemeon M & Sacha P' },
+  { src: 'images/favs/QZsVNikeTech.webp',             event: '',                 caption: 'Milo M & Josue G' },
+  { src: 'images/favs/Artin&RayanThinking.webp',      event: '',                 caption: 'Artin R & Rayan G' },
+  // Page 3 — all regular portraits, equal height columns
+  { src: 'images/favs/DMoneyTruck.webp',              event: '',                 caption: 'Daemeon M' },
+  { src: 'images/favs/JHCream.webp',                  event: 'Pie A Senior',     caption: 'Jesiah H & Kai A' },
+  { src: 'images/favs/InNOut.webp',                   event: 'After Prom',       caption: 'Milo M, Aryan L & Andrew C' },
 ];
+
+let favOrder = FAVORITES.map((_, i) => i);
+let favShuffled = false;
+const FAV_PER_PAGE = 9;
+let favPage = 0;
+
+function toggleFavShuffle() {
+  if (favShuffled) {
+    favOrder = FAVORITES.map((_, i) => i);
+  } else {
+    favOrder = [...favOrder];
+    for (let i = favOrder.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [favOrder[i], favOrder[j]] = [favOrder[j], favOrder[i]]; }
+  }
+  favShuffled = !favShuffled;
+  favPage = 0;
+  document.getElementById('fav-shuffle-btn').textContent = favShuffled ? 'Revert' : 'Shuffle';
+  renderFavorites();
+}
+
+function favPageNav(dir) {
+  const q = (document.getElementById('fav-search')?.value || '').toLowerCase().trim();
+  const ordered = favOrder.map(i => ({ f: FAVORITES[i], i }));
+  const filtered = q ? ordered.filter(({ f }) => (f.event + ' ' + f.caption).toLowerCase().includes(q)) : ordered;
+  const totalPages = Math.ceil(filtered.length / FAV_PER_PAGE);
+  favPage = Math.max(0, Math.min(favPage + dir, totalPages - 1));
+  const sy = window.scrollY;
+  renderFavorites();
+  requestAnimationFrame(() => window.scrollTo(0, sy));
+}
+
+function updateFavPagination(el, infoEl, prevEl, nextEl, favPage, totalPages, displayVal) {
+  if (!el) return;
+  if (totalPages > 1) {
+    el.style.display = displayVal || '';
+    infoEl.textContent = `${favPage + 1} / ${totalPages}`;
+    prevEl.disabled = favPage === 0;
+    nextEl.disabled = favPage === totalPages - 1;
+  } else {
+    el.style.display = 'none';
+  }
+}
 
 function renderFavorites() {
   const grid = document.getElementById('favorites-grid');
-  if (!FAVORITES.length) {
-    grid.innerHTML = '<div class="favorites-empty">No favorites added yet — fill in the FAVORITES array.</div>';
+  const pagination = document.getElementById('fav-pagination');
+  const paginationTop = document.getElementById('fav-pagination-top');
+  const q = (document.getElementById('fav-search')?.value || '').toLowerCase().trim();
+  const ordered = favOrder.map(i => ({ f: FAVORITES[i], i }));
+  const filtered = q
+    ? ordered.filter(({ f }) => (f.event + ' ' + f.caption).toLowerCase().includes(q))
+    : ordered;
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="favorites-empty">No matches found.</div>';
+    if (pagination) pagination.style.display = 'none';
+    if (paginationTop) paginationTop.style.display = 'none';
     return;
   }
-  // Build 3 columns (2 on mobile via CSS), distribute items top-to-bottom
-  const numCols = 3;
-  const cols = Array.from({ length: numCols }, () => []);
-  FAVORITES.forEach((f, i) => cols[i % numCols].push(f));
+  const totalPages = Math.ceil(filtered.length / FAV_PER_PAGE);
+  favPage = Math.max(0, Math.min(favPage, totalPages - 1));
+  const pageItems = filtered.slice(favPage * FAV_PER_PAGE, (favPage + 1) * FAV_PER_PAGE);
   function itemHTML(f, idx) {
     return `<div class="fav-item" data-fav-idx="${idx}">
-      <img src="${f.src}" alt="${f.event || 'Favorite'}" loading="lazy" decoding="async">
+      <img src="${f.src}" alt="${f.event || 'Favorite'}" loading="lazy" decoding="async"
+        onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 4 3%22%3E%3Crect width=%224%22 height=%223%22 fill=%22%23e5e7eb%22/%3E%3C/svg%3E'">
       ${(f.event || f.caption) ? `<div class="fav-caption">
         ${f.event   ? `<div class="fav-event">${f.event}</div>` : ''}
         ${f.caption ? `<div class="fav-caption-text">${f.caption}</div>` : ''}
       </div>` : ''}
     </div>`;
   }
-  grid.innerHTML = cols.map(col => `<div class="fav-col">${col.map((f, colIdx) => itemHTML(f, FAVORITES.indexOf(f))).join('')}</div>`).join('');
-  // Fade-in on scroll via IntersectionObserver
+  const numCols = 3;
+  const cols = Array.from({ length: numCols }, () => []);
+  pageItems.forEach(({ f, i }, pos) => cols[pos % numCols].push({ f, i }));
+  grid.innerHTML = cols.map(col => `<div class="fav-col">${col.map(({ f, i }) => itemHTML(f, i)).join('')}</div>`).join('');
+  // Update both pagination bars
+  updateFavPagination(pagination, document.getElementById('fav-page-info'), document.getElementById('fav-prev-btn'), document.getElementById('fav-next-btn'), favPage, totalPages);
+  updateFavPagination(paginationTop, document.getElementById('fav-page-info-top'), document.getElementById('fav-prev-btn-top'), document.getElementById('fav-next-btn-top'), favPage, totalPages, 'flex');
+  // Fade-in: wait for both scroll visibility AND image load
   const obs = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('in-view'), i * 60);
-        obs.unobserve(e.target);
-      }
+    entries.forEach((entry, i) => {
+      if (!entry.isIntersecting) return;
+      obs.unobserve(entry.target);
+      const img = entry.target.querySelector('img');
+      const reveal = () => setTimeout(() => entry.target.classList.add('in-view'), i * 60);
+      if (!img || img.complete) { reveal(); } else { img.addEventListener('load', reveal, { once: true }); img.addEventListener('error', reveal, { once: true }); }
     });
   }, { rootMargin: '0px 0px -40px 0px', threshold: 0.08 });
   grid.querySelectorAll('.fav-item').forEach(el => obs.observe(el));
@@ -2328,7 +2436,7 @@ function setArchiveView(view) {
   outEl.style.opacity = '0';
   setTimeout(() => {
     // Hide outgoing, show incoming (opacity 0 so transition can play)
-    if (isTimeline) { fv.classList.remove('visible'); archiveMain.style.display = ''; }
+    if (isTimeline) { fv.classList.remove('visible'); archiveMain.style.display = ''; document.getElementById('fav-pagination').style.display = 'none'; document.getElementById('fav-pagination-top').style.display = 'none'; }
     else { archiveMain.style.display = 'none'; fv.classList.add('visible'); }
     outEl.style.opacity = '';
     inEl.style.opacity = '0';
