@@ -980,7 +980,7 @@
           <button class="view-btn active" data-view="grid" onclick="setPeopleView('grid')">Grid</button>
           <button class="view-btn" data-view="groups" onclick="setPeopleView('groups')">Groups</button>
         </div>
-        <input class="people-search" id="people-search" type="search" placeholder="Search people…" oninput="renderGrid()" autocomplete="off">
+        <input class="people-search" id="people-search" type="search" placeholder="Search people…" oninput="renderGrid();renderGroups()" autocomplete="off">
         <button class="shuffle-btn" id="shuffle-btn" onclick="toggleShuffle()">Shuffle</button>
         <button class="shuffle-btn rearrange-btn" id="rearrange-btn" onclick="toggleRearrange()">Rearrange</button>
       </div>
@@ -1248,8 +1248,11 @@ let popupOrder = [], popupIdx = -1;
 function renderGrid() {
   const grid = document.getElementById('people-grid');
   const q = (document.getElementById('people-search')?.value || '').toLowerCase().trim();
+  const matchedGroup = q ? GROUPS.find(g => g.name.toLowerCase() === q) : null;
   const filtered = q
-    ? people.filter(p => p.name.toLowerCase().includes(q) || p.role.toLowerCase().includes(q))
+    ? matchedGroup
+      ? people.filter(p => matchedGroup.members.includes(p.name))
+      : people.filter(p => p.name.toLowerCase().includes(q) || p.role.toLowerCase().includes(q))
     : people;
   if (!filtered.length) {
     grid.innerHTML = '<div class="people-no-results">No people found.</div>';
@@ -1411,12 +1414,27 @@ renderGrid();
 /* ── Friend Groups ── */
 // Add groups here — members must match exact names in the people array.
 const GROUPS = [
+  { name: 'Siply', members: ['Milo Madolora', 'Sacha Papadakis', 'Daemeon Mitchell', 'Josue Guzman', 'Andrew Camacho', 'James Wang', 'Nico Mena', 'Preston Wong', 'Iffah Sheikh', 'Santiago Cardenas-Huerta', 'Luna Chen', 'Ruth Zhang', 'Parin Ladva', 'Austin Van', 'Evan Morones', 'Elijah Bagnol', 'Uma Joshi', 'Brandon Campos', 'Cash Thomson', 'Jayden Cerda', 'Kai Arellano', 'Kiana Vuong', 'Nancy Silva', 'Destiny Vivianna Perez'] },
+  { name: 'TrueVue', members: ['Carson Carter', 'Richard Casillas', 'Rayan Rouhizad', 'Peyton Tan', 'Matt Ciecek', 'Leslie Tawagon', 'Brent Limbo', 'Baran Cerrahoglu', 'Audrey Lee', 'Rebecca Casillas', 'Mason Nguyen', 'Luke Dinley', 'Pearce Walter', 'Hunter Williams', 'Nathan Saltzer', 'Danya Ibrahim', 'Sierra Minjares', 'Ali Aryan Lalani', 'Max Chang', 'Hannah Spiezer', 'Joshua Saltzer', 'Josh Kim', 'Chris Cowdell'] },
+  { name: 'Sunmoon Snacks', members: ['Rayan Garg', 'Katally Lin', 'Michael Hsieh', 'Arnav Sheth', 'Amreen Islam', 'Ava Lorenzana', 'Marie-France Demuro', 'Morgan Melching', 'Samana Nadig', 'Cooper Mayhew', 'Jaedon Baluyut', 'Aryanna Martinez', 'Kailee Kwok', 'Ella Schubert', 'Abram Militante', 'Artin Rastegar', 'Jayden Tamura', 'Alethia Duggan', 'Jayden Ohashi', 'Kiyomi Pizarro'] },
+  { name: 'Setta', members: ['Evelynn Ngo', 'Santino Sebastian Salonga', 'Jianna DiLellio', 'Aiza Qureshi', 'Ellie Chung', 'Jesiah Hezekiah', 'Miriam Yassa', 'Connor Paxton', 'Farishta Islam', 'Nathan Hong'] },
+  { name: 'Legacy Enterprises', members: ['Amani Clark', 'Betsy Guevara', 'Brandon Chang', 'Emily Wang', 'Jackson Rowland', 'Janae Alsabti', 'Jeromy Munguia', 'Justin Tangker', 'Logan Haney', 'Logan Woods', 'Matthew Ibarra', 'Murad Malik', 'Nima Partow', 'Paloma Ayala', 'Ryan Yahn', 'Sam Skaron', 'Seth Pham', 'Shirom Mukherjee', 'Zach Avalos'] },
+  { name: 'Dihcheck', members: ['Sacha Papadakis', 'Nathan Hong', 'Daemeon Mitchell', 'Josue Guzman', 'Santiago Cardenas-Huerta', 'Andrew Camacho', 'Kai Arellano', 'Jayden Cerda', 'Arnav Sheth', 'Omar Anees', 'Rayan Garg', 'Ibrahim Memon'] },
   { name: 'Sneakyboos', members: ['Nancy Silva', 'Ella Schubert', 'Aryanna Martinez', 'Miriam Yassa', 'Sierra Minjares', 'Nyala Ali'] },
 ];
 
 function renderGroups() {
   const grid = document.getElementById('groups-grid');
-  grid.innerHTML = GROUPS.map(g => {
+  const q = (document.getElementById('people-search')?.value || '').toLowerCase().trim();
+  let visible = GROUPS;
+  if (q) {
+    const exactGroup = GROUPS.find(g => g.name.toLowerCase() === q);
+    visible = exactGroup
+      ? [exactGroup]
+      : GROUPS.filter(g => g.members.some(name => name.toLowerCase().includes(q)));
+  }
+  if (!visible.length) { grid.innerHTML = '<div class="people-no-results">No groups found.</div>'; return; }
+  grid.innerHTML = visible.map((g, idx) => {
     const members = g.members.map(name => people.find(p => p.name === name)).filter(Boolean);
     const cells = members.slice(0, 4).map(p => {
       const initials = p.name.split(' ').map(w=>w[0]).slice(0,2).join('');
@@ -1429,7 +1447,7 @@ function renderGroups() {
     const tags = members.map(p =>
       `<span class="group-tag" onclick="openPopup(${people.indexOf(p)})">${p.name.split(' ')[0]}</span>`
     ).join('');
-    return `<div class="group-card">
+    return `<div class="group-card card-enter" style="animation-delay:${idx * 40}ms">
       <div class="group-mosaic">${cells.join('')}</div>
       <div class="group-body">
         <div class="group-name">${g.name}</div>
@@ -2303,9 +2321,20 @@ const FAVORITES = [
   { src: 'images/favs/QZsVNikeTech.webp',             event: '',                 caption: 'Milo M & Josue G' },
   { src: 'images/favs/Artin&RayanThinking.webp',      event: '',                 caption: 'Artin R & Rayan G' },
   // Page 3 — all regular portraits, equal height columns
-  { src: 'images/favs/DMoneyTruck.webp',              event: '',                 caption: 'Daemeon M' },
-  { src: 'images/favs/JHCream.webp',                  event: 'Pie A Senior',     caption: 'Jesiah H & Kai A' },
-  { src: 'images/favs/InNOut.webp',                   event: 'After Prom',       caption: 'Milo M, Aryan L & Andrew C' },
+  { src: 'images/favs/DMoneyTruck.webp',              event: '',                   caption: 'Daemeon M' },
+  { src: 'images/favs/JHCream.webp',                  event: 'Pie A Senior',       caption: 'Jesiah H & Kai A' },
+  { src: 'images/favs/InNOut.webp',                   event: 'After Prom',         caption: 'Milo M, Aryan L & Andrew C' },
+  // New batch — layout will be rebalanced after images uploaded
+  { src: 'images/favs/SPJGCream.webp',                event: 'Pie A Senior',       caption: 'Sacha P & Josue G' },
+  { src: 'images/favs/WofoTuff.webp',                 event: 'Winter Formal',      caption: 'Audrey L, Aryanna M & Kiana V' },
+  { src: 'images/favs/AbramTuff.webp',                event: 'Senior Blues',       caption: 'Abram M' },
+  { src: 'images/favs/BakoBros.webp',                 event: 'VE Warriors',        caption: 'Rayan R, Aryanna M, Amreen I & Uma J' },
+  { src: 'images/favs/Psych.webp',                    event: '',                   caption: 'Abram M, Kiana V & Aryanna M' },
+  { src: 'images/favs/Woodbury.webp',                 event: 'Senior Assassin',    caption: 'Ella S, Jesiah H, Aryanna M, Nyala A, Sierra M, Nancy S & Brandon Ch' },
+  { src: 'images/favs/KVandAM.webp',                  event: 'Senior Blues',       caption: 'Aryanna M & Kiana V' },
+  { src: 'images/favs/TTown.webp',                    event: 'Friday Night Lights', caption: 'Nancy S & Aryanna M' },
+  { src: 'images/favs/JHDawg.webp',                   event: '',                   caption: 'Nyala A, Nancy S & Jesiah H' },
+  { src: 'images/favs/TillerDays.webp',               event: 'Tustin Tiller Days', caption: 'Nyala A, Luke D, Aryanna M & Nancy S' },
 ];
 
 let favOrder = FAVORITES.map((_, i) => i);
@@ -2355,8 +2384,15 @@ function renderFavorites() {
   const paginationTop = document.getElementById('fav-pagination-top');
   const q = (document.getElementById('fav-search')?.value || '').toLowerCase().trim();
   const ordered = favOrder.map(i => ({ f: FAVORITES[i], i }));
+  const matchedGroup = q ? GROUPS.find(g => g.name.toLowerCase() === q) : null;
   const filtered = q
-    ? ordered.filter(({ f }) => (f.event + ' ' + f.caption).toLowerCase().includes(q))
+    ? matchedGroup
+      ? ordered.filter(({ f }) => matchedGroup.members.some(name => {
+          const parts = name.split(' ');
+          const short = parts[0] + ' ' + parts[parts.length - 1][0];
+          return f.caption.includes(short);
+        }))
+      : ordered.filter(({ f }) => (f.event + ' ' + f.caption).toLowerCase().includes(q))
     : ordered;
   if (!filtered.length) {
     grid.innerHTML = '<div class="favorites-empty">No matches found.</div>';
