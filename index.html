@@ -1663,7 +1663,7 @@ requestAnimationFrame(() => requestAnimationFrame(() => {
   movePill(document.querySelector('.nav-link.active'));
   const active = document.querySelector('.view-btn.active');
   const slider = document.getElementById('people-view-slider');
-  if (active && slider) { slider.style.transition = 'none'; slider.style.left = active.offsetLeft + 'px'; slider.style.width = active.offsetWidth + 'px'; requestAnimationFrame(() => slider.style.transition = ''); }
+  if (active && slider) { const l = active.offsetLeft, w = active.offsetWidth; slider.style.transition = 'none'; slider.style.left = l + 'px'; slider.style.width = w + 'px'; requestAnimationFrame(() => slider.style.transition = ''); }
 }));
 
 /* ── People paywall ── */
@@ -2154,20 +2154,20 @@ function showPage(id, btn) {
       next.querySelectorAll('.stat-block').forEach(el => el.classList.add('visible'));
       initMapsOnce();
       const activeMapTab = next.querySelector('.map-pill.active');
-      if (activeMapTab) { const s = document.getElementById('map-pill-slider'); if (s) { s.style.transition = 'none'; moveMapSlider(activeMapTab); requestAnimationFrame(() => { s.style.transition = ''; }); } }
+      if (activeMapTab) { const s = document.getElementById('map-pill-slider'); if (s) { const l = activeMapTab.offsetLeft, w = activeMapTab.offsetWidth; s.style.transition = 'none'; s.style.left = l + 'px'; s.style.width = w + 'px'; requestAnimationFrame(() => { s.style.transition = ''; }); } }
     }));
   }
   if (id === 'archive') {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       const activeTab = next.querySelector('.archive-tab.active');
-      if (activeTab) { const s = document.getElementById('arc-tab-slider'); if (s) { s.style.transition = 'none'; moveTabSlider(activeTab); requestAnimationFrame(() => { s.style.transition = ''; }); } }
+      if (activeTab) { const s = document.getElementById('arc-tab-slider'); if (s) { const l = activeTab.offsetLeft, w = activeTab.offsetWidth; s.style.transition = 'none'; s.style.left = l + 'px'; s.style.width = w + 'px'; requestAnimationFrame(() => { s.style.transition = ''; }); } }
     }));
   }
   if (id === 'people') {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       const active = document.querySelector('.view-btn.active');
       const s = document.getElementById('people-view-slider');
-      if (active && s) { s.style.transition = 'none'; s.style.left = active.offsetLeft + 'px'; s.style.width = active.offsetWidth + 'px'; requestAnimationFrame(() => { s.style.transition = ''; }); }
+      if (active && s) { const l = active.offsetLeft, w = active.offsetWidth; s.style.transition = 'none'; s.style.left = l + 'px'; s.style.width = w + 'px'; requestAnimationFrame(() => { s.style.transition = ''; }); }
     }));
   }
 }
