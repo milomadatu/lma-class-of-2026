@@ -212,8 +212,10 @@
   }
 
   /* ── Mobile hero (replaces slideshow on small screens) ── */
-  .mobile-hero { display: none; position: relative; overflow: hidden; }
-  .mobile-hero-img { width: 100%; height: 58vh; min-height: 340px; object-fit: cover; object-position: center 25%; display: block; }
+  .mobile-hero { display: none; position: relative; overflow: hidden; height: 58vh; min-height: 340px; }
+  .mobile-hero-slides { position: absolute; inset: 0; }
+  .mobile-hero-slide { position: absolute; inset: 0; background-size: cover; background-position: center 25%; opacity: 0; transform: scale(1.04); transition: opacity 1.6s ease, transform 12s ease; }
+  .mobile-hero-slide.active { opacity: 1; transform: scale(1); }
   .mobile-hero-overlay {
     position: absolute; inset: 0;
     background: linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0) 75%);
@@ -800,9 +802,14 @@
   <!-- LANDING -->
   <div class="page active" id="page-landing">
 
-    <!-- Mobile hero: single image, no slideshow, shown only on ≤768px -->
+    <!-- Mobile hero: slideshow, shown only on ≤768px -->
     <div class="mobile-hero">
-      <img class="mobile-hero-img" src="images/Class Photo (Mobile).webp" alt="LMA Class of 2026" fetchpriority="high" decoding="sync">
+      <div class="mobile-hero-slides">
+        <div class="mobile-hero-slide active" style="background-image:url('images/Class Photo (Mobile).webp')"></div>
+        <div class="mobile-hero-slide" style="background-image:url('images/SeniorBlues (Mobile).webp')"></div>
+        <div class="mobile-hero-slide" style="background-image:url('images/SeniorSunriseGroup (Mobile).webp')"></div>
+        <div class="mobile-hero-slide" style="background-image:url('images/26 (Mobile).webp')"></div>
+      </div>
       <div class="mobile-hero-overlay"></div>
       <div class="mobile-hero-content">
         <div class="mobile-hero-eyebrow">Legacy Magnet Academy</div>
@@ -818,14 +825,16 @@
     <div class="hero-section">
       <div class="hero-slides">
         <div class="hero-slide active" style="background-image:url('images/Class Photo (Desktop).webp')"></div>
-        <div class="hero-slide" style="background-image:url('images/26.webp')"></div>
+        <div class="hero-slide" style="background-image:url('images/26 (Desktop).webp')"></div>
         <div class="hero-slide" style="background-image:url('images/SeniorSunriseGroup (Desktop).webp')"></div>
+        <div class="hero-slide" style="background-image:url('images/SeniorBlues (Desktop).webp')"></div>
       </div>
       <div class="hero-overlay"></div>
       <div class="hero-indicators">
         <div class="hero-dot active" onclick="goHeroSlide(0)"></div>
         <div class="hero-dot" onclick="goHeroSlide(1)"></div>
         <div class="hero-dot" onclick="goHeroSlide(2)"></div>
+        <div class="hero-dot" onclick="goHeroSlide(3)"></div>
       </div>
       <div class="hero-content">
         <div class="hero-eyebrow">Legacy Magnet Academy</div>
@@ -1226,7 +1235,7 @@ const people = [
   {img:'',name:'Elijah Bagnol',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Elijah is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Jaedon B.webp',name:'Jaedon Baluyut',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Jaedon is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Andrew C.webp',name:'Andrew Camacho',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Andrew is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'Brandon Campos',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Brandon is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'',name:'Brandon Campos',role:'IVC — College',ig:'@brandoncamp.os',email:'brandonac4292@gmail.com',birthday:'September 16, 2008',quote:"Don't be a judger bro.",quoteBy:'Ken Carson',bio:"Brandon is committed to IVC, planning to transfer. His favorite memory was Kai vs. Jesiah. He will miss his friends the most and is most excited for traveling and exploring."},
   {img:'images/Headshots/Santiago C.webp',name:'Santiago Cardenas-Huerta',role:'IVC',ig:'@Santiago_cahu',email:'Santiagoc4183@mytusd.org',birthday:'April 26, 2008',quote:'God is absolutely above all, trust in Him and you\'ll end up where He wants you to be.',quoteBy:'',bio:'Santiago is committed to IVC, planning to get married, start a family, and achieve financial stability. His favorite memory was with the boys. He will miss the bonds and friendships he has built and is most excited to figure things out.'},
   {img:'images/Headshots/Carson C.webp',name:'Carson Carter',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Carson is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Rebecca Casillas',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Rebecca is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
@@ -2715,7 +2724,17 @@ function setArchiveView(view) {
     outEl.style.opacity = '';
     inEl.style.opacity = '0';
     if (isTimeline) { archiveMain.style.transform = 'translateY(10px) scale(0.985)'; }
-    if (!isTimeline && !document.getElementById('favorites-grid').children.length) renderFavorites();
+    if (!isTimeline) {
+      const grid = document.getElementById('favorites-grid');
+      if (!grid.children.length) {
+        renderFavorites();
+      } else {
+        const filtered = getFavFiltered();
+        const totalPages = Math.ceil(filtered.length / FAV_PER_PAGE);
+        updateFavPagination(document.getElementById('fav-pagination'), document.getElementById('fav-page-info'), document.getElementById('fav-prev-btn'), document.getElementById('fav-next-btn'), favPage, totalPages);
+        updateFavPagination(document.getElementById('fav-pagination-top'), document.getElementById('fav-page-info-top'), document.getElementById('fav-prev-btn-top'), document.getElementById('fav-next-btn-top'), favPage, totalPages, 'flex');
+      }
+    }
     // Double rAF so browser paints before we release opacity
     requestAnimationFrame(() => requestAnimationFrame(() => {
       inEl.style.opacity = '';
@@ -2740,6 +2759,18 @@ function setArchiveView(view) {
   window.goHeroSlide = function(i) { clearInterval(timer); goTo(i); timer = setInterval(next, 6000); };
   function next() { goTo((cur + 1) % slides.length); }
   timer = setInterval(next, 6000);
+})();
+
+/* ── Mobile hero slideshow ── */
+(function() {
+  const slides = document.querySelectorAll('.mobile-hero-slide');
+  if (slides.length < 2) return;
+  let cur = 0;
+  setInterval(() => {
+    slides[cur].classList.remove('active');
+    cur = (cur + 1) % slides.length;
+    slides[cur].classList.add('active');
+  }, 6000);
 })();
 
 /* ── Confetti ── */
