@@ -422,9 +422,10 @@
   .groups-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .group-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
   .group-mosaic { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; aspect-ratio: 16/9; }
-  .mosaic-cell { overflow: hidden; }
+  .mosaic-cell { overflow: hidden; position: relative; }
   .mosaic-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .mosaic-cell-initials { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: rgba(0,0,0,0.4); }
+  .mosaic-cell-overflow { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--bg); font-size: 14px; font-weight: 700; color: var(--ink-2); letter-spacing: -0.02em; }
   .group-body { padding: 12px 14px 14px; }
   .group-name { font-size: 14px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; margin-bottom: 8px; }
   .group-tags { display: flex; flex-wrap: wrap; gap: 5px; }
@@ -452,6 +453,45 @@
     to   { opacity: 1; transform: translateY(0) scale(1); }
   }
   .card-enter { animation: cardFadeUp 0.38s ease both; }
+
+  /* ── Group sheet ── */
+  .group-sheet-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0);
+    z-index: 55; pointer-events: none; transition: background 0.25s ease;
+  }
+  .group-sheet-overlay.open { background: rgba(0,0,0,0.45); pointer-events: all; }
+  .group-sheet {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: var(--surface); border-radius: 22px 22px 0 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    max-height: 80vh; display: flex; flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.32,0.72,0,1);
+  }
+  .group-sheet-overlay.open .group-sheet { transform: translateY(0); }
+  .group-sheet-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--border); margin: 12px auto 0; flex-shrink: 0; }
+  .group-sheet-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px 12px; border-bottom: 0.5px solid var(--border); flex-shrink: 0; }
+  .group-sheet-title { font-size: 17px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
+  .group-sheet-count { font-size: 12px; color: var(--ink-3); font-weight: 500; margin-left: 8px; }
+  .group-sheet-close { width: 28px; height: 28px; border-radius: 50%; background: var(--bg); border: none; cursor: pointer; color: var(--ink-2); font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s; }
+  .group-sheet-close:hover { background: var(--surface-2); }
+  .group-sheet-body { overflow-y: auto; padding: 16px 20px; flex: 1; }
+  .group-sheet-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .group-sheet-member { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+  .group-sheet-member-photo { width: 100%; aspect-ratio: 1; border-radius: 10px; overflow: hidden; background: var(--bg); transition: transform 0.15s; }
+  .group-sheet-member:active .group-sheet-member-photo { transform: scale(0.94); }
+  .group-sheet-member-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .group-sheet-member-initials { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: rgba(0,0,0,0.4); }
+  .group-sheet-member-name { font-size: 10px; font-weight: 500; color: var(--ink-2); text-align: center; line-height: 1.2; }
+  .group-sheet-footer { padding: 12px 20px 16px; border-top: 0.5px solid var(--border); flex-shrink: 0; }
+  .group-sheet-photos-btn { width: 100%; padding: 13px; border-radius: 980px; background: var(--ink); color: #fff; border: none; font-size: 14px; font-weight: 700; cursor: pointer; letter-spacing: -0.01em; transition: opacity 0.15s; }
+  .group-sheet-photos-btn:hover { opacity: 0.82; }
+  @media (min-width: 769px) {
+    .group-sheet { position: absolute; top: 50%; left: 50%; right: auto; bottom: auto; transform: translate(-50%,-44%) scale(0.96); width: 500px; border-radius: 22px; max-height: 72vh; opacity: 0; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s ease; }
+    .group-sheet-overlay.open .group-sheet { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+    .group-sheet-grid { grid-template-columns: repeat(6, 1fr); }
+    .group-sheet-handle { display: none; }
+  }
 
   /* ── Popup ── */
   .popup-overlay {
@@ -676,8 +716,13 @@
     .archive-section { margin-bottom: 1.75rem; }
     .archive-page-header { padding: 0 1rem; margin-bottom: 0; flex-direction: column; align-items: center; text-align: center; }
     .favorites-view.visible { padding: 10px 1rem 1.5rem; }
-    .favorites-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .fav-page-btn { padding: 5px 13px; font-size: 16px; }
+    .favorites-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; overflow: hidden; }
+    .rearrange-btn { min-width: 0; padding: 7px 10px; }
+    #fav-pagination-top { display: none !important; }
+    .fav-search { flex: 1; width: auto; min-width: 0; }
+    .fav-page-btn { display: none; }
+    .fav-pagination { gap: 0; }
+    .fav-page-info { font-size: 12px; color: var(--ink-3); }
     .section-label { font-size: 10px; }
     /* Nav */
     .nav { padding: 0 1rem; }
@@ -1094,6 +1139,26 @@
   </main>
 </div>
 
+<!-- Group sheet -->
+<div class="group-sheet-overlay" id="group-sheet-overlay" onclick="if(event.target===this)closeGroupSheet()">
+  <div class="group-sheet">
+    <div class="group-sheet-handle"></div>
+    <div class="group-sheet-header">
+      <div>
+        <span class="group-sheet-title" id="group-sheet-title"></span>
+        <span class="group-sheet-count" id="group-sheet-count"></span>
+      </div>
+      <button class="group-sheet-close" onclick="closeGroupSheet()">✕</button>
+    </div>
+    <div class="group-sheet-body">
+      <div class="group-sheet-grid" id="group-sheet-grid"></div>
+    </div>
+    <div class="group-sheet-footer">
+      <button class="group-sheet-photos-btn" id="group-sheet-photos-btn">See their photos →</button>
+    </div>
+  </div>
+</div>
+
 <!-- POPUP -->
 <div class="popup-overlay" id="popup" onclick="if(event.target===this)closePopup()">
   <div class="popup">
@@ -1469,13 +1534,54 @@ function openPopup(i) {
 function closePopup() {
   document.getElementById('popup').classList.remove('open');
 }
+
+function openGroupSheet(gidx) {
+  const g = GROUPS[gidx];
+  const members = g.members.map(name => people.find(p => p.name === name)).filter(Boolean);
+  document.getElementById('group-sheet-title').textContent = g.name;
+  document.getElementById('group-sheet-count').textContent = `${members.length} members`;
+  document.getElementById('group-sheet-grid').innerHTML = members.map(p => {
+    const idx = people.indexOf(p);
+    const initials = p.name.split(' ').map(w => w[0]).slice(0, 2).join('');
+    const bg = pastels[idx % pastels.length];
+    const photo = p.img
+      ? `<img src="${p.img}" alt="${p.name}" loading="lazy">`
+      : `<div class="group-sheet-member-initials" style="background:${bg}">${initials}</div>`;
+    return `<div class="group-sheet-member" onclick="openPopupFromSheet(${idx})">
+      <div class="group-sheet-member-photo">${photo}</div>
+      <div class="group-sheet-member-name">${p.name.split(' ')[0]}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('group-sheet-photos-btn').onclick = () => seeGroupPhotos(g.name);
+  document.getElementById('group-sheet-overlay').classList.add('open');
+}
+function closeGroupSheet() {
+  document.getElementById('group-sheet-overlay').classList.remove('open');
+}
+function openPopupFromSheet(idx) {
+  closeGroupSheet();
+  setTimeout(() => openPopup(idx), 320);
+}
+function seeGroupPhotos(groupName) {
+  closeGroupSheet();
+  setTimeout(() => {
+    const archiveBtn = document.querySelectorAll('.nav-link')[1];
+    showPage('archive', archiveBtn);
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      setArchiveView('favorites');
+      document.getElementById('fav-search').value = groupName;
+      favPage = 0;
+      renderFavorites();
+    }));
+  }, 320);
+}
 function popupNav(dir) {
   const pos = popupOrder.indexOf(popupIdx);
   const newPos = pos + dir;
   if (newPos >= 0 && newPos < popupOrder.length) openPopup(popupOrder[newPos]);
 }
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closePopup(); closeFavLightbox(); }
+  if (e.key === 'Escape') { closePopup(); closeFavLightbox(); closeGroupSheet(); }
   if (document.getElementById('popup').classList.contains('open')) {
     if (e.key === 'ArrowLeft') popupNav(-1);
     if (e.key === 'ArrowRight') popupNav(1);
@@ -1492,8 +1598,8 @@ const GROUPS = [
   { name: 'Sunmoon Snacks', members: ['Rayan Garg', 'Katally Lin', 'Michael Hsieh', 'Arnav Sheth', 'Amreen Islam', 'Ava Lorenzana', 'Marie-France Demuro', 'Morgan Melching', 'Samana Nadig', 'Cooper Mayhew', 'Jaedon Baluyut', 'Aryanna Martinez', 'Kailee Kwok', 'Ella Schubert', 'Abram Militante', 'Artin Rastegar', 'Jayden Tamura', 'Alethia Duggan', 'Jayden Ohashi', 'Kiyomi Pizarro'] },
   { name: 'Setta', members: ['Evelynn Ngo', 'Santino Sebastian Salonga', 'Jianna DiLellio', 'Aiza Qureshi', 'Ellie Chung', 'Jesiah Hezekiah', 'Miriam Yassa', 'Connor Paxton', 'Farishta Islam', 'Nathan Hong'] },
   { name: 'Legacy Enterprises', members: ['Amani Clark', 'Betsy Guevara', 'Brandon Chang', 'Emily Wang', 'Jackson Rowland', 'Janae Alsabti', 'Jeromy Munguia', 'Justin Tangker', 'Logan Haney', 'Logan Woods', 'Matthew Ibarra', 'Murad Malik', 'Nima Partow', 'Paloma Ayala', 'Ryan Yahn', 'Sam Skaron', 'Seth Pham', 'Shirom Mukherjee', 'Zach Avalos'] },
-  { name: 'Dihcheck', members: ['Sacha Papadakis', 'Nathan Hong', 'Daemeon Mitchell', 'Josue Guzman', 'Santiago Cardenas-Huerta', 'Andrew Camacho', 'Kai Arellano', 'Jayden Cerda', 'Arnav Sheth', 'Omar Anees', 'Rayan Garg', 'Ibrahim Memon'] },
-  { name: 'Sneakyboos', members: ['Nancy Silva', 'Ella Schubert', 'Aryanna Martinez', 'Miriam Yassa', 'Sierra Minjares', 'Nyala Ali'] },
+  { name: 'Dihcheck', members: ['Sacha Papadakis', 'Nathan Hong', 'Daemeon Mitchell', 'Josue Guzman', 'Santiago Cardenas-Huerta', 'Andrew Camacho', 'Kai Arellano', 'Jayden Cerda', 'Arnav Sheth', 'Omar Anees', 'Rayan Garg', 'Ibrahim Memon', 'James Wang', 'Brent Limbo', 'Jayden Ohashi', 'Brandon Campos', 'Richard Casillas'] },
+  { name: 'Sneakyboos', members: ['Nancy Silva', 'Ella Schubert', 'Aryanna Martinez', 'Miriam Yassa', 'Sierra Minjares', 'Nyala Ali', 'Jesiah Hezekiah'] },
 ];
 
 function renderGroups() {
@@ -1509,18 +1615,20 @@ function renderGroups() {
   if (!visible.length) { grid.innerHTML = '<div class="people-no-results">No groups found.</div>'; return; }
   grid.innerHTML = visible.map((g, idx) => {
     const members = g.members.map(name => people.find(p => p.name === name)).filter(Boolean);
-    const cells = members.slice(0, 4).map(p => {
+    const overflow = members.length > 4 ? members.length - 3 : 0;
+    const cells = members.slice(0, overflow ? 3 : 4).map(p => {
       const initials = p.name.split(' ').map(w=>w[0]).slice(0,2).join('');
       const bg = pastels[people.indexOf(p) % pastels.length];
       return p.img
         ? `<div class="mosaic-cell"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>`
         : `<div class="mosaic-cell"><div class="mosaic-cell-initials" style="background:${bg}">${initials}</div></div>`;
     });
+    if (overflow) cells.push(`<div class="mosaic-cell"><div class="mosaic-cell-overflow">+${overflow}</div></div>`);
     while (cells.length < 4) cells.push(`<div class="mosaic-cell" style="background:var(--bg)"></div>`);
     const tags = members.map(p =>
-      `<span class="group-tag" onclick="openPopup(${people.indexOf(p)})">${p.name.split(' ')[0]}</span>`
+      `<span class="group-tag" onclick="event.stopPropagation();openPopup(${people.indexOf(p)})">${p.name.split(' ')[0]}</span>`
     ).join('');
-    return `<div class="group-card card-enter" data-gidx="${GROUPS.indexOf(g)}" style="animation-delay:${idx * 40}ms">
+    return `<div class="group-card card-enter" data-gidx="${GROUPS.indexOf(g)}" style="animation-delay:${idx * 40}ms;cursor:pointer" onclick="openGroupSheet(${GROUPS.indexOf(g)})">
       <div class="group-mosaic">${cells.join('')}</div>
       <div class="group-body">
         <div class="group-name">${g.name}</div>
@@ -2429,14 +2537,22 @@ const FAVORITES = [
   { src: 'images/favs/JGTuff.webp',                   event: '',                      caption: 'Josue G' },
   { src: 'images/favs/ZAandDI.webp',                  event: '',                      caption: 'Zach A & Danya I' },
   { src: 'images/favs/JHandSP.webp',                  event: '',                      caption: 'Jesiah H & Sacha P' },
-  // Page 6 — col0: Albanians(0.75)+SpecialGrade(0.67)+PopIt(0.67)=2.09 | col1: Clappin(0.67)+JGLocked(0.67)=1.34 | col2: SiplyGoons(0.67)+LiccWork(0.67)=1.34
+  // Page 6 — col0: Albanians(0.75)+Clappin(0.67)+JGLocked(0.67)=2.09 | col1: PJDay(0.75)+SiplyGoons(0.67)+LiccWork(0.67)=2.09 | col2: PushinP(0.75)+SpecialGrade(0.67)+PopIt(0.67)=2.09
   { src: 'images/favs/Albanians.webp',                event: '',                      caption: 'Omar A, Andrew C, James W, Jayden C & Jesiah H' },
+  { src: 'images/favs/PJDay.webp',                    event: 'PJ Day',                caption: 'Brandon C & Max C' },
+  { src: 'images/favs/PushinP.webp',                  event: '',                      caption: 'Santino S, Pearce W & Aryan L' },
   { src: 'images/favs/Clappin.webp',                  event: '',                      caption: 'Jayden T, Cash T & Hunter W' },
   { src: 'images/favs/SiplyGoons.webp',               event: '',                      caption: 'Santiago C, Milo M & Josue G' },
   { src: 'images/favs/SpecialGrade.webp',             event: '',                      caption: 'Josue G, Kai A, Baran C & Aryan L' },
   { src: 'images/favs/JGLocked.webp',                 event: '',                      caption: 'Josue G' },
   { src: 'images/favs/LiccWork.webp',                 event: '',                      caption: 'Evan M & Danya I' },
   { src: 'images/favs/PopIt.webp',                    event: '',                      caption: 'Uma J & Leslie T' },
+  // Page 7 — col0: PercandTin(0.75)+PepBoys(0.67)=1.42 | col1: DynamicDuo(0.75)+TheThinker(0.67)=1.42 | col2: MadScientist(0.67)=0.67
+  { src: 'images/favs/PercandTin.webp',               event: '',                      caption: 'Artin R & Pearce W' },
+  { src: 'images/favs/DynamicDuo.webp',               event: '',                      caption: 'Baran C & Josue G' },
+  { src: 'images/favs/MadScientist.webp',             event: '',                      caption: 'Jesiah H, Evelynn N & Leslie T' },
+  { src: 'images/favs/PepBoys.webp',                  event: 'Pep Rally',             caption: 'Sacha P, Jesiah H, Santiago C, Nathan H & Jayden T' },
+  { src: 'images/favs/TheThinker.webp',               event: '',                      caption: 'Nathan H' },
 ];
 
 let favOrder = FAVORITES.map((_, i) => i);
@@ -2517,7 +2633,7 @@ function renderFavorites() {
       </div>` : ''}
     </div>`;
   }
-  const numCols = 3;
+  const numCols = window.innerWidth <= 768 ? 2 : 3;
   const cols = Array.from({ length: numCols }, () => []);
   pageItems.forEach(({ f, i }, pos) => cols[pos % numCols].push({ f, i }));
   grid.innerHTML = cols.map(col => `<div class="fav-col">${col.map(({ f, i }) => itemHTML(f, i)).join('')}</div>`).join('');
@@ -2560,6 +2676,24 @@ document.getElementById('favorites-grid').addEventListener('click', e => {
   const item = e.target.closest('[data-fav-idx]');
   if (item) openFavLightbox(FAVORITES[+item.dataset.favIdx]);
 });
+
+// Swipe to paginate favorites on mobile
+(function() {
+  const fv = document.getElementById('favorites-view');
+  let sx = null, sy = null;
+  fv.addEventListener('touchstart', e => {
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+  }, { passive: true });
+  fv.addEventListener('touchend', e => {
+    if (sx === null) return;
+    const dx = e.changedTouches[0].clientX - sx;
+    const dy = e.changedTouches[0].clientY - sy;
+    sx = null; sy = null;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return; // not a horizontal swipe
+    favPageNav(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
 
 function setArchiveView(view) {
   const isTimeline = view === 'timeline';
@@ -2640,10 +2774,10 @@ function launchConfetti() {
       ctx.stroke();
     });
     if (!done) requestAnimationFrame(draw);
-    if (pieces.every(p => p.y > canvas.height + 20)) { done = true; canvas.remove(); }
+    if (pieces.every(p => p.y > canvas.height + 20)) { done = true; if (canvas.parentNode) canvas.remove(); }
   }
   draw();
-  setTimeout(() => { done = true; canvas.remove(); }, 8000);
+  setTimeout(() => { done = true; if (canvas.parentNode) canvas.remove(); }, 8000);
 }
 
 /* ── Events strip ── */
