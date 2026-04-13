@@ -1268,7 +1268,7 @@ const people = [
   {img:'images/Headshots/Josh K.webp',name:'Josh Kim',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Josh is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Kailee K.webp',name:'Kailee Kwok',role:'IVC — Marketing / Psychology',ig:'@kaileekwok',email:'kailee.kwok@gmail.com',birthday:'December 16, 2007',quote:'Live every day with no regrets because there\'s no promise of tomorrow!',quoteBy:'',bio:'Kailee is committed to IVC, planning to transfer to a UC and pursue a career in marketing or psychology. Her favorite memory was senior year hangouts — especially walking during class and the random late-night car talks. She will miss seeing her friends every day the most and is most excited to see where life takes her.'},
   {img:'',name:'Parin Ladva',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Parin is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'images/Headshots/Aryan L.webp',name:'Ali Aryan Lalani',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ali Aryan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Aryan L.webp',name:'Ali Aryan Lalani',role:'4 Year College — Loyola Marymount University',ig:'@Yoits_ari',email:'alil7124@mytusd.org',birthday:'12/21/2007',quote:'Live life and be academic',quoteBy:'Aryan',bio:'Ali Aryan is headed to Loyola Marymount University, planning to earn 3 degrees and a master\'s while running his own side business. His favorite memory from LMA has been football games, and he will miss his friends and all the fun times they had the most. In 10 years, he sees himself working for a company while his side business thrives.'},
   {img:'images/Headshots/Audrey L.webp',name:'Audrey Lee',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Audrey is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Brent L.webp',name:'Brent Limbo',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Brent is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Katally Lin',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Katally is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
@@ -1369,7 +1369,7 @@ function toggleShuffle() {
       for (let i = GROUPS.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [GROUPS[i],GROUPS[j]] = [GROUPS[j],GROUPS[i]]; }
     }
     gridShuffled = !gridShuffled;
-    document.getElementById('shuffle-btn').textContent = gridShuffled ? 'A–Z' : 'Shuffle';
+    document.getElementById('shuffle-btn').textContent = gridShuffled ? 'Revert' : 'Shuffle';
     renderGroups();
     return;
   }
@@ -1379,7 +1379,7 @@ function toggleShuffle() {
     for (let i = people.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [people[i],people[j]] = [people[j],people[i]]; }
   }
   gridShuffled = !gridShuffled;
-  document.getElementById('shuffle-btn').textContent = gridShuffled ? 'A–Z' : 'Shuffle';
+  document.getElementById('shuffle-btn').textContent = gridShuffled ? 'Revert' : 'Shuffle';
   renderGrid();
 }
 
@@ -1768,7 +1768,7 @@ const universities = [
   { name:'UC Irvine', city:'Irvine, CA', lat:33.6405, lng:-117.8443, color:'#0064A4',
     desc:'A rising UC powerhouse in the heart of Orange County, known for research, gaming, and one of the most unique circular campus layouts in the US.',
     img:'https://uci.edu//visit/_imgs/visit-masthead-4.jpg',
-    igPosts: ['DWazkn-Damw'] },
+    igPosts: ['DWazkn-Damw', 'DXCgh4mjXa6'] },
   { name:'UC San Diego', city:'La Jolla, CA', lat:32.8801, lng:-117.2340, color:'#182B49',
     desc:'Perched above the Pacific Ocean, UCSD is renowned for science, engineering, and the landmark Geisel Library.',
     img:'https://ucsdtritons.com/images/2020/9/1/geisel_library_1_UCSanDiego.jpg',
@@ -1825,6 +1825,10 @@ const universities = [
     desc:'A private university in the San Gabriel Valley known for its personalized education, strong community ties, and diverse student body.',
     img:'https://laverne.edu/news/wp-content/uploads/sites/5/2023/08/20210805-founders-hall-2-2100x1400-0230fbdf-b171-4a11-a38a-77ae84c32549-1920x1280.jpg',
     igPosts: ['DWx4s0YjQB8'] },
+  { name:'Cal Poly SLO', city:'San Luis Obispo, CA', lat:35.3001, lng:-120.6597, color:'#154734',
+    desc:'A premier polytechnic university on the Central Coast known for its hands-on "Learn by Doing" philosophy, strong engineering programs, and stunning campus near the Pacific.',
+    img:'https://visitslo.com/wp-content/uploads/2023/12/Cal-Poly-SLO.jpg',
+    igPosts: [] },
   { name:'University of Minnesota', city:'Minneapolis, MN', lat:44.9740, lng:-93.2277, color:'#7A0019',
     desc:'A Big Ten powerhouse and one of the top public research universities in the country. Located in the Twin Cities with world-class programs across every discipline.',
     img:'https://www.commonapp.org/static/7efac8744272bdede472f2ade1703769/university-minnesota-twin-cities_816_gallery1.jpg',
@@ -1837,19 +1841,20 @@ const universities = [
 
 /* ── Map helpers ── */
 const BAY_AREA_UNIS = ['Stanford University', 'UC Berkeley', 'USF', 'Cabrillo College'];
-const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'San Diego State', 'USC', 'LMU', 'Pepperdine University', 'Occidental College', 'Irvine Valley College', 'University of La Verne'];
+const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'San Diego State', 'USC', 'LMU', 'Pepperdine University', 'Occidental College', 'Irvine Valley College', 'University of La Verne', 'Cal Poly SLO'];
 
 // County FIPS codes (numeric). California state code = 06, so county IDs start with 6xxx.
 const BAY_AREA_COUNTIES = [6001,6013,6041,6055,6075,6081,6085,6087,6095,6097];
-// SoCal: LA, Orange, San Diego, Riverside, San Bernardino, Ventura
-const SOCAL_COUNTIES    = [6037,6059,6073,6065,6071,6111];
+// SoCal: LA, Orange, San Diego, Riverside, San Bernardino, Ventura, Santa Barbara
+const SOCAL_COUNTIES    = [6037,6059,6073,6065,6071,6111,6083,6079,6029];
 
 const COUNTY_NAMES = {
   6001:'Alameda',     6013:'Contra Costa', 6041:'Marin',       6055:'Napa',
   6075:'San Francisco', 6081:'San Mateo', 6085:'Santa Clara', 6087:'Santa Cruz',
   6095:'Solano',      6097:'Sonoma',
   6037:'Los Angeles', 6059:'Orange',      6073:'San Diego',
-  6065:'Riverside',   6071:'San Bernardino', 6111:'Ventura'
+  6065:'Riverside',   6071:'San Bernardino', 6111:'Ventura',   6083:'Santa Barbara',
+  6079:'San Luis Obispo', 6029:'Kern'
 };
 
 // Soft coastal palette — alternating so neighbors read as distinct
@@ -2496,7 +2501,7 @@ buildArchive();
 // Add your favorite shots here. src = path to local image or Instagram shortcode URL.
 // event = the section label shown in gold. caption = optional overlay text.
 const FAVORITES = [
-  // Page 1 — col0: GreatestPic(0.67)+CCLabubu(1.79)+BigBandJG(1.33)=3.79 | col1: Milo&Tino(1.33)+Sunrose(0.67)+FrameMog(1.79)=3.79 | col2: ArtinSelfie(1.33)+RickysBirthday(0.75)+JC911(1.39)=3.47
+  // Page 1 — col0: GreatestPic(0.67)+CCLabubu(1.79)+BigBandJG(1.33)+BJMeet(0.91)=4.70 | col1: Milo&Tino(1.33)+Sunrose(0.67)+FrameMog(1.79)+VEWarriors(1.33)=5.12 | col2: ArtinSelfie(1.33)+RickysBirthday(0.75)+JC911(1.39)+TrollingJH(1.33)=4.80
   { src: 'images/favs/GreatestPictureOfAllTime.webp', event: 'SoFi Stadium',          caption: 'Aryan L' },
   { src: 'images/favs/Milo&TinoFieldTrip.webp',       event: 'Field Trip',            caption: 'Milo M & Santino S' },
   { src: 'images/favs/ArtinSelfie.webp',              event: '',                      caption: 'Artin R, Leslie T & Evelynn N' },
@@ -2506,27 +2511,26 @@ const FAVORITES = [
   { src: 'images/favs/BigBandJG.webp',                event: '',                      caption: 'Baran C & Josue G' },
   { src: 'images/favs/FrameMog.webp',                 event: '',                      caption: 'Parin L & Aryan L' },
   { src: 'images/favs/JC911.webp',                    event: 'Shot by Jayden C',      caption: '' },
-  // Page 2 — col0: BJMeet(0.91)+JCSchool(1.37)+KabaBonfire(0.75)=3.03 | col1: VEWarriors(1.33)+CPWork(0.75)+QZsV(1.33)=3.41 | col2: TrollingJH(1.33)+Trunk(1.33)+Artin&Rayan(0.75)=3.41
   { src: 'images/favs/BJMeet&Greet.webp',             event: "BJ's Restaurant",       caption: 'Jesiah H, Andrew C, Brandon Ca, Nolan E, Nathan H, Daemeon M, Sacha P & Milo M' },
   { src: 'images/favs/VEWarriors.webp',               event: 'VE Warriors',           caption: 'Milo M, Santino S & James W' },
   { src: 'images/favs/TrollingJH.webp',               event: 'Senior Assassin',       caption: 'Milo M, Jesiah H & Evelynn N' },
+  // Page 2 — col0: JCSchool(1.37)+KabaBonfire(0.75)+JHDawg(1.79)+MuradTripleT(0.56)=4.47 | col1: CPWork(0.75)+QZsV(1.33)+DMoneyTruck(1.33)+WofoTuff(0.75)=4.16 | col2: Trunk(1.33)+Artin&Rayan(0.75)+JHCream(1.33)+AbramTuff(0.75)=4.16
   { src: 'images/favs/JCSchool.webp',                 event: 'Shot by Jayden C',      caption: '' },
   { src: 'images/favs/CPWork.webp',                   event: '',                      caption: 'Jayden C, Andrew C, Brandon Ch & Evan M' },
   { src: 'images/favs/Trunk or Treat.webp',           event: 'Trunk or Treat',        caption: 'Baran C, Josue G & Daemeon M' },
   { src: 'images/favs/KabaBonfire.webp',              event: 'Filipino Club Bonfire', caption: 'Brandon Ca, Abram M, Andrew C, Santino S, Josue G, Daemeon M & Sacha P' },
   { src: 'images/favs/QZsVNikeTech.webp',             event: '',                      caption: 'Milo M & Josue G' },
   { src: 'images/favs/Artin&RayanThinking.webp',      event: '',                      caption: 'Artin R & Rayan G' },
-  // Page 3 — col0: JHDawg(1.79)+MuradTripleT(0.56)+G6(0.67)=3.02 | col1: DMoneyTruck(1.33)+WofoTuff(0.75)+GargYap(0.67)=2.75 | col2: JHCream(1.33)+AbramTuff(0.75)+LoganYap(0.67)=2.75
   { src: 'images/favs/JHDawg.webp',                   event: '',                      caption: 'Nyala A, Nancy S & Jesiah H' },
   { src: 'images/favs/DMoneyTruck.webp',              event: '',                      caption: 'Daemeon M' },
   { src: 'images/favs/JHCream.webp',                  event: 'Pie A Senior',          caption: 'Jesiah H & Kai A' },
   { src: 'images/favs/MuradTripleT.webp',             event: '',                      caption: 'Murad M' },
   { src: 'images/favs/WofoTuff.webp',                 event: 'Winter Formal',         caption: 'Audrey L, Aryanna M & Kiana V' },
   { src: 'images/favs/AbramTuff.webp',                event: 'Senior Blues',          caption: 'Abram M' },
+  // Page 3 — col0: G6(0.67)+KVandAM(1.33)+DoUNoticeMe(0.67)+Silencio(0.67)=3.34 | col1: GargYap(0.67)+BakoBros(1.33)+Psych(0.75)+TTown(0.75)=3.50 | col2: LoganYap(0.67)+SPJGCream(1.33)+Woodbury(0.75)+TillerDays(0.75)=3.50
   { src: 'images/favs/G6.webp',                       event: '',                      caption: 'Cash T, Milo M, Matt C & Hunter W' },
   { src: 'images/favs/GargYap.webp',                  event: '',                      caption: 'Artin R, Kiana V, Rayan G, Seth P, Logan W, Jayden O & Rayan R' },
   { src: 'images/favs/LoganYap.webp',                 event: '',                      caption: 'Seth P, Logan W & Jayden O' },
-  // Page 4 — col0: KVandAM(1.33)+DoUNoticeMe(0.67)+Silencio(0.67)=2.67 | col1: BakoBros(1.33)+Psych(0.75)+TTown(0.75)=2.83 | col2: SPJGCream(1.33)+Woodbury(0.75)+TillerDays(0.75)=2.83
   { src: 'images/favs/KVandAM.webp',                  event: 'Senior Blues',          caption: 'Aryanna M & Kiana V' },
   { src: 'images/favs/BakoBros.webp',                 event: 'VE Warriors',           caption: 'Rayan R, Aryanna M, Amreen I & Uma J' },
   { src: 'images/favs/SPJGCream.webp',                event: 'Pie A Senior',          caption: 'Sacha P & Josue G' },
@@ -2536,7 +2540,7 @@ const FAVORITES = [
   { src: 'images/favs/Silencio.webp',                 event: '',                      caption: 'Santino S, Josue G & Daemeon M' },
   { src: 'images/favs/TTown.webp',                    event: 'Friday Night Lights',   caption: 'Nancy S & Aryanna M' },
   { src: 'images/favs/TillerDays.webp',               event: 'Tustin Tiller Days',    caption: 'Nyala A, Luke D, Aryanna M & Nancy S' },
-  // Page 5 — col0: NathanFuego(1.33)+YbSquad(0.67)+JGTuff(0.67)=2.67 | col1: InNOut(1.33)+SDSUFratLeader(0.67)+ZAandDI(0.67)=2.67 | col2: Jeromy&Moe(0.75)+PPAP(1.49)+JHandSP(0.75)=2.99
+  // Page 4 — col0: NathanFuego(1.33)+YbSquad(0.67)+JGTuff(0.67)+Albanians(0.75)=3.42 | col1: InNOut(1.33)+SDSUFratLeader(0.67)+ZAandDI(0.67)+PJDay(0.75)=3.42 | col2: Jeromy&Moe(0.75)+PPAP(1.49)+JHandSP(0.75)+PushinP(0.75)=3.74
   { src: 'images/favs/NathanFuego.webp',              event: '',                      caption: 'Nathan H' },
   { src: 'images/favs/InNOut.webp',                   event: 'After Prom',            caption: 'Milo M, Aryan L & Andrew C' },
   { src: 'images/favs/Jeromy&Moe.webp',               event: '',                      caption: 'Jeromy M' },
@@ -2546,27 +2550,46 @@ const FAVORITES = [
   { src: 'images/favs/JGTuff.webp',                   event: '',                      caption: 'Josue G' },
   { src: 'images/favs/ZAandDI.webp',                  event: '',                      caption: 'Zach A & Danya I' },
   { src: 'images/favs/JHandSP.webp',                  event: '',                      caption: 'Jesiah H & Sacha P' },
-  // Page 6 — col0: Albanians(0.75)+Clappin(0.67)+JGLocked(0.67)=2.09 | col1: PJDay(0.75)+SiplyGoons(0.67)+LiccWork(0.67)=2.09 | col2: PushinP(0.75)+SpecialGrade(0.67)+PopIt(0.67)=2.09
   { src: 'images/favs/Albanians.webp',                event: '',                      caption: 'Omar A, Andrew C, James W, Jayden C & Jesiah H' },
   { src: 'images/favs/PJDay.webp',                    event: 'PJ Day',                caption: 'Brandon C & Max C' },
   { src: 'images/favs/PushinP.webp',                  event: '',                      caption: 'Santino S, Pearce W & Aryan L' },
+  // Page 5 — col0: Clappin(0.67)+JGLocked(0.67)+PercandTin(0.75)+PepBoys(0.67)=2.76 | col1: SiplyGoons(0.67)+LiccWork(0.67)+DynamicDuo(0.75)+TheThinker(0.67)=2.76 | col2: SpecialGrade(0.67)+PopIt(0.67)+MadScientist(0.67)+Warming(1.33)=3.34
   { src: 'images/favs/Clappin.webp',                  event: '',                      caption: 'Jayden T, Cash T & Hunter W' },
   { src: 'images/favs/SiplyGoons.webp',               event: '',                      caption: 'Santiago C, Milo M & Josue G' },
   { src: 'images/favs/SpecialGrade.webp',             event: '',                      caption: 'Josue G, Kai A, Baran C & Aryan L' },
   { src: 'images/favs/JGLocked.webp',                 event: '',                      caption: 'Josue G' },
   { src: 'images/favs/LiccWork.webp',                 event: '',                      caption: 'Evan M & Danya I' },
   { src: 'images/favs/PopIt.webp',                    event: '',                      caption: 'Uma J & Leslie T' },
-  // Page 7 — col0: PercandTin(0.75)+PepBoys(0.67)=1.42 | col1: DynamicDuo(0.75)+TheThinker(0.67)=1.42 | col2: MadScientist(0.67)=0.67
   { src: 'images/favs/PercandTin.webp',               event: '',                      caption: 'Artin R & Pearce W' },
   { src: 'images/favs/DynamicDuo.webp',               event: '',                      caption: 'Baran C & Josue G' },
   { src: 'images/favs/MadScientist.webp',             event: '',                      caption: 'Jesiah H, Evelynn N & Leslie T' },
   { src: 'images/favs/PepBoys.webp',                  event: 'Pep Rally',             caption: 'Sacha P, Jesiah H, Santiago C, Nathan H & Jayden T' },
   { src: 'images/favs/TheThinker.webp',               event: '',                      caption: 'Nathan H' },
+  { src: 'images/favs/Warming.webp',                  event: '',                      caption: 'Baran C, Milo M & Aryan L' },
+  // Page 6 — col0: LockedTFIn(1.33)+CholoSquat(0.75)+Twins(1.33)+LayUp(1.33)=4.74 | col1: HugItOut(1.33)+Twizzies(0.75)+TheMack(1.33)+Lonzo(1.33)=4.74 | col2: Cluely(1.33)+PleaseSpeed(0.78)+FlexedUp(1.33)+Raymen(1.33)=4.77
+  { src: 'images/favs/LockedTFIn.webp',               event: '',                      caption: 'Josue G & Baran C' },
+  { src: 'images/favs/HugItOut.webp',                 event: '',                      caption: 'James W & Santino S' },
+  { src: 'images/favs/Cluely.webp',                   event: '',                      caption: 'Milo M, Nico M & Brandon Ch' },
+  { src: 'images/favs/CholoSquat.webp',               event: 'Trunk or Treat',        caption: 'Jayden O, Daemeon M & Jayden C' },
+  { src: 'images/favs/Twizzies.webp',                 event: '',                      caption: 'Kailee K & Morgan M' },
+  { src: 'images/favs/PleaseSpeed.webp',              event: '',                      caption: 'Evan M & Jayden C' },
+  { src: 'images/favs/Twins.webp',                    event: '',                      caption: 'Aryan L' },
+  { src: 'images/favs/TheMack.webp',                  event: '',                      caption: 'Josue G & Andrew C' },
+  { src: 'images/favs/FlexedUp.webp',                 event: '',                      caption: 'Josue G & Abram M' },
+  { src: 'images/favs/LayUp.webp',                    event: '',                      caption: 'Christopher C & Evan M' },
+  { src: 'images/favs/Lonzo.webp',                    event: 'Senior Assassin',       caption: 'Milo M' },
+  { src: 'images/favs/Raymen.webp',                   event: '',                      caption: 'Milo M, Brent L & Daemeon M' },
+  // Page 7 — col0: WhoseHouse(1.33)+LastGame(1.18)=2.51 | col1: Besties(1.50)+FunniestJoke(1.17)=2.67 | col2: Kawaii(1.40)=1.40
+  { src: 'images/favs/WhoseHouse.webp',               event: '',                      caption: 'Milo M & Matt C' },
+  { src: 'images/favs/Besties.webp',                  event: '',                      caption: 'Santino S, Parin L & Cash T' },
+  { src: 'images/favs/Kawaii.webp',                   event: '',                      caption: 'Evelynn N, Carson C & Leslie T' },
+  { src: 'images/favs/LastGame.webp',                 event: '',                      caption: 'Baran C, Josue G & Nico M' },
+  { src: 'images/favs/FunniestJoke.webp',             event: '',                      caption: 'Jayden O & Evelynn N' },
 ];
 
 let favOrder = FAVORITES.map((_, i) => i);
 let favShuffled = false;
-const FAV_PER_PAGE = 9;
+const FAV_PER_PAGE = 12;
 let favPage = 0;
 
 function toggleFavShuffle() {
