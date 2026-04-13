@@ -550,12 +550,20 @@
 
   /* ── Map section ── */
   .map-box { background: var(--surface); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow-sm); }
-  .map-row { display: flex; gap: 12px; height: 420px; align-items: stretch; }
+  .map-row { display: flex; gap: 10px; height: 460px; align-items: stretch; }
 
   /* Left: map canvases */
-  .map-section { flex: 1 1 0; min-width: 0; position: relative; border-radius: var(--radius); overflow: hidden; background: #d0dcea; }
-  .map-canvas { position: absolute; inset: 0; display: none; }
-  .map-canvas.active-map { display: block; }
+  .map-section { flex: 1 1 50%; min-width: 0; position: relative; border-radius: var(--radius); overflow: hidden; background: #d0dcea; }
+  .map-canvas { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+  .map-canvas.active-map { opacity: 1; pointer-events: auto; }
+  @keyframes mapEnterRight { from { opacity:0; transform:translateX(6%); } to { opacity:1; transform:translateX(0); } }
+  @keyframes mapEnterLeft  { from { opacity:0; transform:translateX(-6%); } to { opacity:1; transform:translateX(0); } }
+  @keyframes mapExitLeft   { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(-3%); } }
+  @keyframes mapExitRight  { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(3%); } }
+  .map-canvas.map-enter-right { animation: mapEnterRight 0.44s cubic-bezier(0.4,0,0.2,1) both; }
+  .map-canvas.map-enter-left  { animation: mapEnterLeft  0.44s cubic-bezier(0.4,0,0.2,1) both; }
+  .map-canvas.map-exit-left   { animation: mapExitLeft   0.38s cubic-bezier(0.4,0,0.2,1) both; pointer-events:none; }
+  .map-canvas.map-exit-right  { animation: mapExitRight  0.38s cubic-bezier(0.4,0,0.2,1) both; pointer-events:none; }
 
   /* Floating pill switcher on map */
   .map-pills { position: absolute; top: 12px; left: 12px; z-index: 20; display: flex; background: rgba(255,255,255,0.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-radius: 30px; padding: 3px; gap: 2px; box-shadow: 0 2px 14px rgba(0,0,0,0.14), 0 0 0 0.5px rgba(0,0,0,0.06); }
@@ -572,13 +580,24 @@
   .dot-pulse { animation: dot-pulse 2.2s ease-out infinite; transform-box: fill-box; transform-origin: center; }
   @keyframes dot-pulse { 0% { opacity: 0.4; transform: scale(1); } 100% { opacity: 0; transform: scale(3.2); } }
 
-  /* Right: info panel */
-  .map-panel { flex: 1 1 0; min-width: 0; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; display: flex; flex-direction: column; }
-  .map-panel-placeholder { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--ink-3); font-size: 12px; gap: 8px; padding: 1rem; text-align: center; }
-  .map-panel-placeholder svg { opacity: 0.25; }
-  .map-panel-content { display: none; flex-direction: row; height: 100%; }
-  .map-panel.filled .map-panel-placeholder { display: none; }
-  .map-panel.filled .map-panel-content { display: flex; }
+  /* Middle: scrollable school list */
+  .map-list-col { flex: 0 0 10%; display: flex; flex-direction: column; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+  .map-uni-list-header { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-3); padding: 10px 14px 6px; flex-shrink: 0; border-bottom: 0.5px solid var(--border); }
+  .map-uni-list { overflow-y: auto; flex: 1; }
+  .map-uni-list::-webkit-scrollbar { width: 3px; }
+  .map-uni-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .map-uni-list-item { display: flex; align-items: center; gap: 9px; padding: 7px 12px; cursor: pointer; transition: background 0.22s ease, opacity 0.3s ease; }
+  .map-uni-list-item:hover { background: var(--bg); }
+  .map-uni-list-item.active { background: var(--gold-lt); }
+  .map-uni-list-item.dimmed { opacity: 0.32; }
+  .map-uni-list-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .map-uni-list-name { font-size: 11px; font-weight: 600; color: var(--ink); line-height: 1.25; letter-spacing: -0.01em; }
+  .map-uni-list-city { font-size: 10px; color: var(--ink-3); margin-top: 1px; }
+  /* Right: info card — collapsed until a school is selected */
+  .map-panel { flex: 0 0 0; min-width: 0; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; display: flex; flex-direction: column; transition: flex-basis 0.52s cubic-bezier(0.16,1,0.3,1); }
+  .map-panel.filled { flex-basis: 40%; }
+  .map-panel-content { display: flex; flex-direction: row; height: 100%; opacity: 0; transform: translateX(10px); transition: opacity 0.32s cubic-bezier(0.16,1,0.3,1) 0.28s, transform 0.38s cubic-bezier(0.16,1,0.3,1) 0.24s; }
+  .map-panel.filled .map-panel-content { opacity: 1; transform: translateX(0); }
   .map-panel-header { background: var(--dark); padding: 14px; display: flex; flex-direction: column; gap: 10px; flex: 0 0 42%; position: relative; overflow: hidden; }
   .map-panel-close { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.12); border: none; color: rgba(255,255,255,0.7); width: 24px; height: 24px; border-radius: 50%; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
   .map-panel-close:hover { background: rgba(255,255,255,0.22); color: var(--surface); }
@@ -756,8 +775,9 @@
     .map-box { padding: 1rem; }
     .map-row { flex-direction: column; height: auto; gap: 10px; }
     .map-section { height: 380px; flex: none; }
-    .map-panel { flex: none; }
-    .map-panel-placeholder { display: none; }
+    .map-list-col { flex: none; height: 180px; }
+    .map-panel { flex: none; max-height: 0; flex-basis: auto; transition: max-height 0.48s cubic-bezier(0.16,1,0.3,1); }
+    .map-panel.filled { max-height: 520px; }
     .map-panel-content { flex-direction: column; height: auto; }
     .map-panel-header { flex: 0 0 auto; flex-direction: row; align-items: center; gap: 12px; padding: 12px; }
     .map-panel-img { width: 72px; height: 72px; border-radius: 8px; flex-shrink: 0; }
@@ -1078,11 +1098,11 @@
             </button>
           </div>
         </div>
+        <div class="map-list-col">
+          <div class="map-uni-list-header" id="map-uni-list-header">All Schools</div>
+          <div class="map-uni-list" id="map-uni-list"></div>
+        </div>
         <div class="map-panel" id="map-panel">
-          <div class="map-panel-placeholder">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
-            Click a pin to explore
-          </div>
           <div class="map-panel-content">
             <div class="map-panel-header">
               <img id="uni-img" class="map-panel-img" alt="">
@@ -1110,37 +1130,15 @@
     <div class="stat-block" style="transition-delay:240ms">
     <div class="section-label" style="margin-bottom:12px">By the numbers</div>
     <div class="pie-section">
-      <div class="pie-card">
+      <div class="pie-card" id="pie-college">
         <div class="pie-title">College commitments</div>
-        <div class="pie-chart">
-          <svg viewBox="0 0 90 90">
-            <circle cx="45" cy="45" r="38" fill="none" stroke="#e5e7eb" stroke-width="14"/>
-            <circle cx="45" cy="45" r="38" fill="none" style="stroke:var(--dark)" stroke-width="14" stroke-dasharray="151 88" stroke-dashoffset="0" transform="rotate(-90 45 45)"/>
-            <circle cx="45" cy="45" r="38" fill="none" style="stroke:var(--gold-bright)" stroke-width="14" stroke-dasharray="88 151" stroke-dashoffset="-151" transform="rotate(-90 45 45)"/>
-            <text x="45" y="49" text-anchor="middle" font-size="14" font-weight="500" style="fill:var(--dark)">63%</text>
-          </svg>
-        </div>
-        <div class="pie-legend">
-          <div class="legend-row"><div class="legend-dot" style="background:var(--dark)"></div>4-year university</div>
-          <div class="legend-row"><div class="legend-dot" style="background:var(--gold-bright)"></div>Community college</div>
-        </div>
+        <div class="pie-chart"></div>
+        <div class="pie-legend"></div>
       </div>
-      <div class="pie-card">
+      <div class="pie-card" id="pie-postgrad">
         <div class="pie-title">Post-grad plans</div>
-        <div class="pie-chart">
-          <svg viewBox="0 0 90 90">
-            <circle cx="45" cy="45" r="38" fill="none" stroke="#e5e7eb" stroke-width="14"/>
-            <circle cx="45" cy="45" r="38" fill="none" style="stroke:var(--dark)" stroke-width="14" stroke-dasharray="226 13" stroke-dashoffset="0" transform="rotate(-90 45 45)"/>
-            <circle cx="45" cy="45" r="38" fill="none" style="stroke:var(--gold-bright)" stroke-width="14" stroke-dasharray="13 226" stroke-dashoffset="-226" transform="rotate(-90 45 45)"/>
-            <circle cx="45" cy="45" r="38" fill="none" stroke="#b0c0d8" stroke-width="14" stroke-dasharray="0 239" stroke-dashoffset="-239" transform="rotate(-90 45 45)"/>
-            <text x="45" y="49" text-anchor="middle" font-size="14" font-weight="500" style="fill:var(--dark)">95%</text>
-          </svg>
-        </div>
-        <div class="pie-legend">
-          <div class="legend-row"><div class="legend-dot" style="background:var(--dark)"></div>College</div>
-          <div class="legend-row"><div class="legend-dot" style="background:var(--gold-bright)"></div>Work / gap year</div>
-          <div class="legend-row"><div class="legend-dot" style="background:#b0c0d8"></div>Military / other</div>
-        </div>
+        <div class="pie-chart"></div>
+        <div class="pie-legend"></div>
       </div>
     </div>
     </div>
@@ -1691,6 +1689,86 @@ function checkPaywall() {
   }
 }
 
+/* ── Survey data — update this object when real responses come in ── */
+const SURVEY_DATA = {
+  wordCloud: [
+    {text:'LMA',value:30},{text:"'26",value:32},{text:'Community',value:24},{text:'Family',value:22},{text:'Leaders',value:18},
+    {text:'Unique',value:22},{text:'Chud',value:20},{text:'Interesting',value:20},{text:'Chill',value:20},
+    {text:'Inspiring',value:16},{text:'Innovative',value:15},{text:'Connected',value:15},
+    {text:'Nostalgic',value:15},{text:'Transformative',value:14},{text:'Goofy',value:14},
+    {text:'Modest',value:13},{text:'Painful',value:13},{text:'Open',value:13},
+    {text:'Small',value:12},{text:'Communication',value:12},
+  ],
+  // pct values must sum to 100 per chart
+  collegeCommitments: [
+    { label:'4-year university', pct:63, color:'var(--dark)' },
+    { label:'Community college', pct:37, color:'var(--gold-bright)' },
+  ],
+  postGradPlans: [
+    { label:'College',          pct:95, color:'var(--dark)' },
+    { label:'Work / gap year',  pct:5,  color:'var(--gold-bright)' },
+    { label:'Military / other', pct:0,  color:'#b0c0d8' },
+  ],
+};
+
+/* ── Pie charts — built from SURVEY_DATA ── */
+function buildPie(chartEl, legendEl, segments) {
+  const r = 38, C = 2 * Math.PI * r;
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', '0 0 90 90');
+  // Track
+  const track = document.createElementNS(ns, 'circle');
+  Object.entries({cx:45,cy:45,r,fill:'none',stroke:'#e5e7eb','stroke-width':14})
+    .forEach(([k,v]) => track.setAttribute(k,v));
+  svg.appendChild(track);
+  // Segments
+  let offset = 0;
+  segments.filter(d => d.pct > 0).forEach(d => {
+    const len = (d.pct / 100) * C;
+    const seg = document.createElementNS(ns, 'circle');
+    seg.setAttribute('cx',45); seg.setAttribute('cy',45); seg.setAttribute('r',r);
+    seg.setAttribute('fill','none'); seg.setAttribute('stroke-width',14);
+    seg.style.stroke = d.color;
+    seg.setAttribute('stroke-dasharray', `${len.toFixed(2)} ${(C-len).toFixed(2)}`);
+    seg.setAttribute('stroke-dashoffset', (-offset).toFixed(2));
+    seg.setAttribute('transform','rotate(-90 45 45)');
+    svg.appendChild(seg);
+    offset += len;
+  });
+  // Center label — largest segment %
+  const top = segments.reduce((a,b) => b.pct > a.pct ? b : a);
+  const label = document.createElementNS(ns, 'text');
+  label.setAttribute('x',45); label.setAttribute('y',49);
+  label.setAttribute('text-anchor','middle'); label.setAttribute('font-size',14);
+  label.setAttribute('font-weight',500); label.style.fill = 'var(--dark)';
+  label.textContent = top.pct + '%';
+  svg.appendChild(label);
+  chartEl.innerHTML = ''; chartEl.appendChild(svg);
+  // Legend
+  if (legendEl) {
+    legendEl.innerHTML = segments.filter(d => d.pct > 0).map(d =>
+      `<div class="legend-row"><div class="legend-dot" style="background:${d.color}"></div>${d.label}</div>`
+    ).join('');
+  }
+}
+
+let _piesBuilt = false;
+function buildPieCharts() {
+  if (_piesBuilt) return;
+  _piesBuilt = true;
+  buildPie(
+    document.querySelector('#pie-college .pie-chart'),
+    document.querySelector('#pie-college .pie-legend'),
+    SURVEY_DATA.collegeCommitments
+  );
+  buildPie(
+    document.querySelector('#pie-postgrad .pie-chart'),
+    document.querySelector('#pie-postgrad .pie-legend'),
+    SURVEY_DATA.postGradPlans
+  );
+}
+
 /* ── Word cloud (d3-cloud) — lazy-loaded when scrolled into view ── */
 (function() {
   const container = document.getElementById('wordcloud');
@@ -1706,24 +1784,13 @@ function checkPaywall() {
   requestAnimationFrame(_buildWordCloud);
   }
   function _buildWordCloud() {
-  const wcWords = [
-    // Class identity
-    {text:'LMA',value:30},{text:"'26",value:32},{text:'Community',value:24},{text:'Family',value:22},{text:'Leaders',value:18},
-    // Student-submitted words (×2 = larger)
-    {text:'Unique',value:22},{text:'Chud',value:20},{text:'Interesting',value:20},{text:'Chill',value:20},
-    // Student-submitted words (×1)
-    {text:'Inspiring',value:16},{text:'Innovative',value:15},{text:'Connected',value:15},
-    {text:'Nostalgic',value:15},{text:'Transformative',value:14},{text:'Goofy',value:14},
-    {text:'Modest',value:13},{text:'Painful',value:13},{text:'Open',value:13},
-    {text:'Small',value:12},{text:'Communication',value:12},
-  ];
   const colors = [C_DARK, C_GOLD, '#4a6fa5','#b07830','#2d4a6e','#6e6e73'];
   const container = document.getElementById('wordcloud');
   const W = Math.min(container.offsetWidth || 560, 680);
   const H = 220;
   d3.layout.cloud()
     .size([W, H])
-    .words(wcWords.map(d => ({ text: d.text, size: d.value })))
+    .words(SURVEY_DATA.wordCloud.map(d => ({ text: d.text, size: d.value })))
     .padding(6)
     .rotate(() => (Math.random() > 0.75 ? (Math.random() > 0.5 ? 90 : -90) : 0))
     .font('Inter, sans-serif')
@@ -1757,96 +1824,116 @@ function checkPaywall() {
 // Example: 'https://www.instagram.com/p/ABC123xyz/' → shortcode is 'ABC123xyz'
 // Add as many posts as you'd like per school and they'll appear as scrollable embeds below the map.
 const universities = [
-  { name:'Stanford University', city:'Palo Alto, CA', lat:37.4275, lng:-122.1697, color:'#8C1515',
+  { name:'Stanford University', city:'Palo Alto, CA', lat:37.4275, lng:-122.1697, color:'#8C1515', color2:'#FFFFFF',
     desc:'One of the world\'s leading research universities in the heart of Silicon Valley. Known for innovation, entrepreneurship, and its iconic sandstone architecture.',
     img:'https://cdn.britannica.com/25/121725-050-8BF363EC/Hoover-Tower-Stanford-University-California.jpg',
     igPosts: ['DTzWa5YFGib'] },
-  { name:'UCLA', city:'Los Angeles, CA', lat:34.0689, lng:-118.4452, color:'#2D68C4',
+  { name:'UCLA', city:'Los Angeles, CA', lat:34.0689, lng:-118.4452, color:'#2D68C4', color2:'#FFD100',
     desc:'A flagship UC campus known for academics, athletics, and its iconic Royce Hall. One of the most applied-to universities in the country.',
     img:'https://s3.amazonaws.com/cms.ipressroom.com/173/files/20198/5d72b4772cfac209ff04c634_Royce+Quad/Royce+Quad_hero.jpg',
     igPosts: ['DWkcd4_jY97', 'DWKNRplEl5K', 'DW0Ak31jVra'] },
-  { name:'UC Irvine', city:'Irvine, CA', lat:33.6405, lng:-117.8443, color:'#0064A4',
+  { name:'UC Irvine', city:'Irvine, CA', lat:33.6405, lng:-117.8443, color:'#0064A4', color2:'#FFD200',
     desc:'A rising UC powerhouse in the heart of Orange County, known for research, gaming, and one of the most unique circular campus layouts in the US.',
     img:'https://uci.edu//visit/_imgs/visit-masthead-4.jpg',
     igPosts: ['DWazkn-Damw', 'DXCgh4mjXa6'] },
-  { name:'UC San Diego', city:'La Jolla, CA', lat:32.8801, lng:-117.2340, color:'#182B49',
+  { name:'UC San Diego', city:'La Jolla, CA', lat:32.8801, lng:-117.2340, color:'#182B49', color2:'#C69214',
     desc:'Perched above the Pacific Ocean, UCSD is renowned for science, engineering, and the landmark Geisel Library.',
     img:'https://ucsdtritons.com/images/2020/9/1/geisel_library_1_UCSanDiego.jpg',
     igPosts: [] },
-  { name:'San Diego State', city:'San Diego, CA', lat:32.7757, lng:-117.0719, color:'#A6192E',
+  { name:'San Diego State', city:'San Diego, CA', lat:32.7757, lng:-117.0719, color:'#A6192E', color2:'#231F20',
     desc:'A major public research university and part of the CSU system, known for its business, public health, and engineering programs — and a passionate Aztec fanbase.',
     img:'https://www.collegetransitions.com/wp-content/uploads/2022/04/sdsu-1200x675.png',
     igPosts: ['DW0DfLsjQb1'] },
-  { name:'UC Berkeley', city:'Berkeley, CA', lat:37.8724, lng:-122.2595, color:'#003262',
+  { name:'UC Berkeley', city:'Berkeley, CA', lat:37.8724, lng:-122.2595, color:'#003262', color2:'#FDB515',
     desc:'The original UC flagship and a global top-10 university. Home to Nobel laureates, Sather Tower, and a storied history of student activism.',
     img:'https://www.tclf.org/sites/default/files/thumbnails/image/CA_Berkeley_UniversityOfCaliforniaAtBerkeley_byCharlieNguyen-Flickr_2008_001_Sig.jpg',
     igPosts: ['DWvlzP3DYPO'] },
-  { name:'USC', city:'Los Angeles, CA', lat:34.0224, lng:-118.2851, color:'#990000',
+  { name:'USC', city:'Los Angeles, CA', lat:34.0224, lng:-118.2851, color:'#990000', color2:'#FFC72C',
     desc:'A private research powerhouse in the heart of LA. Home to one of the top film schools in the world and the legendary Tommy Trojan.',
     img:'https://i0.wp.com/calmatters.org/wp-content/uploads/2025/10/072825-USC-Campus-AP-CM.jpg?fit=2000%2C1333&ssl=1/',
     igPosts: ['DTzYn90FPnx', 'DUTuwBHks10'] },
-  { name:'USF', city:'San Francisco, CA', lat:37.7764, lng:-122.4506, color:'#006A4E',
+  { name:'USF', city:'San Francisco, CA', lat:37.7764, lng:-122.4506, color:'#006A4E', color2:'#A88B4A',
     desc:'A Jesuit university set in one of the world\'s most vibrant cities. Known for social justice, law, and stunning views of the Golden Gate.',
     img:'https://www.usfca.edu/sites/default/files/styles/16_9_768x432/public/2022-04/11_01_16_campus_beauty_selects_9826_1.jpg.jpeg?itok=63C7G3K4',
     igPosts: ['DVaL7ikjZCU'] },
-  { name:'LMU', city:'Los Angeles, CA', lat:33.9694, lng:-118.4165, color:'#A50034',
+  { name:'LMU', city:'Los Angeles, CA', lat:33.9694, lng:-118.4165, color:'#AB0C2F', color2:'#0076A5',
     desc:'A Jesuit university on the bluffs above Marina del Rey with ocean views and a tight-knit community focused on ethics and service.',
     img:'https://admission.lmu.edu/media/homepage/lmu-sacred-heart-chapel.jpg',
     igPosts: ['DWKJXODksvb'] },
-  { name:'Colorado State', city:'Fort Collins, CO', lat:40.5734, lng:-105.0865, color:'#1E4D2B',
+  { name:'Colorado State', city:'Fort Collins, CO', lat:40.5734, lng:-105.0865, color:'#1E4D2B', color2:'#C8A45A',
     desc:'A land-grant university in the Rocky Mountain foothills. Known for agriculture, engineering, outdoor culture, and vibrant campus life.',
     img:'https://www.usnews.com/dims4/USNEWS/90b4c6a/17177859217/resize/800x540%3E/quality/85/?url=https%3A%2F%2Fwww.usnews.com%2Fcmsmedia%2F64%2Fc1ed79f7dcb3ced35b9053ae9c7abb%2F23017_06875.jpg',
     igPosts: ['DWU-jSdCdgX'] },
-  { name:'University of Utah', city:'Salt Lake City, UT', lat:40.7649, lng:-111.8421, color:'#CC0000',
+  { name:'University of Utah', city:'Salt Lake City, UT', lat:40.7649, lng:-111.8421, color:'#CC0000', color2:'#FFFFFF',
     desc:'Utah\'s flagship university set against the Wasatch Mountains. Strong programs in health sciences, tech, and engineering with ski slopes minutes away.',
     img:'https://utahnewsdispatch.com/wp-content/uploads/2024/01/011524_University-of-Utah_02-scaled.jpg',
     igPosts: ['DUTn-s4kiSz'] },
-  { name:'Carnegie Mellon', city:'Pittsburgh, PA', lat:40.4432, lng:-79.9428, color:'#C41230',
+  { name:'Carnegie Mellon', city:'Pittsburgh, PA', lat:40.4432, lng:-79.9428, color:'#C41230', color2:'#6D6E71',
     desc:'A global research university known for computer science, engineering, and the arts. CMU consistently ranks among the top schools for technology and innovation.',
     img:'https://www.cmu.edu/sites/default/files/cmu-visit-site-files/styles/large_hero_1920x1080/public/2025-08/visit_hero.jpg.webp?itok=Wj42GGPE',
     igPosts: ['DWk1z1iDX0l'] },
-  { name:'Pepperdine University', city:'Malibu, CA', lat:34.0359, lng:-118.6919, color:'#00205B',
+  { name:'Pepperdine University', city:'Malibu, CA', lat:34.0359, lng:-118.6919, color:'#00205B', color2:'#E56020',
     desc:'A private Christian university perched on the Malibu coast with stunning Pacific Ocean views. Known for law, business, and a close-knit community.',
     img:'https://www.pepperdine.edu/about/images/222375-malibu-campus-full.jpg',
     igPosts: ['DV7oNUyDftU'] },
-  { name:'Occidental College', city:'Los Angeles, CA', lat:34.1184, lng:-118.2117, color:'#F36C21',
+  { name:'Occidental College', city:'Los Angeles, CA', lat:34.1184, lng:-118.2117, color:'#F36C21', color2:'#231F20',
     desc:'A small liberal arts college in Eagle Rock with a rigorous academic program and a strong commitment to community engagement and social justice.',
     img:'https://www.oxy.edu/sites/default/files/News_USNWR23_1440x800-2.jpg',
     igPosts: ['DTzLIvelBn3'] },
-  { name:'Cabrillo College', city:'Aptos, CA', lat:36.9741, lng:-121.9072, color:'#003865',
+  { name:'Cabrillo College', city:'Aptos, CA', lat:36.9741, lng:-121.9072, color:'#3861e3', color2:'#78bde8',
     desc:'A community college nestled in the Santa Cruz mountains, offering a wide range of programs and a gateway to UC and CSU transfers.',
     img:'https://tpgonlinedaily.com/wp-content/uploads/2014/02/cabrillo-college-640x480.jpg',
     igPosts: ['DWqPIeBjTo1'] },
-  { name:'Irvine Valley College', city:'Irvine, CA', lat:33.6450, lng:-117.7685, color:'#005A9C',
+  { name:'Irvine Valley College', city:'Irvine, CA', lat:33.6450, lng:-117.7685, color:'#004789', color2:'#C7CACE',
     desc:'A top-ranked community college in Orange County known for its high transfer rates to UC and CSU campuses and strong programs in arts, science, and technology.',
     img:'https://arquitectonica.com/architecture/wp-content/uploads/sites/2/2016/10/Irvine_Valley_College_PAC_2-1920x1080.jpg',
     igPosts: ['DW0GIYfjaFn', 'DW5tYlBDaZb'] },
-  { name:'University of La Verne', city:'La Verne, CA', lat:34.1008, lng:-117.7678, color:'#2C5234',
+  { name:'University of La Verne', city:'La Verne, CA', lat:34.1008, lng:-117.7678, color:'#2C5234', color2:'#C4962B',
     desc:'A private university in the San Gabriel Valley known for its personalized education, strong community ties, and diverse student body.',
     img:'https://laverne.edu/news/wp-content/uploads/sites/5/2023/08/20210805-founders-hall-2-2100x1400-0230fbdf-b171-4a11-a38a-77ae84c32549-1920x1280.jpg',
     igPosts: ['DWx4s0YjQB8'] },
-  { name:'Cal Poly SLO', city:'San Luis Obispo, CA', lat:35.3001, lng:-120.6597, color:'#154734',
+  { name:'Cal Poly SLO', city:'San Luis Obispo, CA', lat:35.3001, lng:-120.6597, color:'#154734', color2:'#C69214',
     desc:'A premier polytechnic university on the Central Coast known for its hands-on "Learn by Doing" philosophy, strong engineering programs, and stunning campus near the Pacific.',
     img:'https://visitslo.com/wp-content/uploads/2023/12/Cal-Poly-SLO.jpg',
     igPosts: [] },
-  { name:'University of Minnesota', city:'Minneapolis, MN', lat:44.9740, lng:-93.2277, color:'#7A0019',
+  { name:'University of Minnesota', city:'Minneapolis, MN', lat:44.9740, lng:-93.2277, color:'#7A0019', color2:'#FFCC33',
     desc:'A Big Ten powerhouse and one of the top public research universities in the country. Located in the Twin Cities with world-class programs across every discipline.',
     img:'https://www.commonapp.org/static/7efac8744272bdede472f2ade1703769/university-minnesota-twin-cities_816_gallery1.jpg',
     igPosts: ['DWx4UAHDZIH'] },
-  { name:'Oregon State University', city:'Corvallis, OR', lat:44.5638, lng:-123.2794, color:'#DC4405',
+  { name:'Oregon State University', city:'Corvallis, OR', lat:44.5638, lng:-123.2794, color:'#DC4405', color2:'#231F20',
     desc:'A Pac-12 land-grant university nestled in the Willamette Valley. Known for engineering, forestry, and oceanography — and one of the most beautiful green campuses in the Pacific Northwest.',
     img:'https://oregonstate.edu/sites/default/files/styles/twitter_preview_image/public/2024-04/blossoms-2200w-compressed.jpg?itok=zI09oR_P',
     igPosts: ['DW3-fTaDd4C'] },
+  { name:'Northeastern University (Oakland)', city:'Oakland, CA', lat:37.8044, lng:-122.2712, color:'#C8102E', color2:'#231F20',
+    desc:'Northeastern\'s Oakland campus is set in the historic former Mills College grounds. Known for its co-op program that alternates coursework with paid work experience — one of the best in the nation for turning a degree into a career.',
+    img:'https://msmagazine.com/wp-content/uploads/2022/03/Mills_Hall_Oakland_CA.jpg',
+    igPosts: [] },
+  { name:'UC Santa Barbara', city:'Santa Barbara, CA', lat:34.4140, lng:-119.8489, color:'#003660', color2:'#FEBC11',
+    desc:'A premier UC campus perched on a coastal bluff in Goleta, with the Pacific Ocean and Santa Ynez Mountains as its backdrop. Known for research in science, engineering, and the arts — and an unbeatable California lifestyle.',
+    img:'https://www.alumni.ucsb.edu/sites/default/files/images/welcome/stay-connected-campus-aerial.jpg',
+    igPosts: [] },
+  { name:'San Jose State', city:'San Jose, CA', lat:37.3352, lng:-121.8811, color:'#0055A2', color2:'#E5A823',
+    desc:'The oldest public institution of higher education on the West Coast, located in the heart of Silicon Valley. SJSU\'s proximity to tech giants makes it a natural launchpad for careers in engineering, business, and the arts.',
+    img:'https://upload.wikimedia.org/wikipedia/commons/d/df/Tower_Hall_-_Morris_Dailey_Auditorium_-_San_Jose_State_University.jpg',
+    igPosts: [] },
+  { name:'CSU Long Beach', city:'Long Beach, CA', lat:33.7838, lng:-118.1141, color:'#F6C324', color2:'#000000',
+    desc:'One of the largest CSU campuses in California with a diverse, research-active community in the greater LA area. Known for strong programs in engineering, business, and the arts — and the iconic CSULB Pyramid.',
+    img:'https://media.california.com/media/_versions_jpg/articles/shutterstock_1089266585__3395x2503____v1222x580__.jpg',
+    igPosts: [] },
+  { name:'UC Riverside', city:'Riverside, CA', lat:33.9737, lng:-117.3281, color:'#003DA5', color2:'#F1AB00',
+    desc:'A UC campus in the Inland Empire with a rapidly growing research profile and one of the most diverse student bodies in the UC system. Known for strong programs in agricultural sciences, engineering, and business.',
+    img:'https://admissions.ucr.edu/sites/default/files/styles/hero_slider_large_wide/public/2024-06/homepage-banner-ucr-campus.jpg?h=75585b40&itok=J7wrLKDF',
+    igPosts: [] },
 ];
 
 /* ── Map helpers ── */
-const BAY_AREA_UNIS = ['Stanford University', 'UC Berkeley', 'USF', 'Cabrillo College'];
-const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'San Diego State', 'USC', 'LMU', 'Pepperdine University', 'Occidental College', 'Irvine Valley College', 'University of La Verne', 'Cal Poly SLO'];
+const BAY_AREA_UNIS = ['Stanford University', 'UC Berkeley', 'USF', 'Cabrillo College', 'Northeastern University (Oakland)', 'San Jose State'];
+const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'San Diego State', 'USC', 'LMU', 'Pepperdine University', 'Occidental College', 'Irvine Valley College', 'University of La Verne', 'Cal Poly SLO', 'UC Santa Barbara', 'CSU Long Beach', 'UC Riverside'];
 
 // County FIPS codes (numeric). California state code = 06, so county IDs start with 6xxx.
 const BAY_AREA_COUNTIES = [6001,6013,6041,6055,6075,6081,6085,6087,6095,6097];
-// SoCal: LA, Orange, San Diego, Riverside, San Bernardino, Ventura, Santa Barbara
-const SOCAL_COUNTIES    = [6037,6059,6073,6065,6071,6111,6083,6079,6029];
+// SoCal: LA, Orange, San Diego, Riverside, San Bernardino, Ventura, Santa Barbara, SLO, Kern, Imperial
+const SOCAL_COUNTIES    = [6037,6059,6073,6065,6071,6111,6083,6079,6029,6025];
 
 const COUNTY_NAMES = {
   6001:'Alameda',     6013:'Contra Costa', 6041:'Marin',       6055:'Napa',
@@ -1854,7 +1941,7 @@ const COUNTY_NAMES = {
   6095:'Solano',      6097:'Sonoma',
   6037:'Los Angeles', 6059:'Orange',      6073:'San Diego',
   6065:'Riverside',   6071:'San Bernardino', 6111:'Ventura',   6083:'Santa Barbara',
-  6079:'San Luis Obispo', 6029:'Kern'
+  6079:'San Luis Obispo', 6029:'Kern',  6025:'Imperial'
 };
 
 // Soft coastal palette — alternating so neighbors read as distinct
@@ -1895,6 +1982,12 @@ function openUniInfo(u) {
   });
   const panel = document.getElementById('map-panel');
   panel.classList.add('filled');
+  document.querySelectorAll('.map-uni-list-item').forEach(el => el.classList.toggle('active', el.dataset.uniName === u.name));
+  requestAnimationFrame(() => {
+    const activeItem = document.querySelector('.map-uni-list-item.active');
+    if (activeItem) activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+  highlightMapPin(u.name);
   if (window.instgrm) window.instgrm.Embeds.process();
   // On mobile, scroll the panel into view after it appears
   if (window.innerWidth <= 768) {
@@ -1904,6 +1997,41 @@ function openUniInfo(u) {
 
 function closeUniCard() {
   document.getElementById('map-panel').classList.remove('filled');
+  document.querySelectorAll('.map-uni-list-item').forEach(el => el.classList.remove('active'));
+  clearMapPinHighlight();
+}
+
+function buildUniList(highlight) {
+  const list = document.getElementById('map-uni-list');
+  if (!list) return;
+  // First render — build DOM once
+  if (!list.children.length) {
+    const sorted = [...universities].sort((a, b) => a.name.localeCompare(b.name));
+    list.innerHTML = sorted.map(u => {
+      const safeName = u.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+      const safeCity = u.city.replace(/&/g,'&amp;');
+      const esc = u.name.replace(/'/g,"\\'");
+      return `<div class="map-uni-list-item" data-uni-name="${safeName}" onclick="openUniByName('${esc}')" onmouseenter="peekMapPin('${esc}')" onmouseleave="clearPeekMapPin('${esc}')" title="${safeName}">
+        <div class="map-uni-list-dot" style="background:${u.color}"></div>
+        <div><div class="map-uni-list-name">${safeName}</div><div class="map-uni-list-city">${safeCity}</div></div>
+      </div>`;
+    }).join('');
+  }
+  // Toggle dimmed class — CSS transition handles the fade
+  list.querySelectorAll('.map-uni-list-item').forEach(el => {
+    const name = el.getAttribute('data-uni-name');
+    el.classList.toggle('dimmed', !!(highlight && !highlight.includes(name)));
+  });
+}
+
+function openUniByName(name) {
+  const u = universities.find(u => u.name === name);
+  if (!u) return;
+  const targetView = BAY_AREA_UNIS.includes(u.name) ? 'bayarea'
+                   : SOCAL_UNIS.includes(u.name)    ? 'socal' : 'usa';
+  if (_activeMapView !== targetView) switchMapView(targetView, { keepCard: true });
+  openUniInfo(u);
+  zoomToUni(u, targetView);
 }
 
 const LMA = {
@@ -1916,23 +2044,45 @@ const LMA = {
   igProfileEmbed: '<blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/legacymagnetacademy/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;flex-shrink:0;width:320px;min-width:0;padding:0;"></blockquote>'
 };
 
+function setTooltip(el, text) { el.textContent = text; el.style.opacity = '1'; }
+function posTooltip(el, event) {
+  const tw = el.offsetWidth;
+  let x = event.clientX + 14, y = event.clientY - 36;
+  if (x + tw + 6 > window.innerWidth) x = event.clientX - tw - 10;
+  if (y < 6) y = event.clientY + 18;
+  el.style.left = x + 'px'; el.style.top = y + 'px';
+}
+function peekMapPin(name) {
+  if (typeof d3 === 'undefined') return;
+  const active = document.querySelector('.map-uni-list-item.active');
+  if (active?.dataset.uniName === name) return;
+  d3.selectAll(`[data-uni="${name}"] .dot-outer, [data-uni="${name}"] .lma-outer`)
+    .transition().duration(150).attr('r', 9);
+}
+function clearPeekMapPin(name) {
+  if (typeof d3 === 'undefined') return;
+  const active = document.querySelector('.map-uni-list-item.active');
+  if (active?.dataset.uniName === name) return;
+  d3.selectAll(`[data-uni="${name}"] .dot-outer`)
+    .transition().duration(200).attr('r', 7);
+  d3.selectAll(`[data-uni="${name}"] .lma-outer`)
+    .transition().duration(200).attr('r', 9);
+}
+
 function addLMAPin(g, projection) {
   const coords = projection([LMA.lng, LMA.lat]);
   if (!coords) return;
   const [cx, cy] = coords;
   const tooltip = document.getElementById('map-tooltip');
 
-  const dot = g.append('g').style('cursor', 'pointer')
-    .on('mouseover', function() {
-      d3.select(this).select('.lma-outer').attr('r', 11).attr('opacity', 0.85);
-      tooltip.textContent = 'Legacy Magnet Academy'; tooltip.style.opacity = '1';
+  const dot = g.append('g').style('cursor', 'pointer').attr('data-uni', LMA.name)
+    .on('mouseover', function(event) {
+      d3.select(this).select('.lma-outer').transition().duration(120).attr('r', 11);
+      setTooltip(tooltip, 'Legacy Magnet Academy'); posTooltip(tooltip, event);
     })
-    .on('mousemove', function(event) {
-      tooltip.style.left = (event.clientX + 14) + 'px';
-      tooltip.style.top  = (event.clientY - 32) + 'px';
-    })
+    .on('mousemove', function(event) { posTooltip(tooltip, event); })
     .on('mouseout', function() {
-      d3.select(this).select('.lma-outer').attr('r', 9).attr('opacity', 1);
+      d3.select(this).select('.lma-outer').transition().duration(200).attr('r', 9);
       tooltip.style.opacity = '0';
     })
     .on('click', function(event) {
@@ -1962,17 +2112,14 @@ function addPins(g, projection, uniNames) {
     const coords = projection([u.lng, u.lat]);
     if (!coords) return;
     const [cx, cy] = coords;
-    const dot = g.append('g').style('cursor', 'pointer')
-      .on('mouseover', function() {
-        d3.select(this).select('.dot-outer').attr('r', 9).attr('opacity', 0.85);
-        tooltip.textContent = u.name; tooltip.style.opacity = '1';
+    const dot = g.append('g').style('cursor', 'pointer').attr('data-uni', u.name)
+      .on('mouseover', function(event) {
+        d3.select(this).select('.dot-outer').transition().duration(120).attr('r', 9);
+        setTooltip(tooltip, u.name); posTooltip(tooltip, event);
       })
-      .on('mousemove', function(event) {
-        tooltip.style.left = (event.clientX + 14) + 'px';
-        tooltip.style.top  = (event.clientY - 32) + 'px';
-      })
+      .on('mousemove', function(event) { posTooltip(tooltip, event); })
       .on('mouseout', function() {
-        d3.select(this).select('.dot-outer').attr('r', 7).attr('opacity', 1);
+        d3.select(this).select('.dot-outer').transition().duration(200).attr('r', 7);
         tooltip.style.opacity = '0';
       })
       .on('click', function(event) {
@@ -1983,8 +2130,6 @@ function addPins(g, projection, uniNames) {
     const col = u.color || C_DARK;
     // Transparent hit-area — larger than the visible dot for easier mobile tapping
     dot.append('circle').attr('cx',cx).attr('cy',cy).attr('r',18).attr('fill','transparent').attr('stroke','none');
-    dot.append('circle').attr('class','dot-pulse')
-      .attr('cx',cx).attr('cy',cy).attr('r',7).attr('fill',col).attr('pointer-events','none');
     dot.append('circle').attr('class','dot-outer')
       .attr('cx',cx).attr('cy',cy).attr('r',7).attr('fill',col)
       .attr('stroke','#fff').attr('stroke-width',1.8);
@@ -2003,10 +2148,10 @@ function buildUSMap() {
     .attr('viewBox', `0 0 ${VW} ${VH}`)
     .attr('width', '100%').attr('height', '100%')
     .style('display', 'block');
-  const g = svg.append('g');
+  const g = svg.append('g').style('will-change', 'transform');
   const zoom = d3.zoom().scaleExtent([0.8, 8]).on('zoom', e => g.attr('transform', e.transform));
   svg.call(zoom);
-  _mapRefs.usa = { svg, zoom };
+  _mapRefs.usa = { svg, zoom, proj, vw: VW, vh: VH };
   const path = d3.geoPath().projection(proj);
   getStatesTopo().then(us => {
     g.selectAll('path').data(topojson.feature(us, us.objects.states).features)
@@ -2030,10 +2175,11 @@ function buildRegionalMap(elId, countyIds, uniNames) {
     .attr('viewBox', `0 0 ${W} ${H}`)
     .attr('width', '100%').attr('height', '100%')
     .style('display', 'block');
-  const g = svg.append('g');
+  const g = svg.append('g').style('will-change', 'transform');
   const zoom = d3.zoom().scaleExtent([0.8, 10]).on('zoom', e => g.attr('transform', e.transform));
   svg.call(zoom);
-  _mapRefs[elId.replace('map-', '')] = { svg, zoom };
+  const _viewKey = elId.replace('map-', '');
+  _mapRefs[_viewKey] = { svg, zoom, vw: W, vh: H };
 
   getCountiesTopo().then(us => {
     const all = topojson.feature(us, us.objects.counties).features;
@@ -2042,6 +2188,7 @@ function buildRegionalMap(elId, countyIds, uniNames) {
 
     const proj = d3.geoMercator()
       .fitExtent([[18, 18], [W - 18, H - 18]], { type:'FeatureCollection', features: region });
+    _mapRefs[_viewKey].proj = proj;
     const path = d3.geoPath().projection(proj);
 
     // County fills
@@ -2070,30 +2217,64 @@ function buildRegionalMap(elId, countyIds, uniNames) {
     addPins(g, proj, uniNames);
     // Add LMA pin on SoCal map only
     if (elId === 'map-socal') addLMAPin(g, proj);
+    // Fire any pending zoom that was requested before this map finished building
+    if (_pendingZoom && _pendingZoom.view === _viewKey) {
+      const pz = _pendingZoom; _pendingZoom = null;
+      requestAnimationFrame(() => zoomToUni(pz.u, pz.view));
+    }
   });
 }
 
 // Lazy init — maps built only when Stats page is visible (real offsetWidth)
 const mapBuiltFor = { usa: false, bayarea: false, socal: false };
-const _mapRefs = {}; // view → { svg, zoom } — populated as maps are built
+const _mapRefs = {}; // view → { svg, zoom, proj, vw, vh } — populated as maps are built
+let _pendingZoom = null; // { u, view } — zoom queued before regional map finishes building
+
+function highlightMapPin(name) {
+  clearMapPinHighlight();
+  if (typeof d3 === 'undefined') return;
+  const u = universities.find(u => u.name === name);
+  const ringColor = (u && u.color2) || '#e8b24e';
+  d3.selectAll(`[data-uni="${name}"] .dot-outer, [data-uni="${name}"] .lma-outer`)
+    .transition().duration(220)
+    .attr('r', 10).attr('stroke', ringColor).attr('stroke-width', 2.5);
+}
+
+function clearMapPinHighlight() {
+  if (typeof d3 === 'undefined') return;
+  d3.selectAll('[data-uni] .dot-outer')
+    .transition().duration(220)
+    .attr('r', 7).attr('stroke', '#fff').attr('stroke-width', 1.8);
+  d3.selectAll('[data-uni] .lma-outer')
+    .transition().duration(220)
+    .attr('r', 9).attr('stroke', '#67686a').attr('stroke-width', 1.8);
+}
+
+function zoomToUni(u, view) {
+  const ref = _mapRefs[view];
+  if (!ref || !ref.proj) { _pendingZoom = { u, view }; return; }
+  const coords = ref.proj([u.lng, u.lat]);
+  if (!coords) return;
+  const [px, py] = coords;
+  const k = view === 'usa' ? 4 : 3;
+  ref.svg.transition().duration(900).ease(d3.easeCubicInOut).call(
+    ref.zoom.transform, d3.zoomIdentity.translate(ref.vw / 2 - k * px, ref.vh / 2 - k * py).scale(k));
+}
 
 function zoomMap(factor) {
-  const activeView = ['usa','socal','bayarea'].find(v =>
-    document.getElementById('map-' + v)?.classList.contains('active-map'));
-  const ref = _mapRefs[activeView];
-  if (ref) ref.svg.transition().duration(250).call(ref.zoom.scaleBy, factor);
+  const ref = _mapRefs[_activeMapView];
+  if (ref) ref.svg.transition().duration(350).ease(d3.easeCubicOut).call(ref.zoom.scaleBy, factor);
 }
 
 function resetMapZoom() {
-  const activeView = ['usa','socal','bayarea'].find(v =>
-    document.getElementById('map-' + v)?.classList.contains('active-map'));
-  const ref = _mapRefs[activeView];
-  if (ref) ref.svg.transition().duration(350).call(ref.zoom.transform, d3.zoomIdentity);
+  const ref = _mapRefs[_activeMapView];
+  if (ref) ref.svg.transition().duration(550).ease(d3.easeCubicInOut).call(ref.zoom.transform, d3.zoomIdentity);
 }
 
 function initMapsOnce() {
   if (mapBuiltFor.usa) return;
   mapBuiltFor.usa = true;
+  buildUniList();
   loadD3().then(buildUSMap);
 }
 
@@ -2103,12 +2284,35 @@ function moveMapSlider(tabEl) {
   slider.style.left = tabEl.offsetLeft + 'px';
   slider.style.width = tabEl.offsetWidth + 'px';
 }
-function switchMapView(view) {
+const MAP_ORDER = { usa: 0, socal: 1, bayarea: 2 };
+const MAP_ANIM_CLS = ['map-enter-right','map-enter-left','map-exit-left','map-exit-right'];
+let _activeMapView = 'usa';
+
+function switchMapView(view, opts = {}) {
+  const prev = _activeMapView;
+  _activeMapView = view;
+
   ['usa', 'bayarea', 'socal'].forEach(v => {
     document.getElementById('map-tab-' + v).classList.toggle('active', v === view);
-    document.getElementById('map-' + v).classList.toggle('active-map', v === view);
   });
   moveMapSlider(document.getElementById('map-tab-' + view));
+  if (!opts.keepCard) closeUniCard();
+  const highlight = view === 'bayarea' ? BAY_AREA_UNIS : view === 'socal' ? SOCAL_UNIS : null;
+  const headerEl = document.getElementById('map-uni-list-header');
+  if (headerEl) headerEl.textContent = view === 'bayarea' ? 'Bay Area' : view === 'socal' ? 'SoCal' : 'All Schools';
+  buildUniList(highlight);
+
+  // Directional crossfade
+  const outEl = document.getElementById('map-' + prev);
+  const inEl  = document.getElementById('map-' + view);
+  ['usa','bayarea','socal'].forEach(v => document.getElementById('map-' + v).classList.remove(...MAP_ANIM_CLS));
+  if (prev !== view) {
+    const dir = MAP_ORDER[view] > MAP_ORDER[prev] ? 1 : -1;
+    outEl.classList.remove('active-map');
+    outEl.classList.add(dir > 0 ? 'map-exit-left' : 'map-exit-right');
+    inEl.classList.add('active-map', dir > 0 ? 'map-enter-right' : 'map-enter-left');
+  }
+
   if (!mapBuiltFor[view]) {
     mapBuiltFor[view] = true;
     loadD3().then(() => {
@@ -2158,6 +2362,7 @@ function showPage(id, btn) {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       next.querySelectorAll('.stat-block').forEach(el => el.classList.add('visible'));
       initMapsOnce();
+      buildPieCharts();
       const activeMapTab = next.querySelector('.map-pill.active');
       if (activeMapTab) { const s = document.getElementById('map-pill-slider'); if (s) { const l = activeMapTab.offsetLeft, w = activeMapTab.offsetWidth; s.style.transition = 'none'; s.style.left = l + 'px'; s.style.width = w + 'px'; requestAnimationFrame(() => { s.style.transition = ''; }); } }
     }));
@@ -2528,13 +2733,13 @@ const FAVORITES = [
   { src: 'images/favs/WofoTuff.webp',                 event: 'Winter Formal',         caption: 'Audrey L, Aryanna M & Kiana V' },
   { src: 'images/favs/AbramTuff.webp',                event: 'Senior Blues',          caption: 'Abram M' },
   // Page 3 — col0: G6(0.67)+KVandAM(1.33)+DoUNoticeMe(0.67)+Silencio(0.67)=3.34 | col1: GargYap(0.67)+BakoBros(1.33)+Psych(0.75)+TTown(0.75)=3.50 | col2: LoganYap(0.67)+SPJGCream(1.33)+Woodbury(0.75)+TillerDays(0.75)=3.50
-  { src: 'images/favs/G6.webp',                       event: '',                      caption: 'Cash T, Milo M, Matt C & Hunter W' },
+  { src: 'images/favs/G6.webp',                       event: 'Pep Rally',             caption: 'Cash T, Milo M, Matt C & Hunter W' },
   { src: 'images/favs/GargYap.webp',                  event: '',                      caption: 'Artin R, Kiana V, Rayan G, Seth P, Logan W, Jayden O & Rayan R' },
   { src: 'images/favs/LoganYap.webp',                 event: '',                      caption: 'Seth P, Logan W & Jayden O' },
   { src: 'images/favs/KVandAM.webp',                  event: 'Senior Blues',          caption: 'Aryanna M & Kiana V' },
   { src: 'images/favs/BakoBros.webp',                 event: 'VE Warriors',           caption: 'Rayan R, Aryanna M, Amreen I & Uma J' },
   { src: 'images/favs/SPJGCream.webp',                event: 'Pie A Senior',          caption: 'Sacha P & Josue G' },
-  { src: 'images/favs/DoUNoticeMe.webp',              event: '',                      caption: 'Milo M' },
+  { src: 'images/favs/DoUNoticeMe.webp',              event: 'Pep Rally',             caption: 'Milo M' },
   { src: 'images/favs/Psych.webp',                    event: '',                      caption: 'Abram M, Kiana V & Aryanna M' },
   { src: 'images/favs/Woodbury.webp',                 event: 'Senior Assassin',       caption: 'Ella S, Jesiah H, Aryanna M, Nyala A, Sierra M, Nancy S & Brandon Ch' },
   { src: 'images/favs/Silencio.webp',                 event: '',                      caption: 'Santino S, Josue G & Daemeon M' },
@@ -2542,9 +2747,9 @@ const FAVORITES = [
   { src: 'images/favs/TillerDays.webp',               event: 'Tustin Tiller Days',    caption: 'Nyala A, Luke D, Aryanna M & Nancy S' },
   // Page 4 — col0: NathanFuego(1.33)+YbSquad(0.67)+JGTuff(0.67)+Albanians(0.75)=3.42 | col1: InNOut(1.33)+SDSUFratLeader(0.67)+ZAandDI(0.67)+PJDay(0.75)=3.42 | col2: Jeromy&Moe(0.75)+PPAP(1.49)+JHandSP(0.75)+PushinP(0.75)=3.74
   { src: 'images/favs/NathanFuego.webp',              event: '',                      caption: 'Nathan H' },
-  { src: 'images/favs/InNOut.webp',                   event: 'After Prom',            caption: 'Milo M, Aryan L & Andrew C' },
+  { src: 'images/favs/InNOut.webp',                   event: 'After Dance',           caption: 'Milo M, Aryan L & Andrew C' },
   { src: 'images/favs/Jeromy&Moe.webp',               event: '',                      caption: 'Jeromy M' },
-  { src: 'images/favs/YbSquad.webp',                  event: '',                      caption: 'Hunter W & Matt C' },
+  { src: 'images/favs/YbSquad.webp',                  event: 'Pep Rally',             caption: 'Hunter W & Matt C' },
   { src: 'images/favs/SDSUFratLeader.webp',           event: '',                      caption: 'Sacha P & Kai A' },
   { src: 'images/favs/PPAP.webp',                     event: '',                      caption: 'Leslie T & Santino S' },
   { src: 'images/favs/JGTuff.webp',                   event: '',                      caption: 'Josue G' },
@@ -2552,10 +2757,10 @@ const FAVORITES = [
   { src: 'images/favs/JHandSP.webp',                  event: '',                      caption: 'Jesiah H & Sacha P' },
   { src: 'images/favs/Albanians.webp',                event: '',                      caption: 'Omar A, Andrew C, James W, Jayden C & Jesiah H' },
   { src: 'images/favs/PJDay.webp',                    event: 'PJ Day',                caption: 'Brandon C & Max C' },
-  { src: 'images/favs/PushinP.webp',                  event: '',                      caption: 'Santino S, Pearce W & Aryan L' },
+  { src: 'images/favs/PushinP.webp',                  event: 'PJ Day',                caption: 'Santino S, Pearce W & Aryan L' },
   // Page 5 — col0: Clappin(0.67)+JGLocked(0.67)+PercandTin(0.75)+PepBoys(0.67)=2.76 | col1: SiplyGoons(0.67)+LiccWork(0.67)+DynamicDuo(0.75)+TheThinker(0.67)=2.76 | col2: SpecialGrade(0.67)+PopIt(0.67)+MadScientist(0.67)+Warming(1.33)=3.34
-  { src: 'images/favs/Clappin.webp',                  event: '',                      caption: 'Jayden T, Cash T & Hunter W' },
-  { src: 'images/favs/SiplyGoons.webp',               event: '',                      caption: 'Santiago C, Milo M & Josue G' },
+  { src: 'images/favs/Clappin.webp',                  event: 'VE Warriors',           caption: 'Jayden T, Cash T & Hunter W' },
+  { src: 'images/favs/SiplyGoons.webp',               event: 'VE Warriors',           caption: 'Santiago C, Milo M & Josue G' },
   { src: 'images/favs/SpecialGrade.webp',             event: '',                      caption: 'Josue G, Kai A, Baran C & Aryan L' },
   { src: 'images/favs/JGLocked.webp',                 event: '',                      caption: 'Josue G' },
   { src: 'images/favs/LiccWork.webp',                 event: '',                      caption: 'Evan M & Danya I' },
@@ -2565,13 +2770,13 @@ const FAVORITES = [
   { src: 'images/favs/MadScientist.webp',             event: '',                      caption: 'Jesiah H, Evelynn N & Leslie T' },
   { src: 'images/favs/PepBoys.webp',                  event: 'Pep Rally',             caption: 'Sacha P, Jesiah H, Santiago C, Nathan H & Jayden T' },
   { src: 'images/favs/TheThinker.webp',               event: '',                      caption: 'Nathan H' },
-  { src: 'images/favs/Warming.webp',                  event: '',                      caption: 'Baran C, Milo M & Aryan L' },
+  { src: 'images/favs/Warming.webp',                  event: 'SoFi Stadium',          caption: 'Baran C, Milo M & Aryan L' },
   // Page 6 — col0: LockedTFIn(1.33)+CholoSquat(0.75)+Twins(1.33)+LayUp(1.33)=4.74 | col1: HugItOut(1.33)+Twizzies(0.75)+TheMack(1.33)+Lonzo(1.33)=4.74 | col2: Cluely(1.33)+PleaseSpeed(0.78)+FlexedUp(1.33)+Raymen(1.33)=4.77
   { src: 'images/favs/LockedTFIn.webp',               event: '',                      caption: 'Josue G & Baran C' },
   { src: 'images/favs/HugItOut.webp',                 event: '',                      caption: 'James W & Santino S' },
   { src: 'images/favs/Cluely.webp',                   event: '',                      caption: 'Milo M, Nico M & Brandon Ch' },
   { src: 'images/favs/CholoSquat.webp',               event: 'Trunk or Treat',        caption: 'Jayden O, Daemeon M & Jayden C' },
-  { src: 'images/favs/Twizzies.webp',                 event: '',                      caption: 'Kailee K & Morgan M' },
+  { src: 'images/favs/Twizzies.webp',                 event: 'Twin Day',              caption: 'Kailee K & Morgan M' },
   { src: 'images/favs/PleaseSpeed.webp',              event: '',                      caption: 'Evan M & Jayden C' },
   { src: 'images/favs/Twins.webp',                    event: '',                      caption: 'Aryan L' },
   { src: 'images/favs/TheMack.webp',                  event: '',                      caption: 'Josue G & Andrew C' },
@@ -2583,7 +2788,7 @@ const FAVORITES = [
   { src: 'images/favs/WhoseHouse.webp',               event: '',                      caption: 'Milo M & Matt C' },
   { src: 'images/favs/Besties.webp',                  event: '',                      caption: 'Santino S, Parin L & Cash T' },
   { src: 'images/favs/Kawaii.webp',                   event: '',                      caption: 'Evelynn N, Carson C & Leslie T' },
-  { src: 'images/favs/LastGame.webp',                 event: '',                      caption: 'Baran C, Josue G & Nico M' },
+  { src: 'images/favs/LastGame.webp',                 event: 'Tustin Soccer',         caption: 'Baran C, Josue G & Nico M' },
   { src: 'images/favs/FunniestJoke.webp',             event: '',                      caption: 'Jayden O & Evelynn N' },
 ];
 
