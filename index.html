@@ -422,6 +422,8 @@
   .rearrange-btn { transition: background 0.2s, color 0.2s, box-shadow 0.18s, transform 0.15s; min-width: 82px; text-align: center; }
   .rearrange-btn.active { background: var(--gold-lt); color: var(--gold); box-shadow: none; }
   .groups-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .groups-grid .ve-card:last-child:nth-child(3n+1) { grid-column: 2; }
+  .groups-grid .ve-card:last-child:nth-child(3n+2) { grid-column: span 2; }
   .person-card {
     flex: 0 0 calc((100% - 72px) / 10);
     aspect-ratio: 1; border-radius: 12px; overflow: hidden; cursor: pointer;
@@ -932,7 +934,7 @@
     <!-- Stats bar -->
     <div class="landing-stats">
       <div class="landing-stat"><div class="landing-stat-num">100</div><div class="landing-stat-label">Seniors</div></div>
-      <div class="landing-stat"><div class="landing-stat-num">20</div><div class="landing-stat-label">Universities</div></div>
+      <div class="landing-stat"><div class="landing-stat-num">22</div><div class="landing-stat-label">Universities</div></div>
       <div class="landing-stat"><div class="landing-stat-num">7</div><div class="landing-stat-label">States</div></div>
     </div>
 
@@ -1330,7 +1332,7 @@ const people = [
   {img:'images/Headshots/Matthew I.webp',name:'Matthew Ibarra',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Matthew is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Danya Ibrahim',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Danya is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Amreen I.webp',name:'Amreen Islam',role:'UCLA — Pre-Law',ig:'@amreenn.i',email:'amreenislam75@gmail.com',birthday:'September 19, 2008',quote:'Everything happens for a reason',quoteBy:'',bio:'Amreen is committed to UCLA, planning to go to law school and become a lawyer or work with the government. Her favorite memory was walking around during class and hanging out at pep rallies. She will miss her friends the most and is most excited to meet new people.'},
-  {img:'images/Headshots/Farishta I.webp',name:'Farishta Islam',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Farishta is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Farishta I.webp',name:'Farishta Islam',role:'UCI — Mechanical Engineering',ig:'@fari.tale.i',email:'fari.islam.22@gmail.com',birthday:'December 22, 2008',quote:'Never accept the world as it appears to be, dare to see it for what it could be.',quoteBy:'',bio:"Farishta is heading to UCI for mechanical engineering, planning to conduct research and internships while competing on rocket and formula car teams, with a master's or PhD and a career in aerospace or automotive engineering in her sights. Her favorite memory at LMA is the Banana Cult — potlucks, karaoke, and a Secret Santa in Mrs. Chung's room. She'll miss the friendships, the proximity to the people she values, unique classes like Philosophy and Rapid Prototyping, and her teachers. She's most excited for the independence and growth that come with a new chapter."},
   {img:'images/Headshots/Uma J.webp',name:'Uma Joshi',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Uma is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Josh K.webp',name:'Josh Kim',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Josh is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Kailee K.webp',name:'Kailee Kwok',role:'IVC — Marketing / Psychology',ig:'@kaileekwok',email:'kailee.kwok@gmail.com',birthday:'December 16, 2007',quote:'Live every day with no regrets because there\'s no promise of tomorrow!',quoteBy:'',bio:'Kailee is committed to IVC, planning to transfer to a UC and pursue a career in marketing or psychology. Her favorite memory was senior year hangouts — especially walking during class and the random late-night car talks. She will miss seeing her friends every day the most and is most excited to see where life takes her.'},
@@ -1351,7 +1353,7 @@ const people = [
   {img:'',name:'Sierra Minjares',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Sierra is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Daemeon M.webp',name:'Daemeon Mitchell',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Daemeon is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Evan M.webp',name:'Evan Morones',role:'4-Year College',ig:'@evan_morones_',email:'evan86386@gmail.com',birthday:'May 15, 2008',quote:'The only thing that matters is who you choose to be in the present.',quoteBy:'',bio:'Evan is committed to a 4-year college, planning to grow into who he chooses to be. He is most excited for what lies ahead.'},
-  {img:'images/Headshots/Shirom M.webp',name:'Shirom Mukherjee',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Shirom is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Shirom M.webp',name:'Shirom Mukherjee',role:'UC Riverside — Education',ig:'@mukherjee.shirom',email:'shirom.mukherjee@gmail.com',birthday:'March 4, 2008',quote:'Life is full of challenges, but all those challenges can lead to different journeys of creativity.',quoteBy:'',bio:"Shirom is heading to UC Riverside, planning to vacation, visit his old teachers, and prep before diving in. In 10 years he sees himself earning a degree in education and becoming a teacher. His favorite memories are the senior events hosted by ASB and the Class of 2026. He'll miss his friends — Elijah, Jackson, Chris, Paloma, and the rest — and is both excited and nervous to start his college chapter."},
   {img:'images/Headshots/Jeromy M.webp',name:'Jeromy Munguia',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Jeromy is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Samana N.webp',name:'Samana Nadig',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Samana is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Evelynn N.webp',name:'Evelynn Ngo',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Evelynn is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
@@ -1623,7 +1625,7 @@ function openGroupSheet(gidx) {
   bannerEl.style.background = color;
   bannerEl.style.backgroundImage = vc?.banner ? `url('${vc.banner}')` : '';
   bannerEl.style.backgroundSize = 'cover';
-  bannerEl.style.backgroundPosition = 'center';
+  bannerEl.style.backgroundPosition = vc?.bannerPos || 'center';
   const avEl = document.getElementById('ve-sheet-avatar');
   avEl.innerHTML = vc?.logo ? `<img src="${vc.logo}" alt="${g.name}">` : initials;
   document.getElementById('ve-sheet-name').textContent = g.name;
@@ -1711,7 +1713,7 @@ const GROUPS = [
   { name: 'TrueVue', members: ['Carson Carter', 'Richard Casillas', 'Rayan Rouhizad', 'Peyton Tan', 'Matthew Ciecek', 'Leslie Tawagon', 'Brent Limbo', 'Baran Cerrahoglu', 'Audrey Lee', 'Rebecca Casillas', 'Mason Nguyen', 'Luke Dinley', 'Pearce Walter', 'Hunter Williams', 'Nathan Saltzer', 'Danya Ibrahim', 'Sierra Minjares', 'Ali Aryan Lalani', 'Max Chang', 'Hannah Spiezer', 'Joshua Saltzer', 'Josh Kim', 'Chris Cowdell'] },
   { name: 'Sunmoon Snacks', members: ['Rayan Garg', 'Katally Lin', 'Michael Hsieh', 'Arnav Sheth', 'Amreen Islam', 'Ava Lorenzana', 'Marie-France Demuro', 'Morgan Melching', 'Samana Nadig', 'Cooper Mayhew', 'Jaedon Baluyut', 'Aryanna Martinez', 'Kailee Kwok', 'Ella Schubert', 'Abram Militante', 'Artin Rastegar', 'Jayden Tamura', 'Alethia Duggan', 'Jayden Ohashi', 'Kiyomi Pizarro'] },
   { name: 'Setta', members: ['Evelynn Ngo', 'Santino Sebastian Salonga', 'Jianna DiLellio', 'Aiza Qureshi', 'Ellie Chung', 'Jesiah Hezekiah', 'Miriam Yassa', 'Connor Paxton', 'Farishta Islam', 'Nathan Hong'] },
-  { name: 'Legacy Enterprises', members: ['Amani Clark', 'Betsy Guevara', 'Brandon Chang', 'Grace De La Cruz', 'Emily Wang', 'Jackson Rowland', 'Janae Alsabti', 'Jeromy Munguia', 'Justin Tangker', 'Logan Haney', 'Logan Woods', 'Matthew Ibarra', 'Murad Malik', 'Nima Parto', 'Paloma Ayala', 'Ryan Yahn', 'Sam Skaron', 'Seth Pham', 'Shirom Mukherjee', 'Zach Avalos'] },
+  { name: 'Legacy Enterprises', members: ['Amani Clark', 'Betsy Guevara', 'Brandon Chang', 'Grace De La Cruz', 'Emily Wang', 'Jackson Rowland', 'Janae Alsabti', 'Jeromy Munguia', 'Justin Tangker', 'Logan Haney', 'Logan Woods', 'Matthew Ibarra', 'Murad Malik', 'Nima Parto', 'Paloma Ayala', 'Ryan Yahn', 'Sam Skaron', 'Seth Pham', 'Shirom Mukherjee', 'Zach Avalos', 'Eden Woods', 'Ibrahim Memon', 'Nyala Ali', 'Omar Anees'] },
   { name: 'Dihcheck', members: ['Sacha Papadakis', 'Nathan Hong', 'Daemeon Mitchell', 'Josue Guzman', 'Santiago Cardenas-Huerta', 'Andrew Camacho', 'Kai Arellano', 'Jayden Cerda', 'Arnav Sheth', 'Omar Anees', 'Rayan Garg', 'Ibrahim Memon', 'James Wang', 'Brent Limbo', 'Jayden Ohashi', 'Brandon Campos', 'Richard Casillas'] },
   { name: 'Sneakyboos', members: ['Nancy Silva', 'Ella Schubert', 'Aryanna Martinez', 'Miriam Yassa', 'Sierra Minjares', 'Nyala Ali', 'Jesiah Hezekiah'] },
 ];
@@ -1719,11 +1721,11 @@ const GROUPS_ORIG = [...GROUPS];
 
 /* ── VE Companies ── */
 const VE_COMPANIES = [
-  { groupName: 'Siply',              handle: 'siply.ve',            color: '#2563eb', banner: 'images/groups/SiplyBanner.webp',  logo: 'images/groups/SiplyLogo.jpg',   site: 'https://siplyca.wixsite.com/siplyve',              igPosts: [] },
-  { groupName: 'TrueVue',            handle: 'truevue.ve',          color: '#059669', banner: null,                              logo: 'images/groups/TruevueLogo.jpg', site: null,                                               igPosts: [] },
-  { groupName: 'Sunmoon Snacks',     handle: 'sunmoonsnacks.ve',    color: '#d97706', banner: null,                              logo: 'images/groups/SunmoonLogo.jpg', site: 'https://emaadi3996.wixsite.com/sunmoonsnacks',      igPosts: [] },
-  { groupName: 'Setta',              handle: 'setta.ve',            color: '#7c3aed', banner: null,                              logo: 'images/groups/SettaLogo.jpg',   site: 'https://settave.framer.website/',                  igPosts: [] },
-  { groupName: 'Legacy Enterprises', handle: '_legacyenterprises_', color: '#374151', banner: null,                              logo: 'images/groups/LegacyLogo.jpg',  site: null,                                               igPosts: [] },
+  { groupName: 'Siply',              handle: 'siply.ve',            color: '#2563eb', banner: 'images/groups/SiplyBanner.webp',    logo: 'images/groups/SiplyLogo.webp',   site: 'https://siplyca.wixsite.com/siplyve',              igPosts: [] },
+  { groupName: 'TrueVue',            handle: 'truevue.ve',          color: '#059669', banner: 'images/groups/TruevueBanner.webp',  logo: 'images/groups/TruevueLogo.webp', site: 'https://truevueca.wixsite.com/truevue',            igPosts: [] },
+  { groupName: 'Sunmoon Snacks',     handle: 'sunmoonsnacks.ve',    color: '#d97706', banner: 'images/groups/SunmoonBanner.webp',  logo: 'images/groups/SunmoonLogo.webp', site: 'https://emaadi3996.wixsite.com/sunmoonsnacks',      igPosts: [] },
+  { groupName: 'Setta',              handle: 'setta.ve',            color: '#7c3aed', banner: 'images/groups/SettaBanner.webp',    logo: 'images/groups/SettaLogo.webp',   site: 'https://settave.framer.website/',  bannerPos: 'center 15%', igPosts: [] },
+  { groupName: 'Legacy Enterprises', handle: '_legacyenterprises_', color: '#374151', banner: null,                               logo: 'images/groups/LegacyLogo.webp',  site: null,                                               igPosts: [] },
 ];
 
 const GROUP_COLORS = ['#6366f1','#ec4899','#14b8a6','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ef4444'];
@@ -1752,7 +1754,7 @@ function renderGroups() {
     const color = groupColor(g.name);
     const initials = g.name.split(' ').map(w => w[0]).slice(0, 2).join('');
     const meta = vc ? `@${vc.handle} · ${members.length} members` : `${members.length} members`;
-    const bannerStyle = vc?.banner ? `background:${color};background-image:url('${vc.banner}');background-size:cover;background-position:center` : `background:${color}`;
+    const bannerStyle = vc?.banner ? `background:${color};background-image:url('${vc.banner}');background-size:cover;background-position:${vc.bannerPos||'center'}` : `background:${color}`;
     const avatarInner = vc?.logo ? `<img src="${vc.logo}" alt="${g.name}">` : initials;
     return `<div class="ve-card card-enter" data-gidx="${GROUPS.indexOf(g)}" style="animation-delay:${idx * 40}ms" onclick="openGroupSheet(${GROUPS.indexOf(g)})">
       <div class="ve-card-banner" style="${bannerStyle}">
@@ -1825,11 +1827,12 @@ const SURVEY_DATA = {
     {text:'Small',value:12},{text:'Communication',value:12},
     {text:'Distinctive',value:10},{text:'Nice',value:11},{text:'Eventful',value:10},{text:'Intriguing',value:10},{text:'Drab',value:10},
     {text:'Entertaining',value:10},{text:'Complex',value:10},{text:'Ok',value:10},
+    {text:'Divergent',value:10},{text:'Creativity',value:10},
   ],
   // pct values must sum to 100 per chart
   collegeCommitments: [
-    { label:'4-year university', pct:61, color:'var(--dark)' },
-    { label:'Community college', pct:39, color:'var(--gold-bright)' },
+    { label:'4-year university', pct:64, color:'var(--dark)' },
+    { label:'Community college', pct:36, color:'var(--gold-bright)' },
   ],
   postGradPlans: [
     { label:'College',          pct:95, color:'var(--dark)' },
@@ -1962,7 +1965,7 @@ const universities = [
   { name:'UC Irvine', city:'Irvine, CA', lat:33.6405, lng:-117.8443, color:'#0064A4', color2:'#FFD200',
     desc:'A rising UC powerhouse in the heart of Orange County, known for research, gaming, and one of the most unique circular campus layouts in the US.',
     img:'https://uci.edu//visit/_imgs/visit-masthead-4.jpg',
-    igPosts: ['DWazkn-Damw', 'DXCgh4mjXa6', 'DXQwuN5ja5H'] },
+    igPosts: ['DWazkn-Damw', 'DXCgh4mjXa6', 'DXQwuN5ja5H', 'DXo63u2ja4o', 'DXpIKvnja0b'] },
   { name:'UC San Diego', city:'La Jolla, CA', lat:32.8801, lng:-117.2340, color:'#182B49', color2:'#C69214',
     desc:'Perched above the Pacific Ocean, UCSD is renowned for science, engineering, and the landmark Geisel Library.',
     img:'https://ucsdtritons.com/images/2020/9/1/geisel_library_1_UCSanDiego.jpg',
@@ -2034,7 +2037,7 @@ const universities = [
   { name:'Northeastern University (Oakland)', city:'Oakland, CA', lat:37.8044, lng:-122.2712, color:'#C8102E', color2:'#231F20',
     desc:'Northeastern\'s Oakland campus is set in the historic former Mills College grounds. Known for its co-op program that alternates coursework with paid work experience — one of the best in the nation for turning a degree into a career.',
     img:'https://msmagazine.com/wp-content/uploads/2022/03/Mills_Hall_Oakland_CA.jpg',
-    igPosts: [] },
+    igPosts: ['DXpsWe6Eowi'] },
   { name:'San Jose State', city:'San Jose, CA', lat:37.3352, lng:-121.8811, color:'#0055A2', color2:'#E5A823',
     desc:'The oldest public institution of higher education on the West Coast, located in the heart of Silicon Valley. SJSU\'s proximity to tech giants makes it a natural launchpad for careers in engineering, business, and the arts.',
     img:'https://upload.wikimedia.org/wikipedia/commons/d/df/Tower_Hall_-_Morris_Dailey_Auditorium_-_San_Jose_State_University.jpg',
@@ -2046,7 +2049,7 @@ const universities = [
   { name:'UC Riverside', city:'Riverside, CA', lat:33.9737, lng:-117.3281, color:'#003DA5', color2:'#F1AB00',
     desc:'A UC campus in the Inland Empire with a rapidly growing research profile and one of the most diverse student bodies in the UC system. Known for strong programs in agricultural sciences, engineering, and business.',
     img:'https://admissions.ucr.edu/sites/default/files/styles/hero_slider_large_wide/public/2024-06/homepage-banner-ucr-campus.jpg?h=75585b40&itok=J7wrLKDF',
-    igPosts: [] },
+    igPosts: ['DXn4uccjdke'] },
   { name:'University of Texas at Dallas', city:'Richardson, TX', lat:32.9858, lng:-96.7502, color:'#E87722', color2:'#154734',
     desc:'A public research university in Richardson, Texas, part of the UT System. Known for strong programs in engineering, computer science, and business, with a rapidly growing research profile in the heart of the Dallas tech corridor.',
     img:'https://www.utdallas.edu/files/2024/04/campus-mall-drone-shot-spring-2023-f9da6375e486abef.jpg',
