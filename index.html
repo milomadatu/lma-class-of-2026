@@ -934,7 +934,7 @@
     <!-- Stats bar -->
     <div class="landing-stats">
       <div class="landing-stat"><div class="landing-stat-num">100</div><div class="landing-stat-label">Seniors</div></div>
-      <div class="landing-stat"><div class="landing-stat-num">22</div><div class="landing-stat-label">Universities</div></div>
+      <div class="landing-stat"><div class="landing-stat-num">24</div><div class="landing-stat-label">Universities</div></div>
       <div class="landing-stat"><div class="landing-stat-num">7</div><div class="landing-stat-label">States</div></div>
     </div>
 
@@ -1005,6 +1005,7 @@
     <button onclick="scrollToSection('arc-events')">In School Events</button>
     <button onclick="scrollToSection('arc-blues')">Senior Blues</button>
     <button onclick="scrollToSection('arc-bonfire')">Senior Bonfire</button>
+    <button onclick="scrollToSection('arc-sdd')">Senior Ditch Day</button>
     <button onclick="scrollToSection('arc-prom')">Prom</button>
     <button onclick="scrollToSection('arc-graduation')">Graduation</button>
   </div>
@@ -1071,12 +1072,22 @@
           <div class="timeline-right"><span class="timeline-arrow">›</span></div>
         </div>
       </div>
+      <div class="timeline-item has-anchor" onclick="scrollToSection('arc-sdd')">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-left">
+            <div class="timeline-title">Senior Ditch Day</div>
+            <div class="timeline-date">Mar 2026</div>
+          </div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
+        </div>
+      </div>
       <div class="timeline-item has-anchor" onclick="scrollToSection('arc-prom')">
         <div class="timeline-dot"></div>
         <div class="timeline-card">
           <div class="timeline-left">
             <div class="timeline-title">Prom</div>
-            <div class="timeline-date">May 2026</div>
+            <div class="timeline-date">Apr 2026</div>
           </div>
           <div class="timeline-right"><span class="timeline-arrow">›</span></div>
         </div>
@@ -1295,7 +1306,7 @@ function loadD3() {
 /* ── People with stock portrait images ── */
 const people = [
   {img:'images/Headshots/Nyala A.webp',name:'Nyala Ali',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Nyala is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'Janae Alsabti',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Janae is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Janae A.webp',name:'Janae Alsabti',role:'Community College → UC / Med School',ig:'@Janae.alsabtiii',email:'janaea0054@mytusd.org',birthday:'May 5, 2008',quote:'Don\'t cry because it\'s over, smile because it happened',quoteBy:'',bio:'Janae is heading to IVC, planning to transfer to a UC or med school. Her favorite memory was finally finding her people. She will miss having so much free time and being able to leave whenever she wanted. She is most excited to see the world through a different lens and learn more about herself outside of high school.'},
   {img:'images/Headshots/Omar A.webp',name:'Omar Anees',role:'IVC → UCI',ig:'@216._omar',email:'omara6502@mytusd.org',birthday:'February 1, 2008',quote:'I\'m gonna learn too I\'m gonna get super smart, so I too can die without money But I\'ll be the smartest dead guy Who has that?',quoteBy:'',bio:'Omar is heading to IVC, planning to transfer to UCI. He will miss the people he\'s met and is most excited to be done with high school.'},
   {img:'images/Headshots/Kai A.webp',name:'Kai Arellano',role:'IVC — Pre-Veterinary',ig:'@kai.arellano',email:'kaia4181@mytusd.org',birthday:'June 20, 2008',quote:'Obsession beats talent every time.',quoteBy:'Adam Sandler',bio:'Kai is headed to IVC, hoping to one day work as a veterinarian and open his own clinic. His favorite memory was the Los Alamos trip with the boys. He will miss hanging out and having fun in class with his friends the most.'},
   {img:'images/Headshots/Zach A.webp',name:'Zach Avalos',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Zach is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
@@ -1310,23 +1321,23 @@ const people = [
   {img:'images/Headshots/Richard C.webp',name:'Richard Casillas',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Richard is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Jayden C.webp',name:'Jayden Cerda',role:'IVC — Photography',ig:'@Vibewth.Jayden',email:'Cerdajay792@gmail.com',birthday:'July 27, 2008',quote:'You will never truly know the value of a moment until it becomes a memory',quoteBy:'',bio:'Jayden is committed to IVC, planning to become a photographer like Larry Chen — or a firefighter. His favorite memory was ESC. He will miss seeing his people every day and is most excited to stop waking up early for school.'},
   {img:'images/Headshots/Baran C.webp',name:'Baran Cerrahoglu',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Baran is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'images/Headshots/Brandon Ch.webp',name:'Brandon Chang',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Brandon is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Brandon Ch.webp',name:'Brandon Chang',role:'Purdue University — Automotive / Motorsports',ig:'@oafishkoala_1159x',email:'brandonchang0907@gmail.com',birthday:'September 7, 2007',quote:'If you\'re having a rough time, just remember that Sisyphus is trapped for eternity.',quoteBy:'',bio:'Brandon is headed to Purdue University, planning to work in the automotive industry designing next-generation motorsport vehicles. His favorite memory was the EV Challenge racing event. He will miss hanging out with friends and is most excited for senior activities in the final stretch of high school.'},
   {img:'images/Headshots/Max C.webp',name:'Max Chang',role:'Community College — College',ig:'@maxiqad',email:'maxchang219@gmail.com',birthday:'May 25, 2008',quote:'Attendance was optional. So was I',quoteBy:'',bio:"Max is headed to community college, planning to finish and then travel the world. His favorite memory was pie-ing a senior. He will miss hanging with friends and is most excited for summer."},
   {img:'images/Headshots/Luna C.webp',name:'Luna Chen',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Luna is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Ellie C.webp',name:'Ellie Chung',role:'UCI — College',ig:'@_____',email:'elliegchung@gmail.com',birthday:'January 9, 2008',quote:'Sometimes you need to take a break from all the work',quoteBy:'',bio:'Ellie is committed to UCI, where she hopes to double major and find work that truly fulfills her. Her favorite memory was karaokeing and having lunch parties with friends. She will miss seeing all her friends daily and is most excited to meet new people.'},
-  {img:'images/Headshots/Matthew C.webp',name:'Matthew Ciecek',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Matthew is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Matthew C.webp',name:'Matthew Ciecek',role:'Colorado State University — Civil Engineering',ig:'@matthew.ciecek',email:'matthew.ciecek@gmail.com',birthday:'April 23, 2008',quote:'Why so serious?',quoteBy:'jonkler',bio:'Matthew is committed to Colorado State University to study Civil Engineering. He sees himself high up in an engineering firm in 10 years, living in Colorado and running a club water polo team. His favorite memory was the 9th grade DC trip. He will miss his friends and California sunsets and is most excited to move to a new state and meet new people.'},
   {img:'images/Headshots/Amani C.webp',name:'Amani Clark',role:'College — University of Texas at Dallas',ig:'@dac_12.4',email:'amanic4060@mytusd.org',birthday:'October 24, 2007',quote:'Keep trying and if you can\'t come up with a solution, game until one comes to you.',quoteBy:'',bio:'Amani is headed to the University of Texas at Dallas, planning to go into business and land a solid job. His favorite memory was karaoke at lunch. He will miss his friends the most and is most excited to make brisket and kick off a new chapter in college.'},
   {img:'images/Headshots/Christopher C.webp',name:'Chris Cowdell',role:'LDS Mission → IVC / UCI — Storytelling',ig:'@chrisandwich_crc',email:'christopherc3090@mytusd.org',birthday:'April 18, 2007',quote:'Being weak is nothing to be ashamed of. Staying weak is.',quoteBy:'',bio:'Chris is departing on a two-year mission for the Church of Jesus Christ of Latter-Day Saints after graduation, then plans to attend college — possibly on a track and field scholarship, or IVC then UCI, pursuing the art of storytelling. His favorite memory was educating students in the weight room through the Fitness Together club. He will miss the teachers and friends he got to know and is most excited to finally tell the stories he has been writing for over eight years.'},
   {img:'images/Headshots/Grace D.webp',name:'Grace De La Cruz',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Grace is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Marie-France Demuro',role:'Community College',ig:'@deffinetly_not_marie',email:'marie-franced2621@mytusd.org',birthday:'April 14, 2008',quote:'From you, 4 years ago.',quoteBy:'',bio:'Marie-France is heading to community college, unsure of exactly what or where, but certain she will be happy doing what feels right. Her favorite memory was realizing she actually has things to contribute. She will miss the sense of familiarity she built but is ready for a new environment and new opportunities.'},
-  {img:'',name:'Jianna DiLellio',role:'UCI — Communication',ig:'@jiannad8',email:'jidilellio@gmail.com',birthday:'July 26, 2008',quote:'Sometimes you don\'t know the value of a moment until it becomes a memory.',quoteBy:'',bio:'Jianna is committed to UCI, planning to find a career and build her independence. Her favorite memory was Senior Sunrise. She will miss the teachers and students the most and is most excited for gaining independence and exploring topics she\'s passionate about.'},
+  {img:'images/Headshots/Jianna D.webp',name:'Jianna DiLellio',role:'UCI — Communication',ig:'@jiannad8',email:'jidilellio@gmail.com',birthday:'July 26, 2008',quote:'Sometimes you don\'t know the value of a moment until it becomes a memory.',quoteBy:'',bio:'Jianna is committed to UCI, planning to find a career and build her independence. Her favorite memory was Senior Sunrise. She will miss the teachers and students the most and is most excited for gaining independence and exploring topics she\'s passionate about.'},
   {img:'',name:'Luke Dinley',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Luke is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Alethia D.webp',name:'Alethia Duggan',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Alethia is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Rayan G.webp',name:'Rayan Garg',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Rayan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Betsy Guevara',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Betsy is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Josue G.webp',name:'Josue Guzman',role:'_____— _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Josue is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Logan Haney',role:'Community College',ig:'',email:'loganh3472@mytusd.org',birthday:'June 28, 2008',quote:'The speed of LMA work has me feeling a burning sensation like Icy-hot',quoteBy:'',bio:'Logan is heading to community college. He will miss Mr. Jones and Dr. M the most and is most excited for getting hella bands.'},
-  {img:'',name:'Jesiah Hezekiah',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Jesiah is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Jesiah H.webp',name:'Jesiah Hezekiah',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Jesiah is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Nathan H.webp',name:'Nathan Hong',role:'Irvine Valley College',ig:'@naate_co',email:'nathanh4787@mytusd.org',birthday:'May 10, 2008',quote:'Don\'t be like Jesiah',quoteBy:'',bio:'Nathan is committed to Irvine Valley College, planning to get to work. His favorite memory was seeing the Check every day. He will miss seeing everyone the most and is most excited for the journey that lies ahead.'},
   {img:'images/Headshots/Michael H.webp',name:'Michael Hsieh',role:'UCSD — Pre-Med',ig:'@codeblue888',email:'michaelh4536@mytusd.org',birthday:'September 14, 2008',quote:'Fun\'s in the challenge',quoteBy:'',bio:'Michael is committed to UCSD, planning for medical residency (or the homeless life). His favorite memory was making jokes in Mrs. Byun\'s Algebra class with his friends. He will miss seeing friends daily and is most excited for new experiences and growth.'},
   {img:'images/Headshots/Matthew I.webp',name:'Matthew Ibarra',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Matthew is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
@@ -1342,7 +1353,7 @@ const people = [
   {img:'images/Headshots/Brent L.webp',name:'Brent Limbo',role:'IVC → UCI — Engineering',ig:'@brentywho',email:'brentl2081@mytusd.org',birthday:'August 4, 2007',quote:'Don\'t lose focus.',quoteBy:'',bio:'Brent is headed to IVC with plans to transfer to UCI, aiming for a career in engineering — whether leading construction projects or doing quality maintenance work on machinery. His favorite memory was escaping point break with Sacha and Nathan. He will miss James the most.'},
   {img:'images/Headshots/Katally L.webp',name:'Katally Lin',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Katally is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Ava L.webp',name:'Ava Lorenzana',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ava is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'images/Headshots/Milo M.webp',name:'Milo Madolora',role:'Northeastern — Business Admin',ig:'@milomadatu',email:'milomadatu@gmail.com',birthday:'April 17, 2008',quote:'Everything I\'m not made me everything I am',quoteBy:'Ye',bio:'Milo Madolora is committed to Northeastern University for Business Administration, planning to find a career in marketing. His favorite memory has been making beats in Mr. Jones\'s class and he will miss walking around the school with his friends the most. Milo is most excited for new experiences in the next 10 years.'},
+  {img:'images/Headshots/Milo M.webp',name:'Milo Madolora',role:'Northeastern — Business Admin',ig:'@milomadatu',email:'milomadatu@gmail.com',birthday:'April 17, 2008',quote:'Everything I\'m not made me everything I am',quoteBy:'',bio:'Milo Madolora is committed to Northeastern University for Business Administration, planning to find a career in marketing. His favorite memory has been making beats in Mr. Jones\'s class and he will miss walking around the school with his friends the most. Milo is most excited for new experiences in the next 10 years.'},
   {img:'images/Headshots/Murad M.webp',name:'Murad Malik',role:'Purdue University',ig:'@_____',email:'muradmalik223@gmail.com',birthday:'February 23, 2008',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Murad is committed to Purdue University, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Aryanna M.webp',name:'Aryanna Martinez',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ary is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Cooper M.webp',name:'Cooper Mayhew',role:'Embry-Riddle Aeronautical University',ig:'@_____',email:'cooperm4484@mytusd.org',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Cooper is committed to Embry-Riddle Aeronautical University (Prescott Campus).'},
@@ -1374,9 +1385,9 @@ const people = [
   {img:'images/Headshots/Nathan S.webp',name:'Nathan Saltzer',role:'IVC → UCLA — Business / Real Estate',ig:'@Nathan_saltzer',email:'nathans2411@mytusd.org',birthday:'February 5, 2008',quote:'Comparison is the thief of joy, be yourself and the right things will happen.',quoteBy:'',bio:'Nathan is heading to IVC, planning to transfer to UCLA to study business of real estate. His favorite memory was playing volleyball with his friends and music class. He will miss his friends and teachers who cared about all of them and the memories they made together.'},
   {img:'images/Headshots/Ella S.webp',name:'Ella Schubert',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ella is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Iffah S.webp',name:'Iffah Sheikh',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Iffah is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'Arnav Sheth',role:'4 Year College — Stanford',ig:'@arnav.sheth19',email:'arnavs5585@mytusd.org',birthday:'November 19, 2007',quote:'',quoteBy:'',bio:'Arnav is headed to Stanford, planning to launch a Y-Combinator startup with Artin Rastegar. His favorite memory was Music Tech class. He is most excited to dive into robotics and explore new opportunities.'},
+  {img:'images/Headshots/Arnav S.webp',name:'Arnav Sheth',role:'4 Year College — Stanford',ig:'@arnav.sheth19',email:'arnavs5585@mytusd.org',birthday:'November 19, 2007',quote:'',quoteBy:'',bio:'Arnav is headed to Stanford, planning to launch a Y-Combinator startup with Artin Rastegar. His favorite memory was Music Tech class. He is most excited to dive into robotics and explore new opportunities.'},
   {img:'images/Headshots/Nancy S.webp',name:'Nancy Silva',role:'University of San Francisco',ig:'@nancesilvaa',email:'nancysilv1231@gmail.com',birthday:'December 30, 2007',quote:'The question isn\'t what are we going to do — the question is what aren\'t we going to do?',quoteBy:'Ferris Bueller',bio:'Nancy is committed to the University of San Francisco, planning to move to SF for college. In ten years she pictures herself in San Diego — married, beachside, with some chickens. Her favorite memory was with Alice Nguyen. She will miss the weekly "Sneakyboo" hangouts and the perfect 80-degree weather most, and is most excited to become a local at a new café and order "the usual."'},
-  {img:'',name:'Sam Skaron',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Sam is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Sam S.webp',name:'Sam Skaron',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Sam is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Hannah S.webp',name:'Hannah Spiezer',role:'Occidental College — Psychology',ig:'@hannahspyer',email:'hannah.wontana@gmail.com',birthday:'March 17, 2008',quote:'There were ups and there were downs, but at least I didn\'t go bald. Oh shit.',quoteBy:'',bio:'Hannah is committed to Occidental College, planning to work as a psychologist in LA. Her favorite memory was graduating. She will miss Mr. Jones the most and is most excited to never touch a Surface Pro again.'},
   {img:'images/Headshots/Jayden T.webp',name:'Jayden Tamura',role:'IVC — College',ig:'@truely_jaydenski',email:'jaydentam29@gmail.com',birthday:'June 29, 2007',quote:'',quoteBy:'',bio:'Jayden is heading to IVC for college. His favorite memory was PE class when they played soccer at ESC after the incident. He will miss getting to meet his friends without having to plan anything every single day and is most excited to see what the future holds. In ten years he sees himself either homeless or extremely successful with a happy life.'},
   {img:'images/Headshots/Peyton T.webp',name:'Peyton Tan',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Peyton is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
@@ -1819,10 +1830,10 @@ function checkPaywall() {
 const SURVEY_DATA = {
   wordCloud: [
     {text:'LMA',value:30},{text:"'26",value:32},{text:'Community',value:24},{text:'Family',value:22},{text:'Leaders',value:18},
-    {text:'Unique',value:24},{text:'Chud',value:20},{text:'Interesting',value:22},{text:'Chill',value:20},
+    {text:'Unique',value:25},{text:'Chud',value:20},{text:'Interesting',value:23},{text:'Chill',value:20},
     {text:'Stellar',value:12},{text:'Mid',value:12},{text:'tight-knit',value:11},{text:'school',value:10},
     {text:'Inspiring',value:16},{text:'Innovative',value:16},{text:'Connected',value:15},
-    {text:'Nostalgic',value:15},{text:'Transformative',value:14},{text:'Goofy',value:14},
+    {text:'Nostalgic',value:15},{text:'Transformative',value:14},{text:'Goofy',value:15},
     {text:'Modest',value:13},{text:'Painful',value:13},{text:'Open',value:13},
     {text:'Small',value:12},{text:'Communication',value:12},
     {text:'Distinctive',value:10},{text:'Nice',value:11},{text:'Eventful',value:10},{text:'Intriguing',value:10},{text:'Drab',value:10},
@@ -1835,8 +1846,8 @@ const SURVEY_DATA = {
     { label:'Community college', pct:36, color:'var(--gold-bright)' },
   ],
   postGradPlans: [
-    { label:'College',          pct:95, color:'var(--dark)' },
-    { label:'Work / gap year',  pct:5,  color:'var(--gold-bright)' },
+    { label:'College',          pct:94, color:'var(--dark)' },
+    { label:'Work / gap year',  pct:6,  color:'var(--gold-bright)' },
     { label:'Military / other', pct:0,  color:'#b0c0d8' },
   ],
 };
@@ -1986,6 +1997,10 @@ const universities = [
     desc:'A Jesuit university set in one of the world\'s most vibrant cities. Known for social justice, law, and stunning views of the Golden Gate.',
     img:'https://www.usfca.edu/sites/default/files/styles/16_9_768x432/public/2022-04/11_01_16_campus_beauty_selects_9826_1.jpg.jpeg?itok=63C7G3K4',
     igPosts: ['DVaL7ikjZCU'] },
+  { name:'San Francisco State', city:'San Francisco, CA', lat:37.7245, lng:-122.4780, color:'#5B2C8D', color2:'#FFB81C',
+    desc:'A public CSU campus at the southwestern edge of San Francisco. Known for its vibrant arts, humanities, and social sciences programs and a deep commitment to social justice and community engagement.',
+    img:'https://future.sfsu.edu/sites/default/files/images/SFSU-drone-campus.png',
+    igPosts: ['DXsWTorj6MZ'] },
   { name:'LMU', city:'Los Angeles, CA', lat:33.9694, lng:-118.4165, color:'#AB0C2F', color2:'#0076A5',
     desc:'A Jesuit university on the bluffs above Marina del Rey with ocean views and a tight-knit community focused on ethics and service.',
     img:'https://admission.lmu.edu/media/homepage/lmu-sacred-heart-chapel.jpg',
@@ -2017,7 +2032,11 @@ const universities = [
   { name:'Irvine Valley College', city:'Irvine, CA', lat:33.6450, lng:-117.7685, color:'#004789', color2:'#C7CACE',
     desc:'A top-ranked community college in Orange County known for its high transfer rates to UC and CSU campuses and strong programs in arts, science, and technology.',
     img:'https://arquitectonica.com/architecture/wp-content/uploads/sites/2/2016/10/Irvine_Valley_College_PAC_2-1920x1080.jpg',
-    igPosts: ['DW0GIYfjaFn', 'DW5tYlBDaZb', 'DXlayvLDVyc'] },
+    igPosts: ['DW0GIYfjaFn', 'DW5tYlBDaZb', 'DXlayvLDVyc', 'DXtDjqRjfue', 'DXtE_bAjajx'] },
+  { name:'Cypress College', city:'Cypress, CA', lat:33.8163, lng:-118.0388, color:'#004B23', color2:'#FFC72C',
+    desc:'A community college in northwestern Orange County serving communities like Anaheim, Buena Park, and Stanton. Known for high transfer rates, strong workforce programs, and a welcoming campus culture.',
+    img:'https://www.thecollegetour.com/wp-content/uploads/2023/08/Cypress-College-Web-Header-1900x700-Pond.jpg',
+    igPosts: ['DXsUG0KAb_w'] },
   { name:'University of La Verne', city:'La Verne, CA', lat:34.1008, lng:-117.7678, color:'#2C5234', color2:'#C4962B',
     desc:'A private university in the San Gabriel Valley known for its personalized education, strong community ties, and diverse student body.',
     img:'https://laverne.edu/news/wp-content/uploads/sites/5/2023/08/20210805-founders-hall-2-2100x1400-0230fbdf-b171-4a11-a38a-77ae84c32549-1920x1280.jpg',
@@ -2057,8 +2076,8 @@ const universities = [
 ];
 
 /* ── Map helpers ── */
-const BAY_AREA_UNIS = ['Stanford University', 'UC Berkeley', 'USF', 'Cabrillo College', 'Northeastern University (Oakland)', 'San Jose State'];
-const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'San Diego State', 'USC', 'LMU', 'Pepperdine University', 'Occidental College', 'Irvine Valley College', 'University of La Verne', 'Cal Poly SLO', 'CSU Long Beach', 'UC Riverside'];
+const BAY_AREA_UNIS = ['Stanford University', 'UC Berkeley', 'USF', 'San Francisco State', 'Cabrillo College', 'Northeastern University (Oakland)', 'San Jose State'];
+const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'San Diego State', 'USC', 'LMU', 'Pepperdine University', 'Occidental College', 'Irvine Valley College', 'Cypress College', 'University of La Verne', 'Cal Poly SLO', 'CSU Long Beach', 'UC Riverside'];
 
 // County FIPS codes (numeric). California state code = 06, so county IDs start with 6xxx.
 const BAY_AREA_COUNTIES = [6001,6013,6041,6055,6075,6081,6085,6087,6095,6097];
@@ -2386,7 +2405,8 @@ function zoomToUni(u, view) {
   const coords = ref.proj([u.lng, u.lat]);
   if (!coords) return;
   const [px, py] = coords;
-  const k = view === 'usa' ? 4 : 3;
+  const minK = view === 'usa' ? 4 : 3;
+  const k = Math.max(d3.zoomTransform(ref.svg.node()).k, minK);
   ref.svg.transition().duration(900).ease(d3.easeCubicInOut).call(
     ref.zoom.transform, d3.zoomIdentity.translate(ref.vw / 2 - k * px, ref.vh / 2 - k * py).scale(k));
 }
@@ -2668,6 +2688,19 @@ const ARCHIVE_SECTIONS = [
       {file:'DT801bBEuFI.webp', post:'DT801bBEuFI'},{file:'DT807LjEvAW.webp', post:'DT807LjEvAW'},
       {file:'DT80-ktEsQ3.webp', post:'DT80-ktEsQ3'},{file:'DT81IGoEos_.webp', post:'DT81IGoEos_'},
       {file:'DT81Ma2kqM5.webp', post:'DT81Ma2kqM5'}
+    ],
+    posts: [] },
+  { id: 'arc-sdd',         label: 'Senior Ditch Day', cols: 3, type: 'p',    comingSoon: false,
+    imgFolder: 'sdd',
+    images: [
+      {file:'DXrh0rVjnn7.webp', post:'DXrh0rVjnn7'},{file:'DXrh8_8DvtA.webp', post:'DXrh8_8DvtA'},
+      {file:'DXriBNjjgzg.webp', post:'DXriBNjjgzg'},{file:'DXriG42DrtX.webp', post:'DXriG42DrtX'},
+      {file:'DXriLqEDvcl.webp', post:'DXriLqEDvcl'},{file:'DXriTsrDsil.webp', post:'DXriTsrDsil'},
+      {file:'DXriVqQjt6z.webp', post:'DXriVqQjt6z'},{file:'DXriYcRjqE7.webp', post:'DXriYcRjqE7'},
+      {file:'DXrianpDup4.webp', post:'DXrianpDup4'},{file:'DXriccijryP.webp', post:'DXriccijryP'},
+      {file:'DXrie-BDqQ6.webp', post:'DXrie-BDqQ6'},{file:'DXrig9XDv3w.webp', post:'DXrig9XDv3w'},
+      {file:'DXrik3pjsOH.webp', post:'DXrik3pjsOH'},{file:'DXripEtDtAX.webp', post:'DXripEtDtAX'},
+      {file:'DXriq6Pjulw.webp', post:'DXriq6Pjulw'}
     ],
     posts: [] },
   { id: 'arc-prom',        label: 'Prom',             cols: 3, type: 'p',    comingSoon: false,
@@ -2988,15 +3021,42 @@ const FAVORITES = [
   { src: 'images/favs/BonnieNClyde.webp',             event: '',                      caption: 'Michael H & Milo M' },
   { src: 'images/favs/Lounge.webp',                   event: '',                      caption: 'Amani C, Farishta I, Luna C, Brandon Ch & Michael H' },
   { src: 'images/favs/Flash.webp',                    event: '',                      caption: 'Andrew C, Santiago C, Brandon Ca & Kai A' },
-  // Page 12 — col0: SiplySquad(1.33)+Girlies(0.75)+Hearts(0.75)=2.83 | col1: Photobooth(1.33)+Dybala(0.75)+Couch(0.75)=2.83 | col2: KingNQueen(1.33)+DubCouch(1.33)=2.66
+  // Page 12 — col0: BCsoaksAM(1.50)+Girlies(0.75)+DubCouch(1.33)+TuffAtBeckman(0.67)=4.25 | col1: SiplySquad(1.33)+Dybala(0.75)+SubmergedtotheMax(1.50)+Scuba(0.67)=4.25 | col2: Photobooth(1.33)+KingNQueen(1.33)+Hearts(0.75)+Couch(0.75)=4.16
+  { src: 'images/favs/BCsoaksAM.webp',                event: 'Soak a Senior',         caption: 'Brandon Ch & Abram M' },
   { src: 'images/favs/SiplySquad.webp',               event: 'VE Warriors',           caption: 'Uma J, Kai A, Santiago C, Josue G, Milo M, James W, Julian A, Elijah B, Nolan E, Daemeon M, Brandon Ca & Jayden C' },
   { src: 'images/favs/Photobooth.webp',               event: 'Prom',                  caption: 'Evan M, Nancy S, Aryanna M & Ryan Y' },
-  { src: 'images/favs/KingNQueen.webp',               event: 'Prom',                  caption: 'Aryanna M & Artin R' },
   { src: 'images/favs/Girlies.webp',                  event: 'Prom',                  caption: 'Leslie T, Kailee K, Aiza Q & Petra M' },
   { src: 'images/favs/Dybala.webp',                   event: '',                      caption: 'Josue G' },
+  { src: 'images/favs/KingNQueen.webp',               event: 'Prom',                  caption: 'Aryanna M & Artin R' },
   { src: 'images/favs/DubCouch.webp',                 event: '',                      caption: 'Milo M, Richard C, Arnav S, Rayan G & Pearce W' },
+  { src: 'images/favs/SubmergedtotheMax.webp',        event: 'Soak a Senior',         caption: 'Max C & Rayan G' },
   { src: 'images/favs/Hearts.webp',                   event: '',                      caption: 'Milo M & James W' },
+  { src: 'images/favs/TuffAtBeckman.webp',            event: '',                      caption: 'Milo M & Brandon Ca' },
+  { src: 'images/favs/Scuba.webp',                    event: '',                      caption: 'Kailee K & Uma J' },
   { src: 'images/favs/Couch.webp',                    event: '',                      caption: 'Milo M & Santiago C' },
+  // Page 13 — col0: ChineseTorture(1.50)+Belligerent(0.67)+LiccSoak(1.50)+Lineup(0.67)=4.34 | col1: CarsonSplash(1.50)+Daycare(0.67)+RowlandSoak(1.50)+RushHour(0.67)=4.34 | col2: Shirom&Jackson(1.50)+DoubleSoak(0.67)+SaigonExecution(1.50)+Squad(0.67)=4.34
+  { src: 'images/favs/ChineseTorture.webp',           event: 'Soak a Senior',         caption: 'Sacha P & Santino S' },
+  { src: 'images/favs/CarsonSplash.webp',             event: 'Soak a Senior',         caption: 'Carson C, Katally L, Rayan G & Arnav S' },
+  { src: 'images/favs/Shirom&Jackson.webp',           event: 'Soak a Senior',         caption: 'Jackson R & Shirom M' },
+  { src: 'images/favs/Belligerent.webp',              event: 'Beckman Volleyball',    caption: 'Sacha P, Baran C & Jayden C' },
+  { src: 'images/favs/Daycare.webp',                  event: '',                      caption: 'Andrew C, Brandon Ca, Baran C & Sacha P' },
+  { src: 'images/favs/DoubleSoak.webp',               event: 'Soak a Senior',         caption: 'Rayan G, Arnav S & Abram M' },
+  { src: 'images/favs/LiccSoak.webp',                 event: 'Soak a Senior',         caption: 'Abram M' },
+  { src: 'images/favs/RowlandSoak.webp',              event: 'Soak a Senior',         caption: 'Jackson R' },
+  { src: 'images/favs/SaigonExecution.webp',          event: 'Soak a Senior',         caption: 'Rayan G' },
+  { src: 'images/favs/Lineup.webp',                   event: '',                      caption: 'Max C, Omar A, Sacha P, Katally L, Rayan G, Arnav S, Abram M & Jackson R' },
+  { src: 'images/favs/RushHour.webp',                 event: '',                      caption: 'Daemeon M & Kailee K' },
+  { src: 'images/favs/Squad.webp',                    event: '',                      caption: 'Sacha P, Andrew C, Baran C, Daemeon M & Omar A' },
+  // Page 14 — col0: TChaseSoak(1.50)+WholeLottAsians(0.67)+UCSystem(0.67)=2.84 | col1: 2sUp(1.00)+UCBUCLA(0.67)+Ultras(0.75)=2.42 | col2: KawaiiDesuNe(1.00)+ThumbsUp(0.67)+T10(0.67)=2.34
+  { src: 'images/favs/TChaseSoak.webp',               event: 'Soak a Senior',         caption: 'Max C & Sacha P' },
+  { src: 'images/favs/2sUp.webp',                     event: '',                      caption: 'Kailee K & Uma J' },
+  { src: 'images/favs/KawaiiDesuNe.webp',             event: '',                      caption: 'Max C & Milo M' },
+  { src: 'images/favs/WholeLottAsians.webp',          event: '',                      caption: 'Jayden O, Max C, Rayan G & Katally L' },
+  { src: 'images/favs/UCBUCLA.webp',                  event: '',                      caption: 'Rayan G & Katally L' },
+  { src: 'images/favs/ThumbsUp.webp',                 event: 'Beckman Volleyball',    caption: 'Uma J, Jayden O & Katally L' },
+  { src: 'images/favs/UCSystem.webp',                 event: '',                      caption: 'Rayan G & Katally L' },
+  { src: 'images/favs/Ultras.webp',                   event: '',                      caption: 'Nathan H, Andrew C, Baran C, Sacha P & Jayden C' },
+  { src: 'images/favs/T10.webp',                      event: 'Soak a Senior',         caption: 'Katally L, Rayan G & Arnav S' },
 ];
 
 let favOrder = FAVORITES.map((_, i) => i);
