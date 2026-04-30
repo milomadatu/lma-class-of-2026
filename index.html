@@ -296,7 +296,11 @@
     border: 1.5px solid transparent; transition: opacity 0.2s, border-color 0.2s;
     position: relative; overflow: hidden;
   }
-  .event-chip.past { opacity: 0.3; }
+  .event-chip.past { background: transparent; border-color: rgba(0,0,0,0.05); }
+  .event-chip.past .event-chip-name,
+  .event-chip.past .event-chip-date,
+  .event-chip.past .event-chip-detail,
+  .event-chip.past .event-chip-days { color: var(--ink-2); }
   .event-chip.upcoming { border-color: var(--gold); background: var(--gold-lt); }
   .event-chip.grad-chip { background: var(--dark); border-color: transparent; }
   .event-chip-date { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-2); margin-bottom: 2px; }
@@ -308,7 +312,6 @@
   .event-chip.grad-chip .event-chip-detail { color: rgba(255,255,255,0.7); }
   .event-chip-days { font-size: 10px; font-weight: 700; color: var(--ink-2); margin-top: 6px; }
   .event-chip.upcoming .event-chip-days { color: #7a5520; }
-  .event-chip.past .event-chip-days { color: var(--ink-2); }
   .event-chip.grad-chip .event-chip-days { color: var(--gold-bright); }
   /* ── Archive ── */
   #page-archive, #page-archive * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; }
@@ -875,9 +878,9 @@
     <div class="mobile-hero">
       <div class="mobile-hero-slides">
         <div class="mobile-hero-slide active" style="background-image:url('images/Class Photo (Mobile).webp')"></div>
-        <div class="mobile-hero-slide" style="background-image:url('images/SeniorBlues (Mobile).webp')"></div>
-        <div class="mobile-hero-slide" style="background-image:url('images/SeniorSunriseGroup (Mobile).webp')"></div>
-        <div class="mobile-hero-slide" style="background-image:url('images/26 (Mobile).webp')"></div>
+        <div class="mobile-hero-slide" data-bg="images/SeniorBlues (Mobile).webp"></div>
+        <div class="mobile-hero-slide" data-bg="images/SeniorSunriseGroup (Mobile).webp"></div>
+        <div class="mobile-hero-slide" data-bg="images/26 (Mobile).webp"></div>
       </div>
       <div class="mobile-hero-overlay"></div>
       <div class="mobile-hero-content">
@@ -894,9 +897,9 @@
     <div class="hero-section">
       <div class="hero-slides">
         <div class="hero-slide active" style="background-image:url('images/Class Photo (Desktop).webp')"></div>
-        <div class="hero-slide" style="background-image:url('images/26 (Desktop).webp')"></div>
-        <div class="hero-slide" style="background-image:url('images/SeniorSunriseGroup (Desktop).webp')"></div>
-        <div class="hero-slide" style="background-image:url('images/SeniorBlues (Desktop).webp')"></div>
+        <div class="hero-slide" data-bg="images/26 (Desktop).webp"></div>
+        <div class="hero-slide" data-bg="images/SeniorSunriseGroup (Desktop).webp"></div>
+        <div class="hero-slide" data-bg="images/SeniorBlues (Desktop).webp"></div>
       </div>
       <div class="hero-overlay"></div>
       <div class="hero-indicators">
@@ -3252,28 +3255,36 @@ function setArchiveView(view) {
   const slides = document.querySelectorAll('.hero-slide');
   const dots   = document.querySelectorAll('.hero-dot');
   let cur = 0, timer;
+  function loadSlide(s) { if (s.dataset.bg) { s.style.backgroundImage = `url('${s.dataset.bg}')`; delete s.dataset.bg; } }
   function goTo(i) {
     slides[cur].classList.remove('active');
     dots[cur].classList.remove('active');
     cur = i;
+    loadSlide(slides[cur]);
     slides[cur].classList.add('active');
     dots[cur].classList.add('active');
   }
   window.goHeroSlide = function(i) { clearInterval(timer); goTo(i); timer = setInterval(next, 6000); };
   function next() { goTo((cur + 1) % slides.length); }
   timer = setInterval(next, 6000);
+  const preloadRest = () => slides.forEach(loadSlide);
+  'requestIdleCallback' in window ? requestIdleCallback(preloadRest, {timeout: 4000}) : setTimeout(preloadRest, 3000);
 })();
 
 /* ── Mobile hero slideshow ── */
 (function() {
   const slides = document.querySelectorAll('.mobile-hero-slide');
   if (slides.length < 2) return;
+  function loadSlide(s) { if (s.dataset.bg) { s.style.backgroundImage = `url('${s.dataset.bg}')`; delete s.dataset.bg; } }
   let cur = 0;
   setInterval(() => {
     slides[cur].classList.remove('active');
     cur = (cur + 1) % slides.length;
+    loadSlide(slides[cur]);
     slides[cur].classList.add('active');
   }, 6000);
+  const preloadRest = () => slides.forEach(loadSlide);
+  'requestIdleCallback' in window ? requestIdleCallback(preloadRest, {timeout: 4000}) : setTimeout(preloadRest, 3000);
 })();
 
 /* ── Confetti ── */
