@@ -523,6 +523,14 @@
   .ve-sheet-main { flex: 1; overflow-y: auto; padding: 16px 20px; min-height: 0; }
   .ve-sheet-members-label { font-size: 11px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
   .ve-sheet-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .ve-sheet-photo-strip { padding: 0 16px 16px; }
+  .ve-sheet-photo-strip-label { font-size: 11px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+  .ve-sheet-photo-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+  .ve-sheet-photo-thumb { aspect-ratio: 1; border-radius: 8px; overflow: hidden; cursor: pointer; background: var(--bg); transition: transform 0.15s; }
+  .ve-sheet-photo-thumb:active { transform: scale(0.93); }
+  .ve-sheet-photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ve-sheet-photo-more { aspect-ratio: 1; border-radius: 8px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--ink-2); cursor: pointer; transition: background 0.15s; }
+  .ve-sheet-photo-more:active { background: var(--border); }
   .ve-sheet-footer { padding: 12px 20px 16px; border-top: 0.5px solid var(--border); flex-shrink: 0; }
   @media (min-width: 769px) {
     .ve-sheet { position: absolute; top: 50%; left: 50%; right: auto; bottom: auto; transform: translate(-50%,-44%) scale(0.96); width: 800px; border-radius: 22px; max-height: 76vh; opacity: 0; transition: transform 0.28s cubic-bezier(0.34,1.2,0.64,1), opacity 0.2s ease; flex-direction: column; }
@@ -936,7 +944,7 @@
 
     <!-- Stats bar -->
     <div class="landing-stats">
-      <div class="landing-stat"><div class="landing-stat-num">100</div><div class="landing-stat-label">Seniors</div></div>
+      <div class="landing-stat"><div class="landing-stat-num">101</div><div class="landing-stat-label">Seniors</div></div>
       <div class="landing-stat"><div class="landing-stat-num">24</div><div class="landing-stat-label">Universities</div></div>
       <div class="landing-stat"><div class="landing-stat-num">7</div><div class="landing-stat-label">States</div></div>
     </div>
@@ -1237,6 +1245,7 @@
           <a class="ve-sheet-ig-btn" id="ve-sheet-ig-btn" href="#" target="_blank" rel="noopener">View their Site →</a>
         </div>
         <div class="ve-sheet-posts" id="ve-sheet-posts"></div>
+        <div class="ve-sheet-photo-strip" id="ve-sheet-photo-strip" style="display:none"></div>
       </div>
       <div class="ve-sheet-main">
         <div class="ve-sheet-members-label" id="ve-sheet-members-label"></div>
@@ -1673,7 +1682,37 @@ function openGroupSheet(gidx) {
     postsEl.innerHTML = '';
     postsEl.style.display = 'none';
   }
-  document.getElementById('ve-sheet-photos-btn').onclick = () => seeGroupPhotos(g.name);
+  const photoBtn = document.getElementById('ve-sheet-photos-btn');
+  photoBtn.onclick = () => seeGroupPhotos(g.name);
+  const photoStrip = document.getElementById('ve-sheet-photo-strip');
+  if (!vc) {
+    const matchedFavs = FAVORITES.filter(f => g.members.some(name => {
+      const parts = name.split(' ');
+      const fn = parts[0], ln = parts[parts.length - 1];
+      return f.caption.split(/,\s*|\s*&\s*/).some(tok => {
+        const tp = tok.trim().split(/\s+/);
+        return tp[0] === fn && (tp.length < 2 || ln.startsWith(tp[1]));
+      });
+    }));
+    if (matchedFavs.length) {
+      const safe = g.name.replace(/'/g, "\\'");
+      const shown = matchedFavs.slice(0, 6);
+      const extra = matchedFavs.length - shown.length;
+      photoStrip.innerHTML = `<div class="ve-sheet-photo-strip-label">Photos · ${matchedFavs.length}</div>
+        <div class="ve-sheet-photo-row">
+          ${shown.map(f => `<div class="ve-sheet-photo-thumb" onclick="seeGroupPhotos('${safe}')"><img src="${f.src}" alt="" loading="lazy"></div>`).join('')}
+          ${extra > 0 ? `<div class="ve-sheet-photo-more" onclick="seeGroupPhotos('${safe}')">+${extra}</div>` : ''}
+        </div>`;
+      photoStrip.style.display = '';
+      photoBtn.textContent = `See all ${matchedFavs.length} photos →`;
+    } else {
+      photoStrip.style.display = 'none';
+      photoBtn.textContent = 'See their photos →';
+    }
+  } else {
+    photoStrip.style.display = 'none';
+    photoBtn.textContent = 'See their photos →';
+  }
   document.getElementById('ve-sheet-overlay').classList.add('open');
 }
 function closeGroupSheet() {
@@ -1995,7 +2034,7 @@ const universities = [
   { name:'USC', city:'Los Angeles, CA', lat:34.0224, lng:-118.2851, color:'#990000', color2:'#FFC72C',
     desc:'A private research powerhouse in the heart of LA. Home to one of the top film schools in the world and the legendary Tommy Trojan.',
     img:'https://i0.wp.com/calmatters.org/wp-content/uploads/2025/10/072825-USC-Campus-AP-CM.jpg?fit=2000%2C1333&ssl=1/',
-    igPosts: ['DTzYn90FPnx', 'DUTuwBHks10'] },
+    igPosts: ['DTzYn90FPnx', 'DUTuwBHks10', 'DXvq84cjRWn'] },
   { name:'USF', city:'San Francisco, CA', lat:37.7764, lng:-122.4506, color:'#006A4E', color2:'#A88B4A',
     desc:'A Jesuit university set in one of the world\'s most vibrant cities. Known for social justice, law, and stunning views of the Golden Gate.',
     img:'https://www.usfca.edu/sites/default/files/styles/16_9_768x432/public/2022-04/11_01_16_campus_beauty_selects_9826_1.jpg.jpeg?itok=63C7G3K4',
@@ -3096,8 +3135,12 @@ function getFavFiltered() {
   if (matchedGroup) {
     return ordered.filter(({ f }) => matchedGroup.members.some(name => {
       const parts = name.split(' ');
-      const short = parts[0] + ' ' + parts[parts.length - 1][0];
-      return f.caption.includes(short);
+      const firstName = parts[0];
+      const lastName = parts[parts.length - 1];
+      return f.caption.split(/,\s*|\s*&\s*/).some(token => {
+        const tp = token.trim().split(/\s+/);
+        return tp[0] === firstName && (tp.length < 2 || lastName.startsWith(tp[1]));
+      });
     }));
   }
   return ordered.filter(({ f }) => (f.event + ' ' + f.caption).toLowerCase().includes(q));
