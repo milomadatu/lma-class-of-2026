@@ -318,6 +318,7 @@
   .section-label { font-size: 11px; font-weight: 500; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
   .section-title { font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 4px; }
   .archive-section { margin-bottom: 2.25rem; }
+  .arc-stub { height: 320px; background: var(--bg); border-radius: var(--radius); }
   .archive-section:last-child { margin-bottom: 0; }
   .archive-skeleton { height: 320px; border-radius: 12px; background: linear-gradient(90deg, var(--bg) 25%, #ebebed 50%, var(--bg) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
   @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
@@ -593,6 +594,17 @@
   .popup-nav-btn:disabled { opacity: 0.25; cursor: default; }
   .popup-nav-pos { font-size: 11px; color: var(--ink-3); font-weight: 500; letter-spacing: 0.04em; }
 
+  /* ── Archive lightbox ── */
+  #arc-lightbox { position: fixed; inset: 0; z-index: 60; background: rgba(0,0,0,0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; pointer-events: none; opacity: 0; transition: opacity 0.22s; }
+  #arc-lightbox.open { opacity: 1; pointer-events: all; }
+  #arc-lb-img { max-width: min(92vw, 1000px); max-height: 78vh; border-radius: 12px; object-fit: contain; opacity: 0; transform: scale(0.96); transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34,1.2,0.64,1); }
+  #arc-lightbox.open #arc-lb-img { opacity: 1; transform: scale(1); }
+  #arc-lb-close { position: absolute; top: 16px; right: 16px; width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.12); border: none; color: #fff; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+  #arc-lb-close:hover { background: rgba(255,255,255,0.25); }
+  #arc-lb-ig { display: inline-flex; align-items: center; gap: 6px; padding: 10px 22px; border-radius: 980px; background: #fff; color: #000; font-size: 14px; font-weight: 700; text-decoration: none; opacity: 0; transition: opacity 0.22s ease 0.1s, background 0.15s; }
+  #arc-lightbox.open #arc-lb-ig { opacity: 1; }
+  #arc-lb-ig:hover { background: rgba(255,255,255,0.88); }
+
   /* ── Stats fade-in ── */
   .stat-block {
     opacity: 0;
@@ -664,7 +676,7 @@
   .map-panel-ig::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
   .stat-card { font-size: 11px; font-weight: 500; background: var(--gold-lt); color: var(--gold); border-radius: 10px; padding: 8px 12px; position: absolute; top: 12px; right: 12px; }
   .stat-card strong { display: block; font-size: 20px; font-weight: 700; color: var(--ink); }
-  .word-cloud { width: 100%; max-width: 680px; margin: 0 auto 1.5rem; }
+  .word-cloud { width: 100%; max-width: 960px; margin: 0 auto 1.5rem; }
   .word-cloud svg { display: block; width: 100%; height: auto; }
   .pie-section { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .pie-card { background: var(--surface); border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow-sm); }
@@ -945,8 +957,8 @@
     <!-- Stats bar -->
     <div class="landing-stats">
       <div class="landing-stat"><div class="landing-stat-num">101</div><div class="landing-stat-label">Seniors</div></div>
-      <div class="landing-stat"><div class="landing-stat-num">24</div><div class="landing-stat-label">Universities</div></div>
-      <div class="landing-stat"><div class="landing-stat-num">7</div><div class="landing-stat-label">States</div></div>
+      <div class="landing-stat"><div class="landing-stat-num">27</div><div class="landing-stat-label">Universities</div></div>
+      <div class="landing-stat"><div class="landing-stat-num">8</div><div class="landing-stat-label">States</div></div>
     </div>
 
 <div class="landing-extra">
@@ -993,7 +1005,7 @@
   </div>
   <div class="favorites-view" id="favorites-view">
     <div class="fav-search-bar">
-      <input class="fav-search" id="fav-search" type="search" placeholder="Search favorites…" oninput="favPage=0;renderFavorites()" autocomplete="off">
+      <input class="fav-search" id="fav-search" type="search" placeholder="Search favorites…" oninput="debouncedFavSearch()" autocomplete="off">
       <button class="shuffle-btn" id="fav-shuffle-btn" onclick="toggleFavShuffle()" style="min-width:72px">Shuffle</button>
       <div id="fav-pagination-top" style="display:none;align-items:center;gap:6px;margin-left:auto">
         <button class="fav-page-btn" id="fav-prev-btn-top" onclick="favPageNav(-1)">&#8592;</button>
@@ -1145,7 +1157,7 @@
           <button class="view-btn active" data-view="grid" onclick="setPeopleView('grid')">Grid</button>
           <button class="view-btn" data-view="groups" onclick="setPeopleView('groups')">Groups</button>
         </div>
-        <input class="people-search" id="people-search" type="search" placeholder="Search people…" oninput="renderGrid();renderGroups()" autocomplete="off">
+        <input class="people-search" id="people-search" type="search" placeholder="Search people…" oninput="debouncedPeopleSearch()" autocomplete="off">
         <div style="display:flex;gap:8px;">
           <button class="shuffle-btn" id="shuffle-btn" onclick="toggleShuffle()">Shuffle</button>
           <button class="shuffle-btn rearrange-btn" id="rearrange-btn" onclick="toggleRearrange()">Rearrange</button>
@@ -1282,6 +1294,13 @@
   </div>
 </div>
 
+<!-- Archive lightbox -->
+<div id="arc-lightbox" onclick="if(event.target===this)closeArcLightbox()">
+  <button id="arc-lb-close" onclick="closeArcLightbox()">✕</button>
+  <img id="arc-lb-img" src="" alt="">
+  <a id="arc-lb-ig" href="#" target="_blank" rel="noopener">View on Instagram ↗</a>
+</div>
+
 <!-- Favorites lightbox -->
 <div id="fav-lightbox" onclick="if(event.target===this)closeFavLightbox()">
   <button id="fav-lb-close" onclick="closeFavLightbox()">✕</button>
@@ -1343,12 +1362,12 @@ const people = [
   {img:'images/Headshots/Grace D.webp',name:'Grace De La Cruz',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Grace is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Marie-France Demuro',role:'Community College',ig:'@deffinetly_not_marie',email:'marie-franced2621@mytusd.org',birthday:'April 14, 2008',quote:'From you, 4 years ago.',quoteBy:'',bio:'Marie-France is heading to community college, unsure of exactly what or where, but certain she will be happy doing what feels right. Her favorite memory was realizing she actually has things to contribute. She will miss the sense of familiarity she built but is ready for a new environment and new opportunities.'},
   {img:'images/Headshots/Jianna D.webp',name:'Jianna DiLellio',role:'UCI — Communication',ig:'@jiannad8',email:'jidilellio@gmail.com',birthday:'July 26, 2008',quote:'Sometimes you don\'t know the value of a moment until it becomes a memory.',quoteBy:'',bio:'Jianna is committed to UCI, planning to find a career and build her independence. Her favorite memory was Senior Sunrise. She will miss the teachers and students the most and is most excited for gaining independence and exploring topics she\'s passionate about.'},
-  {img:'',name:'Luke Dinley',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Luke is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Luke D.webp',name:'Luke Dinley',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Luke is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Alethia D.webp',name:'Alethia Duggan',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Alethia is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Rayan G.webp',name:'Rayan Garg',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Rayan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Betsy Guevara',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Betsy is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Josue G.webp',name:'Josue Guzman',role:'_____— _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Josue is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'Logan Haney',role:'Community College',ig:'',email:'loganh3472@mytusd.org',birthday:'June 28, 2008',quote:'The speed of LMA work has me feeling a burning sensation like Icy-hot',quoteBy:'',bio:'Logan is heading to community college. He will miss Mr. Jones and Dr. M the most and is most excited for getting hella bands.'},
+  {img:'images/Headshots/Logan H.webp',name:'Logan Haney',role:'Community College',ig:'',email:'loganh3472@mytusd.org',birthday:'June 28, 2008',quote:'The speed of LMA work has me feeling a burning sensation like Icy-hot',quoteBy:'',bio:'Logan is heading to community college. He will miss Mr. Jones and Dr. M the most and is most excited for getting hella bands.'},
   {img:'images/Headshots/Jesiah H.webp',name:'Jesiah Hezekiah',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Jesiah is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Nathan H.webp',name:'Nathan Hong',role:'Irvine Valley College',ig:'@naate_co',email:'nathanh4787@mytusd.org',birthday:'May 10, 2008',quote:'Don\'t be like Jesiah',quoteBy:'',bio:'Nathan is committed to Irvine Valley College, planning to get to work. His favorite memory was seeing the Check every day. He will miss seeing everyone the most and is most excited for the journey that lies ahead.'},
   {img:'images/Headshots/Michael H.webp',name:'Michael Hsieh',role:'UCSD — Pre-Med',ig:'@codeblue888',email:'michaelh4536@mytusd.org',birthday:'September 14, 2008',quote:'Fun\'s in the challenge',quoteBy:'',bio:'Michael is committed to UCSD, planning for medical residency (or the homeless life). His favorite memory was making jokes in Mrs. Byun\'s Algebra class with his friends. He will miss seeing friends daily and is most excited for new experiences and growth.'},
@@ -1364,7 +1383,7 @@ const people = [
   {img:'images/Headshots/Audrey L.webp',name:'Audrey Lee',role:'4 Year College — USC',ig:'@aud._lee',email:'audreyl6276@mytusd.org',birthday:'September 24, 2007',quote:'The world is more malleable than you think, and it\'s waiting for you to hammer it into shape.',quoteBy:'Bono',bio:'Audrey is headed to USC, planning to travel after graduation and live an emotionally fulfilling, socially impactful life. Her favorite memory was blasting music in the van to and from Bako with her friends and Mr. Moe. She will miss her teachers the most and is most excited to live in LA.'},
   {img:'images/Headshots/Brent L.webp',name:'Brent Limbo',role:'IVC → UCI — Engineering',ig:'@brentywho',email:'brentl2081@mytusd.org',birthday:'August 4, 2007',quote:'Don\'t lose focus.',quoteBy:'',bio:'Brent is headed to IVC with plans to transfer to UCI, aiming for a career in engineering — whether leading construction projects or doing quality maintenance work on machinery. His favorite memory was escaping point break with Sacha and Nathan. He will miss James the most.'},
   {img:'images/Headshots/Katally L.webp',name:'Katally Lin',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Katally is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'images/Headshots/Ava L.webp',name:'Ava Lorenzana',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ava is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Ava L.webp',name:'Ava Lorenzana',role:'Cypress College — Nursing',ig:'@avaa.lor',email:'aval4530@mytusd.org',birthday:'December 3, 2007',quote:'I think, therefore, I am',quoteBy:'Billie Eilish',bio:"Ava is committed to Cypress College to play volleyball, planning to become a Nurse Practitioner working in the NICU. Her favorite memory was Senior Ditch Day. She will miss her friends the most and is most excited for making new connections and meeting new people."},
   {img:'images/Headshots/Milo M.webp',name:'Milo Madolora',role:'Northeastern — Business Admin',ig:'@milomadatu',email:'milomadatu@gmail.com',birthday:'April 17, 2008',quote:'Everything I\'m not made me everything I am',quoteBy:'',bio:'Milo Madolora is committed to Northeastern University for Business Administration, planning to find a career in marketing. His favorite memory has been making beats in Mr. Jones\'s class and he will miss walking around the school with his friends the most. Milo is most excited for new experiences in the next 10 years.'},
   {img:'images/Headshots/Murad M.webp',name:'Murad Malik',role:'Purdue University',ig:'@_____',email:'muradmalik223@gmail.com',birthday:'February 23, 2008',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Murad is committed to Purdue University, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Aryanna M.webp',name:'Aryanna Martinez',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ary is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
@@ -1373,7 +1392,7 @@ const people = [
   {img:'images/Headshots/Ibrahim M.webp',name:'Ibrahim Memon',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Ibrahim is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'',name:'Nico Mena',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Nico is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Abram M.webp',name:'Abram Militante',role:'Oregon State University — Exploration',ig:'@abrammilit_',email:'abramrocks@gmail.com',birthday:'June 6, 2008',quote:'Live for the now, it creates the moments you\'ll leave in the past and sets the stage for the future.',quoteBy:'',bio:'Abram is committed to Oregon State University (Go Beavs!!!), going in exploration mode. His favorite memory was senior brunch. He will miss all the people he\'s connected with and the memories made, and is most excited for exploring new things and the unknown — no huzz in sight.'},
-  {img:'',name:'Sierra Minjares',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Sierra is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Sierra M.webp',name:'Sierra Minjares',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Sierra is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Daemeon M.webp',name:'Daemeon Mitchell',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Daemeon is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Evan M.webp',name:'Evan Morones',role:'4-Year College',ig:'@evan_morones_',email:'evan86386@gmail.com',birthday:'May 15, 2008',quote:'The only thing that matters is who you choose to be in the present.',quoteBy:'',bio:'Evan is committed to a 4-year college, planning to grow into who he chooses to be. He is most excited for what lies ahead.'},
   {img:'images/Headshots/Shirom M.webp',name:'Shirom Mukherjee',role:'UC Riverside — Education',ig:'@mukherjee.shirom',email:'shirom.mukherjee@gmail.com',birthday:'March 4, 2008',quote:'Life is full of challenges, but all those challenges can lead to different journeys of creativity.',quoteBy:'',bio:"Shirom is heading to UC Riverside, planning to vacation, visit his old teachers, and prep before diving in. In 10 years he sees himself earning a degree in education and becoming a teacher. His favorite memories are the senior events hosted by ASB and the Class of 2026. He'll miss his friends — Elijah, Jackson, Chris, Paloma, and the rest — and is both excited and nervous to start his college chapter."},
@@ -1388,7 +1407,7 @@ const people = [
   {img:'images/Headshots/Destiny P.webp',name:'Destiny Vivianna Perez',role:'University of La Verne — Elementary Education',ig:'@destinyvivianna',email:'destinyviviperez100807@gmail.com',birthday:'October 8, 2007',quote:'The only way to get what you want in this world is through hard work',quoteBy:'Tiana',bio:'Destiny is committed to University of La Verne for Elementary Education, planning to teach in her own personalized classroom while building a family of her own. Her favorite memory was the Washington DC trip freshman year. She will miss her best friend Amani the most and is most excited to finally experience what college life feels like.'},
   {img:'images/Headshots/Seth P.webp',name:'Seth Pham',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Seth is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Kiyomi P.webp',name:'Kiyomi Pizarro',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Kiyomi is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'images/Headshots/Aiza Q.webp',name:'Aiza Qureshi',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Aiza is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Aiza Q.webp',name:'Aiza Qureshi',role:'Community College — Pre-Med',ig:'@aizaquresh.i',email:'aizaqureshi@gmail.com',birthday:'July 30, 2008',quote:'sometimes you will never notice the value of a moment until it becomes a memory',quoteBy:'',bio:'Aiza is committed to community college, planning to transfer and pursue medicine with a goal of becoming a doctor. Her favorite memory was the Bakersfield VE trip. She will miss laughing with her friends every day and is most excited to meet new people.'},
   {img:'images/Headshots/Artin R.webp',name:'Artin Rastegar',role:'UC Berkeley — Entrepreneurship',ig:'@artin_4097',email:'artinrastegar3@gmail.com',birthday:'August 13, 2007',quote:'When the tough gets tough, the tough gets going.',quoteBy:'',bio:'Artin is committed to UC Berkeley, majoring in Entrepreneurship, planning to become an affluent venture capitalist and startup founder. His favorite memory was putting on music and playing ping pong at the gym. He will miss his classmates and teachers the most and is most excited to socialize and meet new people.'},
   {img:'images/Headshots/Rayan R.webp',name:'Rayan Rouhizad',role:'IVC → UC — Data Science',ig:'@nbgr4yan',email:'rayanrouhizad111@gmail.com',birthday:'June 25, 2008',quote:'Not every day is a good day, but there\'s good in every day.',quoteBy:'',bio:'Rayan is committed to IVC, planning to transfer to a UC for Data Science, then get his MBA and work in marketing or AI. His favorite memory was the multicultural fair — they last-minute left school to buy all the ingredients the day of, with seniors helping make the food. He will miss having something to do every day and ditching class to walk around campus with his friends.'},
   {img:'images/Headshots/Jackson R.webp',name:'Jackson Rowland',role:'Santa Ana College — Welding',ig:'',email:'jacksonr5591@mytusd.org',birthday:'December 16, 2007',quote:'There are things in this world that you\'re not meant to see, however if you are able to grasp such a thing then go for it!',quoteBy:'',bio:'Jackson is headed to Santa Ana College to study welding, with plans to weld and build a game on the side — and a few more things he\'s keeping to himself. His favorite memory was all of them. He has no regrets and is ready for whatever comes next.'},
@@ -1421,6 +1440,10 @@ const people = [
 ];
 
 let popupOrder = [], popupIdx = -1;
+
+function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+const debouncedPeopleSearch = debounce(() => { renderGrid(); renderGroups(); }, 150);
+const debouncedFavSearch    = debounce(() => { favPage = 0; renderFavorites(); }, 150);
 
 function renderGrid() {
   const grid = document.getElementById('people-grid');
@@ -1638,6 +1661,16 @@ function closePopup() {
   document.getElementById('popup').classList.remove('open');
 }
 
+function openArcLightbox(src, post) {
+  document.getElementById('arc-lb-img').src = src;
+  document.getElementById('arc-lb-ig').href = `https://www.instagram.com/p/${post}/`;
+  document.getElementById('arc-lightbox').classList.add('open');
+}
+
+function closeArcLightbox() {
+  document.getElementById('arc-lightbox').classList.remove('open');
+}
+
 function openGroupSheet(gidx) {
   const g = GROUPS[gidx];
   const members = g.members.map(name => people.find(p => p.name === name)).filter(Boolean);
@@ -1741,7 +1774,7 @@ function popupNav(dir) {
   if (newPos >= 0 && newPos < popupOrder.length) openPopup(popupOrder[newPos]);
 }
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closePopup(); closeFavLightbox(); closeGroupSheet(); }
+  if (e.key === 'Escape') { closePopup(); closeFavLightbox(); closeGroupSheet(); closeArcLightbox(); }
   if (document.getElementById('popup').classList.contains('open')) {
     if (e.key === 'ArrowLeft') popupNav(-1);
     if (e.key === 'ArrowRight') popupNav(1);
@@ -1874,7 +1907,7 @@ const SURVEY_DATA = {
     {text:'LMA',value:30},{text:"'26",value:32},{text:'Community',value:24},{text:'Family',value:22},{text:'Leaders',value:18},
     {text:'Unique',value:25},{text:'Chud',value:20},{text:'Interesting',value:23},{text:'Chill',value:20},
     {text:'Stellar',value:12},{text:'Mid',value:12},{text:'tight-knit',value:11},{text:'school',value:10},
-    {text:'Inspiring',value:16},{text:'Innovative',value:16},{text:'Connected',value:15},
+    {text:'Inspiring',value:16},{text:'Innovative',value:17},{text:'Connected',value:15},{text:'lmazing',value:10},
     {text:'Nostalgic',value:15},{text:'Transformative',value:14},{text:'Goofy',value:15},
     {text:'Modest',value:13},{text:'Painful',value:13},{text:'Open',value:13},
     {text:'Small',value:12},{text:'Communication',value:12},
@@ -1969,8 +2002,8 @@ function buildPieCharts() {
   function _buildWordCloud() {
   const colors = [C_DARK, C_GOLD, '#4a6fa5','#b07830','#2d4a6e','#6e6e73'];
   const container = document.getElementById('wordcloud');
-  const W = Math.min(container.offsetWidth || 560, 680);
-  const H = 220;
+  const W = Math.min(container.offsetWidth || 760, 960);
+  const H = 240;
   d3.layout.cloud()
     .size([W, H])
     .words(SURVEY_DATA.wordCloud.map(d => ({ text: d.text, size: d.value })))
@@ -2102,7 +2135,7 @@ const universities = [
   { name:'San Jose State', city:'San Jose, CA', lat:37.3352, lng:-121.8811, color:'#0055A2', color2:'#E5A823',
     desc:'The oldest public institution of higher education on the West Coast, located in the heart of Silicon Valley. SJSU\'s proximity to tech giants makes it a natural launchpad for careers in engineering, business, and the arts.',
     img:'https://upload.wikimedia.org/wikipedia/commons/d/df/Tower_Hall_-_Morris_Dailey_Auditorium_-_San_Jose_State_University.jpg',
-    igPosts: [] },
+    igPosts: ['DXw0RvvjXu9'] },
   { name:'CSU Long Beach', city:'Long Beach, CA', lat:33.7838, lng:-118.1141, color:'#F6C324', color2:'#000000',
     desc:'One of the largest CSU campuses in California with a diverse, research-active community in the greater LA area. Known for strong programs in engineering, business, and the arts — and the iconic CSULB Pyramid.',
     img:'https://media.california.com/media/_versions_jpg/articles/shutterstock_1089266585__3395x2503____v1222x580__.jpg',
@@ -2115,6 +2148,14 @@ const universities = [
     desc:'A public research university in Richardson, Texas, part of the UT System. Known for strong programs in engineering, computer science, and business, with a rapidly growing research profile in the heart of the Dallas tech corridor.',
     img:'https://www.utdallas.edu/files/2024/04/campus-mall-drone-shot-spring-2023-f9da6375e486abef.jpg',
     igPosts: [] },
+  { name:'University of Pittsburgh', city:'Pittsburgh, PA', lat:40.4444, lng:-79.9601, color:'#003594', color2:'#FFB81C',
+    desc:'A major public research university in the heart of Pittsburgh. Known for its top-ranked medical school, pharmacy programs, and the iconic 42-story Cathedral of Learning at the center of campus.',
+    img:'https://www.welcome.pitt.edu/sites/default/files/styles/feature_image_left/public/feature-img/Homepage_2-01_0.png?itok=ahE8pbAn',
+    igPosts: ['DXwppYkjSzx'] },
+  { name:'Purdue University', city:'West Lafayette, IN', lat:40.4259, lng:-86.9081, color:'#CEB888', color2:'#000000',
+    desc:'A Big Ten powerhouse known as the "Cradle of Astronauts" with one of the top engineering schools in the country. Purdue\'s hands-on research culture and strong industry ties make it a premier destination for STEM.',
+    img:'https://assets.simpleviewinc.com/simpleview/image/upload/c_limit,h_1200,q_75,w_1200/v1/clients/indiana/Purdue_1_4795a328-1799-4afb-b79e-ec440b98df46.jpg',
+    igPosts: ['DXxLWxOEin0'] },
 ];
 
 /* ── Map helpers ── */
@@ -2159,10 +2200,7 @@ function openUniInfo(u) {
   img.src = u.img; img.alt = u.name;
   const igEl = document.getElementById('uni-ig-posts');
   igEl.innerHTML = '';
-  if (u.igProfileEmbed) {
-    igEl.innerHTML = u.igProfileEmbed;
-    if (window.instgrm) window.instgrm.Embeds.process();
-  }
+  if (u.igProfileEmbed) igEl.innerHTML = u.igProfileEmbed;
   (u.igPosts || []).forEach(shortcode => {
     const bq = document.createElement('blockquote');
     bq.className = 'instagram-media';
@@ -2179,7 +2217,7 @@ function openUniInfo(u) {
     if (activeItem) activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
   highlightMapPin(u.name);
-  if (window.instgrm) window.instgrm.Embeds.process();
+  if (igEl.children.length) processEmbeds();
   // On mobile, scroll the panel into view after it appears
   if (window.innerWidth <= 768) {
     requestAnimationFrame(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
@@ -2408,6 +2446,30 @@ function buildRegionalMap(elId, countyIds, uniNames) {
     addPins(g, proj, uniNames);
     // Add LMA pin on SoCal map only
     if (elId === 'map-socal') addLMAPin(g, proj);
+
+    // SoCal: fit to pin locations (counties include large empty desert areas)
+    // Bay Area: keep fitExtent/identity (counties fill the view nicely)
+    if (elId === 'map-socal') {
+      const pinCoords = uniNames
+        .map(n => universities.find(u => u.name === n)).filter(Boolean)
+        .map(u => proj([u.lng, u.lat])).filter(Boolean);
+      if (pinCoords.length > 1) {
+        const xs = pinCoords.map(c => c[0]), ys = pinCoords.map(c => c[1]);
+        const pad = 72;
+        const k = Math.min(8, Math.max(0.8, Math.min(
+          (W - 2 * pad) / (Math.max(...xs) - Math.min(...xs)),
+          (H - 2 * pad) / (Math.max(...ys) - Math.min(...ys))
+        )));
+        const cx = (Math.min(...xs) + Math.max(...xs)) / 2;
+        const cy = (Math.min(...ys) + Math.max(...ys)) / 2;
+        const homeT = d3.zoomIdentity.translate(W / 2 - k * cx, H / 2 - k * cy).scale(k);
+        _mapRefs[_viewKey].homeTransform = homeT;
+        svg.call(zoom.transform, homeT);
+      }
+    } else {
+      _mapRefs[_viewKey].homeTransform = d3.zoomTransform(svg.node());
+    }
+
     // Fire any pending zoom that was requested before this map finished building
     if (_pendingZoom && _pendingZoom.view === _viewKey) {
       const pz = _pendingZoom; _pendingZoom = null;
@@ -2460,7 +2522,9 @@ function zoomMap(factor) {
 
 function resetMapZoom() {
   const ref = _mapRefs[_activeMapView];
-  if (ref) ref.svg.transition().duration(550).ease(d3.easeCubicInOut).call(ref.zoom.transform, d3.zoomIdentity);
+  if (!ref) return;
+  const t = ref.homeTransform || d3.zoomIdentity;
+  ref.svg.transition().duration(550).ease(d3.easeCubicInOut).call(ref.zoom.transform, t);
 }
 
 function initMapsOnce() {
@@ -2766,8 +2830,8 @@ const ICON_PAUSE = `<svg width="11" height="13" viewBox="0 0 11 13" fill="curren
 
 function makeCarouselHTML(sec) {
   const imgSlides = (sec.images || []).map(({file, post}) => {
-    const url = `https://www.instagram.com/p/${post}/`;
-    return `<div class="carousel-slide"><a href="${url}" target="_blank" rel="noopener" class="local-img-link"><img src="images/${sec.imgFolder || 'lfd'}/${file}" loading="lazy" alt="${sec.label} photo"></a></div>`;
+    const src = `images/${sec.imgFolder || 'lfd'}/${file}`;
+    return `<div class="carousel-slide"><a class="local-img-link" onclick="openArcLightbox('${src}','${post}');return false;" href="#"><img src="${src}" loading="lazy" decoding="async" alt="${sec.label} photo"></a></div>`;
   });
   const embedSlides = (sec.posts || []).map(id => {
     const url = `https://www.instagram.com/${sec.type}/${id}/`;
@@ -2786,13 +2850,12 @@ function buildArchive() {
   if (!container) return;
 
   container.innerHTML = ARCHIVE_SECTIONS.map(sec => {
-    const carousel = makeCarouselHTML(sec);
     if (sec.comingSoon) {
       return `<div class="archive-section" id="${sec.id}">
         <div class="section-label">${sec.label}</div>
         <div class="coming-soon-box">
           <div class="coming-soon-cover"><div class="coming-soon-badge">Coming Soon</div><div class="coming-soon-sub">Photos dropping after the event</div></div>
-          ${carousel}
+          ${makeCarouselHTML(sec)}
         </div>
       </div>`;
     }
@@ -2804,12 +2867,24 @@ function buildArchive() {
           <button class="carousel-play" aria-label="Toggle slideshow">Slideshow</button>
         </div>
       </div>
-      ${carousel}
+      <div class="arc-stub"></div>
     </div>`;
   }).join('');
 
-  initCarousels(container);
-  processEmbeds();
+  const buildSection = el => {
+    const sec = ARCHIVE_SECTIONS.find(s => s.id === el.id);
+    const stub = el.querySelector('.arc-stub');
+    if (!sec || !stub) return;
+    stub.outerHTML = makeCarouselHTML(sec);
+    initCarousels(el);
+    if ((sec.posts || []).length) processEmbeds();
+  };
+
+  const obs = new IntersectionObserver((entries, ob) => {
+    entries.forEach(e => { if (e.isIntersecting) { buildSection(e.target); ob.unobserve(e.target); } });
+  }, { rootMargin: '400px 0px' });
+
+  container.querySelectorAll('.arc-stub').forEach(stub => obs.observe(stub.closest('.archive-section')));
 }
 
 function processEmbeds() {
@@ -2826,30 +2901,33 @@ function processEmbeds() {
   }
 }
 
+const _carouselRO = new ResizeObserver(entries => {
+  entries.forEach(e => e.target._swReset?.());
+});
+
 function initCarousels(root) {
   (root || document).querySelectorAll('.carousel-outer').forEach(outer => {
     const viewport = outer.querySelector('.carousel-viewport');
     const track = viewport?.querySelector('.carousel-track');
     const prev = outer.querySelector('.prev-arrow');
     const next = outer.querySelector('.next-arrow');
-    const playBtn   = outer.closest('.archive-section')?.querySelector('.carousel-play') || null;
-    const resetBtn  = outer.closest('.archive-section')?.querySelector('.carousel-reset') || null;
+    const playBtn  = outer.closest('.archive-section')?.querySelector('.carousel-play') || null;
+    const resetBtn = outer.closest('.archive-section')?.querySelector('.carousel-reset') || null;
     if (!viewport || !track) return;
 
     let idx = 0, timer = null, _sw = 0;
     const cols = track.classList.contains('cols-3') ? 3 : track.classList.contains('cols-2') ? 2 : 1;
+    const slides = [...track.querySelectorAll('.carousel-slide')];
+    const maxIdx = Math.max(0, slides.length - cols);
 
-    function allSlides() { return [...track.querySelectorAll('.carousel-slide')]; }
     function slideW() {
-      if (!_sw) { const s = allSlides()[0]; _sw = s ? s.offsetWidth + 8 : viewport.clientWidth; }
+      if (!_sw) _sw = slides[0] ? slides[0].offsetWidth + 8 : viewport.clientWidth;
       return _sw;
     }
 
     function goTo(i, animate) {
-      const ss = allSlides();
-      const maxIdx = Math.max(0, ss.length - cols);
       idx = Math.max(0, Math.min(i, maxIdx));
-      const sw = slideW(); // Read layout BEFORE style writes to avoid forced reflow
+      const sw = slideW();
       track.style.transition = animate === false ? 'none' : 'transform 0.72s cubic-bezier(0.16,1,0.3,1)';
       track.style.transform = `translateX(-${idx * sw}px)`;
       if (prev) prev.disabled = idx <= 0;
@@ -2857,11 +2935,10 @@ function initCarousels(root) {
       if (resetBtn) resetBtn.classList.toggle('visible', idx > 0);
     }
 
-    // Invalidate cached width and recalc on resize (defer write to next frame to avoid forced reflow)
-    new ResizeObserver(() => { _sw = 0; requestAnimationFrame(() => goTo(idx, false)); }).observe(viewport);
+    viewport._swReset = () => { _sw = 0; requestAnimationFrame(() => goTo(idx, false)); };
+    _carouselRO.observe(viewport);
     requestAnimationFrame(() => goTo(0, false));
 
-    // Touch swipe
     let tx0 = null;
     viewport.addEventListener('touchstart', e => { tx0 = e.touches[0].clientX; }, { passive: true });
     viewport.addEventListener('touchend', e => {
@@ -2902,10 +2979,7 @@ function initCarousels(root) {
         if (timer) {
           stopSlideshow();
         } else {
-          timer = setInterval(() => {
-            const ss = allSlides();
-            goTo(idx >= ss.length - 1 ? 0 : idx + 1, true);
-          }, 2800);
+          timer = setInterval(() => goTo(idx >= slides.length - 1 ? 0 : idx + 1, true), 2800);
           playBtn.textContent = 'Stop';
           playBtn.classList.add('playing');
         }
@@ -3091,7 +3165,7 @@ const FAVORITES = [
   { src: 'images/favs/Squad.webp',                    event: '',                      caption: 'Sacha P, Andrew C, Baran C, Daemeon M & Omar A' },
   // Page 14 — col0: TChaseSoak(1.50)+MIB(0.95)+UCBUCLA(0.67)+WholeLottAsians(0.67)=3.79 | col1: JussABebe(1.50)+SlightlyPeDe(1.00)+Ultras(0.75)+ChemStuff(0.67)=3.92 | col2: IbraSoak(1.50)+KawaiiDesuNe(1.00)+ThumbsUp(0.67)+4kSoak(0.67)=3.84
   { src: 'images/favs/TChaseSoak.webp',               event: 'Soak a Senior',         caption: 'Max C & Sacha P' },
-  { src: 'images/favs/JussABebe.webp',                event: '',                      caption: 'Amreen I, Aiza Q & Uma J' },
+  { src: 'images/favs/JussABebe.webp',                event: 'Flour Baby',            caption: 'Amreen I, Aiza Q & Uma J' },
   { src: 'images/favs/IbraSoak.webp',                 event: 'Soak a Senior',         caption: 'Andrew C & Ibrahim M' },
   { src: 'images/favs/MIB.webp',                      event: 'Soak a Senior',         caption: 'Cooper M & Jayden T' },
   { src: 'images/favs/SlightlyPeDe.webp',             event: '',                      caption: 'Andrew C & Jayden C' },
@@ -3102,10 +3176,33 @@ const FAVORITES = [
   { src: 'images/favs/WholeLottAsians.webp',          event: '',                      caption: 'Jayden O, Max C, Rayan G & Katally L' },
   { src: 'images/favs/ChemStuff.webp',                event: '',                      caption: 'Leslie T, Janae A & Murad M' },
   { src: 'images/favs/4kSoak.webp',                   event: 'Soak a Senior',         caption: 'Destiny P, Michael H & Abram M' },
-  // Page 15 — col0: UCSystem(0.67)+T10(0.67)=1.34 | col1: TonyStark(1.50)=1.50 | col2: 2sUp(1.00)=1.00
-  { src: 'images/favs/UCSystem.webp',                 event: '',                      caption: 'Rayan G & Katally L' },
+  // Page 15 — col0: SneakAttack(1.59)+LTattacksChild(1.49)+FinestEsscentialsEmployee(0.67)+TonyStark(1.49)=5.24 | col1: BraceForImpact(1.19)+TippingBucket(1.49)+PointBlank(1.00)+AIConsumesWater(1.49)=5.17 | col2: CashBebe(1.49)+LiccStrikesBack(1.49)+CCFightsOn(1.49)+UCSystem(0.67)=5.14
+  { src: 'images/favs/SneakAttack.webp',              event: 'Soak a Senior',         caption: 'Aiza Q, Cooper M, Destiny P & Brandon Ch' },
+  { src: 'images/favs/BraceForImpact.webp',           event: 'Soak a Senior',         caption: 'Abram M & Parin L' },
+  { src: 'images/favs/CashBebe.webp',                 event: 'Flour Baby',            caption: 'Cash T' },
+  { src: 'images/favs/LTattacksChild.webp',           event: 'Flour Baby',            caption: 'Santiago C & Leslie T' },
+  { src: 'images/favs/TippingBucket.webp',            event: 'Soak a Senior',         caption: 'Rayan R, Amreen I, Audrey L, Max C, Aiza Q & Brandon Ch' },
+  { src: 'images/favs/LiccStrikesBack.webp',          event: 'Soak a Senior',         caption: 'Connor P, Mason N & Parin L' },
+  { src: 'images/favs/FinestEsscentialsEmployee.webp',event: 'Flour Baby',            caption: 'Milo M' },
+  { src: 'images/favs/PointBlank.webp',               event: 'Soak a Senior',         caption: 'Abram M & Mason N' },
+  { src: 'images/favs/CCFightsOn.webp',               event: 'Soak a Senior',         caption: 'Carson C, Mason N, Rayan R & Amreen I' },
   { src: 'images/favs/TonyStark.webp',                event: 'Soak a Senior',         caption: 'Michael H, Cooper M, Jayden T & Jianna D' },
+  { src: 'images/favs/AIConsumesWater.webp',          event: 'Soak a Senior',         caption: 'Amreen I, Audrey L & Aiza Q' },
+  { src: 'images/favs/UCSystem.webp',                 event: '',                      caption: 'Rayan G & Katally L' },
+  // Page 16 — col0: BCAcceptsIt(1.49)+LilAryanSoaks(1.49)+Aggressive(1.49)+TuffLineup(0.67)=5.14 | col1: JulianSneak(1.49)+TuffBrandonCh(1.49)+22sMyWord(1.00)+Sharpshooter(0.67)=4.65 | col2: Acceptance(1.49)+TotalSoak(1.49)+2sUp(1.00)+TuffAndSoaked(0.67)=4.65
+  { src: 'images/favs/BCAcceptsIt.webp',              event: 'Soak a Senior',         caption: 'Brandon Ch' },
+  { src: 'images/favs/JulianSneak.webp',              event: '',                      caption: 'Santiago C, Daemeon M, Rayan R, Amreen I & Audrey L' },
+  { src: 'images/favs/Acceptance.webp',               event: 'Soak a Senior',         caption: 'Mason N, Abram M & Parin L' },
+  { src: 'images/favs/LilAryanSoaks.webp',            event: 'Soak a Senior',         caption: 'Rayan R' },
+  { src: 'images/favs/TuffBrandonCh.webp',            event: 'Soak a Senior',         caption: 'Brandon Ch' },
+  { src: 'images/favs/TotalSoak.webp',                event: 'Soak a Senior',         caption: 'Rayan R, Amreen I & Audrey L' },
+  { src: 'images/favs/Aggressive.webp',               event: 'Soak a Senior',         caption: 'Rayan R, Amreen I, Audrey L, Aiza Q & Brandon Ch' },
+  { src: 'images/favs/22sMyWord.webp',                event: 'Soak a Senior',         caption: 'Rayan R & Amreen I' },
   { src: 'images/favs/2sUp.webp',                     event: '',                      caption: 'Kailee K & Uma J' },
+  { src: 'images/favs/TuffLineup.webp',               event: 'Soak a Senior',         caption: 'Connor P, Parin L, Santiago C & Daemeon M' },
+  { src: 'images/favs/Sharpshooter.webp',             event: 'Soak a Senior',         caption: 'Max C, Connor P, Parin L, Santiago C, Daemeon M, Rayan R & Amreen I' },
+  { src: 'images/favs/TuffAndSoaked.webp',            event: 'Soak a Senior',         caption: 'Parin L, Santiago C & Daemeon M' },
+  // Page 17 — col0: T10(0.67)=0.67
   { src: 'images/favs/T10.webp',                      event: 'Soak a Senior',         caption: 'Katally L, Rayan G & Arnav S' },
 ];
 
