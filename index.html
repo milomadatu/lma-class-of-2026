@@ -367,44 +367,6 @@
   .people-search::placeholder { color: var(--ink-3); }
   .people-no-results { grid-column: 1/-1; text-align: center; color: var(--ink-3); padding: 2rem 0; font-size: 14px; }
 
-  /* ── People paywall ── */
-  #page-people { position: relative; overflow-x: hidden; }
-  .people-paywall {
-    position: fixed; top: 52px; left: 0; right: 0; bottom: 0;
-    backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-    background: rgba(245,245,247,0.82);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    z-index: 9; gap: 16px; text-align: center; padding: 2rem;
-    transition: opacity 0.3s;
-  }
-  .people-paywall.hidden { opacity: 0; pointer-events: none; }
-  .paywall-lock { color: var(--ink-2); margin-bottom: 4px; }
-  .paywall-title {
-    font-size: clamp(28px, 5vw, 42px); font-weight: 800;
-    color: var(--ink); letter-spacing: -0.03em; line-height: 1.1;
-  }
-  .paywall-sub {
-    font-size: 14px; color: var(--ink-2); max-width: 300px; line-height: 1.6;
-  }
-  .paywall-form { display: flex; gap: 8px; margin-top: 4px; }
-  .paywall-input {
-    padding: 9px 14px; border-radius: 10px; font-size: 14px;
-    border: 1px solid var(--border); outline: none; background: var(--surface);
-    box-shadow: var(--shadow-sm); width: 180px; color: var(--ink);
-    transition: box-shadow 0.18s;
-  }
-  .paywall-input:focus { box-shadow: var(--shadow-md); }
-  .paywall-btn {
-    padding: 9px 18px; border-radius: 10px; font-size: 14px; font-weight: 600;
-    border: none; background: var(--dark); color: #fff; cursor: pointer;
-    transition: opacity 0.18s;
-  }
-  .paywall-btn:hover { opacity: 0.85; }
-  .paywall-error {
-    font-size: 12px; color: #c0392b; font-weight: 500;
-    opacity: 0; transition: opacity 0.2s; margin-top: -8px;
-  }
-  .paywall-error.visible { opacity: 1; }
   .shuffle-btn {
     background: var(--surface); color: var(--ink); font-size: 12px; font-weight: 600;
     border: none; border-radius: 980px; padding: 7px 16px; cursor: pointer;
@@ -863,9 +825,6 @@
     .person-card { flex: 0 0 calc((100% - 24px) / 4); }
     .people-search { width: 90px; }
     .people-search:focus { width: 110px; }
-    .paywall-form { flex-direction: column; align-items: stretch; width: 100%; max-width: 280px; }
-    .paywall-input { width: 100%; box-sizing: border-box; }
-    .paywall-btn { width: 100%; }
     .groups-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
 
     /* Popup */
@@ -1134,18 +1093,6 @@
 
   <!-- PEOPLE -->
   <div class="page" id="page-people">
-    <div class="people-paywall" id="people-paywall">
-      <div class="paywall-lock">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      </div>
-      <div class="paywall-title">Class Directory</div>
-      <p class="paywall-sub">Enter the password to access the LMA '26 directory.</p>
-      <div class="paywall-form">
-        <input class="paywall-input" id="paywall-input" type="password" placeholder="Password" autocomplete="off" onkeydown="if(event.key==='Enter')checkPaywall()">
-        <button class="paywall-btn" onclick="checkPaywall()">Unlock</button>
-      </div>
-      <div class="paywall-error" id="paywall-error" role="alert">Incorrect password</div>
-    </div>
     <div class="people-header">
       <div>
         <div class="section-label">Class of 2026</div>
@@ -1876,30 +1823,6 @@ requestAnimationFrame(() => requestAnimationFrame(() => {
 
 }));
 
-/* ── People paywall ── */
-(function initPaywall() {
-  const paywall = document.getElementById('people-paywall');
-  if (!paywall) return;
-  if (sessionStorage.getItem('lma26_unlocked') === '1') {
-    paywall.style.display = 'none';
-  }
-})();
-
-function checkPaywall() {
-  const input = document.getElementById('paywall-input');
-  const error = document.getElementById('paywall-error');
-  const paywall = document.getElementById('people-paywall');
-  if (input.value === 'AyoJG') {
-    sessionStorage.setItem('lma26_unlocked', '1');
-    paywall.classList.add('hidden');
-    setTimeout(() => paywall.style.display = 'none', 320);
-  } else {
-    error.classList.add('visible');
-    input.value = '';
-    input.focus();
-    setTimeout(() => error.classList.remove('visible'), 2000);
-  }
-}
 
 /* ── Survey data — update this object when real responses come in ── */
 const SURVEY_DATA = {
@@ -2155,7 +2078,7 @@ const universities = [
   { name:'Purdue University', city:'West Lafayette, IN', lat:40.4259, lng:-86.9081, color:'#CEB888', color2:'#000000',
     desc:'A Big Ten powerhouse known as the "Cradle of Astronauts" with one of the top engineering schools in the country. Purdue\'s hands-on research culture and strong industry ties make it a premier destination for STEM.',
     img:'https://assets.simpleviewinc.com/simpleview/image/upload/c_limit,h_1200,q_75,w_1200/v1/clients/indiana/Purdue_1_4795a328-1799-4afb-b79e-ec440b98df46.jpg',
-    igPosts: ['DXxLWxOEin0'] },
+    igPosts: ['DXxLWxOEin0', 'DX1AKQWjWag'] },
   { name:'Embry-Riddle Aeronautical University', city:'Prescott, AZ', lat:34.6096, lng:-112.4510, color:'#003087', color2:'#F5A800',
     desc:'One of the world\'s premier aeronautical universities, ERAU\'s Prescott campus sits at 5,000 feet in Arizona\'s mountain high desert. Renowned for aviation science, aerospace engineering, and hands-on flight training.',
     img:'https://www.usnews.com/dims4/USNEWS/eaafe72/17177859217/resize/800x540%3E/quality/85/?url=https%3A%2F%2Fwww.usnews.com%2Fcmsmedia%2F1a%2F1a28ed986049a6019efd61eff11505%2Fcollege-photo_18686.jpg',
@@ -3074,7 +2997,7 @@ const FAVORITES = [
   { src: 'images/favs/AbramTuff.webp',                event: 'Senior Blues',          caption: 'Abram M' },
   { src: 'images/favs/Clappin.webp',                  event: 'VE Warriors',           caption: 'Jayden T, Cash T & Hunter W' },
   { src: 'images/favs/Lonzo.webp',                    event: 'Senior Assassin',       caption: 'Milo M' },
-  { src: 'images/favs/InNOut.webp',                   event: 'After Dance',           caption: 'Milo M, Aryan L & Andrew C' },
+  { src: 'images/favs/InNOut.webp',                   event: 'Winter Formal',           caption: 'Milo M, Aryan L & Andrew C' },
   { src: 'images/favs/YbSquad.webp',                  event: 'Pep Rally',             caption: 'Hunter W & Matt C' },
   { src: 'images/favs/PleaseSpeed.webp',              event: '',                      caption: 'Evan M & Jayden C' },
   { src: 'images/favs/MadScientist.webp',             event: '',                      caption: 'Jesiah H, Evelynn N & Leslie T' },
@@ -3128,7 +3051,7 @@ const FAVORITES = [
   { src: 'images/favs/TheMack.webp',                  event: '',                      caption: 'Josue G & Andrew C' },
   { src: 'images/favs/GojoNEm.webp',                  event: '',                      caption: 'Preston W & James W' },
   { src: 'images/favs/PressingMatt.webp',             event: '',                      caption: 'Alex G, Matthew I & Milo M' },
-  { src: 'images/favs/TustinVBall.webp',              event: 'Tustin Volleyball',     caption: 'Parin L, Pearce W, Daemeon M, Nathan S, Rayan G, Elijah B & Joshua S' },
+  { src: 'images/favs/TustinVBall.webp',              event: 'HS Volleyball',     caption: 'Parin L, Pearce W, Daemeon M, Nathan S, Rayan G, Elijah B & Joshua S' },
   { src: 'images/favs/ChudvsFoid.webp',               event: '',                      caption: 'Elijah B & Katally L' },
   // Page 7 — col0: YayArea(1.40)+Silencio(0.67)+LayUp(1.33)+TustinLegends(0.75)=4.15 | col1: DMoneyTruck(1.33)+CPWork(0.75)+Raymen(1.33)+LTCross(0.67)=4.08 | col2: SPJGCream(1.33)+PercandTin(0.75)+Numbers(1.33)+JGTuff(0.67)=4.08
   { src: 'images/favs/YayArea.webp',                  event: '',                      caption: 'Artin R & Milo M' },
@@ -3159,7 +3082,7 @@ const FAVORITES = [
   // Page 9 — col0: Twins(1.33)+JGLocked(0.67)+PoolBoy(1.33)+BCBBQ(0.75)=4.08 | col1: Bonitos(1.33)+PepBoys(0.67)+Victory(1.33)+TillerDays(0.75)=4.08 | col2: PantsOnFire(1.33)+DynamicDuo(0.75)+LastGame(1.18)+Albanians(0.75)=4.01
   { src: 'images/favs/Twins.webp',                    event: '',                      caption: 'Aryan L' },
   { src: 'images/favs/Bonitos.webp',                  event: '',                      caption: 'Cash T & Matt C' },
-  { src: 'images/favs/PantsOnFire.webp',              event: 'In School Events',      caption: 'Mason N & Connor P' },
+  { src: 'images/favs/PantsOnFire.webp',              event: 'White Lies',            caption: 'Mason N & Connor P' },
   { src: 'images/favs/JGLocked.webp',                 event: '',                      caption: 'Josue G' },
   { src: 'images/favs/PepBoys.webp',                  event: 'Pep Rally',             caption: 'Sacha P, Jesiah H, Santiago C, Nathan H & Jayden T' },
   { src: 'images/favs/DynamicDuo.webp',               event: '',                      caption: 'Baran C & Josue G' },
@@ -3177,7 +3100,7 @@ const FAVORITES = [
   { src: 'images/favs/IVCGooners.webp',               event: '',                      caption: 'Jesiah H, Milo M, Andrew C, Baran C & Josh T' },
   { src: 'images/favs/PushinP.webp',                  event: 'PJ Day',                caption: 'Santino S, Pearce W & Aryan L' },
   { src: 'images/favs/ArtinYap.webp',                 event: '',                      caption: 'Evelynn N, Artin R & Leslie T' },
-  { src: 'images/favs/WeLuvMax.webp',                 event: 'Foothill Volleyball',   caption: 'Milo M, Brandon Ca & James W' },
+  { src: 'images/favs/WeLuvMax.webp',                 event: 'HS Volleyball',   caption: 'Milo M, Brandon Ca & James W' },
   { src: 'images/favs/MiloSwag.webp',                 event: '',                      caption: 'Milo M' },
   { src: 'images/favs/TuffThree.webp',                event: '',                      caption: 'Morgan M, Kailee K & Amreen I' },
   { src: 'images/favs/InterCompany.webp',             event: '',                      caption: 'Jayden C, James W, Milo M, Rayan G, Elijah B, Max C, Jayden O, Nathan S, Katally L, Kailee K, Brandon Ca & Pearce W' },
@@ -3212,7 +3135,7 @@ const FAVORITES = [
   { src: 'images/favs/ChineseTorture.webp',           event: 'Soak a Senior',         caption: 'Sacha P & Santino S' },
   { src: 'images/favs/CarsonSplash.webp',             event: 'Soak a Senior',         caption: 'Carson C, Katally L, Rayan G & Arnav S' },
   { src: 'images/favs/Shirom&Jackson.webp',           event: 'Soak a Senior',         caption: 'Jackson R & Shirom M' },
-  { src: 'images/favs/Belligerent.webp',              event: 'Beckman Volleyball',    caption: 'Sacha P, Baran C & Jayden C' },
+  { src: 'images/favs/Belligerent.webp',              event: 'HS Volleyball',    caption: 'Sacha P, Baran C & Jayden C' },
   { src: 'images/favs/Daycare.webp',                  event: '',                      caption: 'Andrew C, Brandon Ca, Baran C & Sacha P' },
   { src: 'images/favs/DoubleSoak.webp',               event: 'Soak a Senior',         caption: 'Rayan G, Arnav S & Abram M' },
   { src: 'images/favs/LiccSoak.webp',                 event: 'Soak a Senior',         caption: 'Abram M' },
@@ -3230,7 +3153,7 @@ const FAVORITES = [
   { src: 'images/favs/KawaiiDesuNe.webp',             event: '',                      caption: 'Max C & Milo M' },
   { src: 'images/favs/UCBUCLA.webp',                  event: '',                      caption: 'Rayan G & Katally L' },
   { src: 'images/favs/Ultras.webp',                   event: '',                      caption: 'Nathan H, Andrew C, Baran C, Sacha P & Jayden C' },
-  { src: 'images/favs/ThumbsUp.webp',                 event: 'Beckman Volleyball',    caption: 'Uma J, Jayden O & Katally L' },
+  { src: 'images/favs/ThumbsUp.webp',                 event: 'HS Volleyball',    caption: 'Uma J, Jayden O & Katally L' },
   { src: 'images/favs/WholeLottAsians.webp',          event: '',                      caption: 'Jayden O, Max C, Rayan G & Katally L' },
   { src: 'images/favs/ChemStuff.webp',                event: '',                      caption: 'Leslie T, Janae A & Murad M' },
   { src: 'images/favs/4kSoak.webp',                   event: 'Soak a Senior',         caption: 'Destiny P, Michael H & Abram M' },
@@ -3262,6 +3185,31 @@ const FAVORITES = [
   { src: 'images/favs/TuffAndSoaked.webp',            event: 'Soak a Senior',         caption: 'Parin L, Santiago C & Daemeon M' },
   // Page 17 — col0: T10(0.67)=0.67
   { src: 'images/favs/T10.webp',                      event: 'Soak a Senior',         caption: 'Katally L, Rayan G & Arnav S' },
+  { src: 'images/favs/ZotZotZot.webp',               event: '',                      caption: 'Ruth Z, Ellie C, Jianna D & Farishta I' },
+  { src: 'images/favs/FinalSoakLineup.webp',         event: 'Soak a Senior',         caption: 'Kai A, Andrew C, Milo M, Brandon Ca, Jayden C, Jayden O & Carson C' },
+  { src: 'images/favs/Cuties.webp',                  event: 'Soak a Senior',         caption: 'Milo M & Brandon C' },
+  { src: 'images/favs/TustinTres.webp',              event: 'Soak a Senior',         caption: 'Milo M, Brandon Ca & Jayden C' },
+  { src: 'images/favs/Scrunch.webp',                 event: 'Soak a Senior',         caption: 'Elijah B, Milo M & Brandon Ca' },
+  { src: 'images/favs/BeckmanBetrayal.webp',         event: 'Soak a Senior',         caption: 'Brandon Ca, Jayden O & Carson C' },
+  { src: 'images/favs/LiccAndJO.webp',               event: 'Soak a Senior',         caption: 'Jayden O & Carson C' },
+  { src: 'images/favs/DoubleTeam.webp',              event: 'Soak a Senior',         caption: 'Kai A, Andrew C, Milo M & Brandon Ca' },
+  { src: 'images/favs/JOTorture.webp',               event: 'Soak a Senior',         caption: 'Jayden O' },
+  { src: 'images/favs/Quadruplets.webp',             event: 'Flour Baby',            caption: 'Rayan R' },
+  { src: 'images/favs/YahnDad.webp',                 event: 'Flour Baby',            caption: 'Ryan Y' },
+  { src: 'images/favs/LTHeisman.webp',               event: 'Soak a Senior',         caption: 'Uma J & Leslie T' },
+  { src: 'images/favs/FightOff.webp',                event: 'Soak a Senior',         caption: 'Jayden C, Jayden O, Carson C, Luna C, Grace D & Murad M' },
+  { src: 'images/favs/BCSquadWipe.webp',             event: 'Soak a Senior',         caption: 'Brandon Ch, Carson C, Luna C, Grace D & Murad M' },
+  { src: 'images/favs/MuradSiblingSoak.webp',        event: 'Soak a Senior',         caption: 'Luna C & Murad M' },
+  { src: 'images/favs/AvaBrotherSoak.webp',          event: 'Soak a Senior',         caption: 'Cash T, Ava L & Uma J' },
+  { src: 'images/favs/BrandonCaDistress.webp',       event: 'Soak a Senior',         caption: 'Kai A, Andrew C, Milo M, Brandon Ca, Kailee K, Jayden C & Jayden O' },
+  { src: 'images/favs/SoakedClaps.webp',             event: 'Soak a Senior',         caption: 'Andrew C, Milo M, Brandon Ca & Jayden C' },
+  { src: 'images/favs/Parents.webp',                 event: 'Flour Baby',            caption: 'Evan M, Nancy S, Aryanna M, Miriam Y & Kiana V' },
+  { src: 'images/favs/Omoggers.webp',                event: 'Flour Baby',            caption: 'Evan M, Milo M & Brent L' },
+  { src: 'images/favs/UCLAmom.webp',                 event: 'Flour Baby',            caption: 'Amreen I' },
+  { src: 'images/favs/2+2+2+2.webp',                event: '',                      caption: 'Luke D, Paloma A & Nyala A' },
+  { src: 'images/favs/DarkMoonEmoji.webp',           event: 'Flour Baby',            caption: 'Kiana V & Nancy S' },
+  { src: 'images/favs/Pose.webp',                    event: '',                      caption: 'Andrew C' },
+  { src: 'images/favs/TuffestParents.webp',          event: 'Flour Baby',            caption: 'Ryan Y, Evan M & Nico M' },
 ];
 
 let favOrder = FAVORITES.map((_, i) => i);
@@ -3298,7 +3246,19 @@ function getFavFiltered() {
       });
     }));
   }
-  return ordered.filter(({ f }) => (f.event + ' ' + f.caption).toLowerCase().includes(q));
+  // Resolve query against full people names → "First L" / "First La" abbreviated forms used in captions
+  const personAbbrevs = people
+    .filter(p => p.name.toLowerCase().includes(q))
+    .flatMap(p => {
+      const parts = p.name.split(' ');
+      const fn = parts[0].toLowerCase();
+      const ln = parts[parts.length - 1].toLowerCase();
+      return [fn + ' ' + ln[0], fn + ' ' + ln.substring(0, 2)];
+    });
+  return ordered.filter(({ f }) => {
+    const hay = (f.event + ' ' + f.caption).toLowerCase();
+    return hay.includes(q) || personAbbrevs.some(a => hay.includes(a));
+  });
 }
 
 function favPageNav(dir) {
