@@ -2030,7 +2030,7 @@ const universities = [
   { name:'Irvine Valley College', city:'Irvine, CA', lat:33.6450, lng:-117.7685, color:'#004789', color2:'#C7CACE',
     desc:'A top-ranked community college in Orange County known for its high transfer rates to UC and CSU campuses and strong programs in arts, science, and technology.',
     img:'https://arquitectonica.com/architecture/wp-content/uploads/sites/2/2016/10/Irvine_Valley_College_PAC_2-1920x1080.jpg',
-    igPosts: ['DW0GIYfjaFn', 'DW5tYlBDaZb', 'DXlayvLDVyc', 'DXtDjqRjfue', 'DXtE_bAjajx'] },
+    igPosts: ['DW0GIYfjaFn', 'DW5tYlBDaZb', 'DXlayvLDVyc', 'DXtDjqRjfue', 'DXtE_bAjajx', 'DX2WzrKjYMx'] },
   { name:'Cypress College', city:'Cypress, CA', lat:33.8163, lng:-118.0388, color:'#004B23', color2:'#FFC72C',
     desc:'A community college in northwestern Orange County serving communities like Anaheim, Buena Park, and Stanton. Known for high transfer rates, strong workforce programs, and a welcoming campus culture.',
     img:'https://www.thecollegetour.com/wp-content/uploads/2023/08/Cypress-College-Web-Header-1900x700-Pond.jpg',
@@ -2058,7 +2058,7 @@ const universities = [
   { name:'San Jose State', city:'San Jose, CA', lat:37.3352, lng:-121.8811, color:'#0055A2', color2:'#E5A823',
     desc:'The oldest public institution of higher education on the West Coast, located in the heart of Silicon Valley. SJSU\'s proximity to tech giants makes it a natural launchpad for careers in engineering, business, and the arts.',
     img:'https://upload.wikimedia.org/wikipedia/commons/d/df/Tower_Hall_-_Morris_Dailey_Auditorium_-_San_Jose_State_University.jpg',
-    igPosts: [] },
+    igPosts: ['DX2U3oNDfgg'] },
   { name:'CSU Long Beach', city:'Long Beach, CA', lat:33.7838, lng:-118.1141, color:'#F6C324', color2:'#000000',
     desc:'One of the largest CSU campuses in California with a diverse, research-active community in the greater LA area. Known for strong programs in engineering, business, and the arts — and the iconic CSULB Pyramid.',
     img:'https://media.california.com/media/_versions_jpg/articles/shutterstock_1089266585__3395x2503____v1222x580__.jpg',
@@ -2079,6 +2079,10 @@ const universities = [
     desc:'A Big Ten powerhouse known as the "Cradle of Astronauts" with one of the top engineering schools in the country. Purdue\'s hands-on research culture and strong industry ties make it a premier destination for STEM.',
     img:'https://assets.simpleviewinc.com/simpleview/image/upload/c_limit,h_1200,q_75,w_1200/v1/clients/indiana/Purdue_1_4795a328-1799-4afb-b79e-ec440b98df46.jpg',
     igPosts: ['DXxLWxOEin0', 'DX1AKQWjWag'] },
+  { name:'Indiana University', city:'Bloomington, IN', lat:39.1653, lng:-86.5264, color:'#990000', color2:'#FFFFFF',
+    desc:'A flagship Big Ten university nestled in the rolling hills of southern Indiana. Known for its Jacobs School of Music, strong business and public policy programs, and one of the most beautiful campuses in the country.',
+    img:'https://assets.simpleviewinc.com/simpleview/image/upload/c_fill,f_jpg,g_xy_center,h_495,q_65,w_583,x_1728,y_1417/v1/clients/bloomington/SampleGatesFall_Sunrise_10_edit_2f20bd0e-3463-416b-98ad-f45f347e29d1.jpg',
+    igPosts: ['DX2cll0jUeG'] },
   { name:'Embry-Riddle Aeronautical University', city:'Prescott, AZ', lat:34.6096, lng:-112.4510, color:'#003087', color2:'#F5A800',
     desc:'One of the world\'s premier aeronautical universities, ERAU\'s Prescott campus sits at 5,000 feet in Arizona\'s mountain high desert. Renowned for aviation science, aerospace engineering, and hands-on flight training.',
     img:'https://www.usnews.com/dims4/USNEWS/eaafe72/17177859217/resize/800x540%3E/quality/85/?url=https%3A%2F%2Fwww.usnews.com%2Fcmsmedia%2F1a%2F1a28ed986049a6019efd61eff11505%2Fcollege-photo_18686.jpg',
@@ -2091,11 +2095,15 @@ const universities = [
     desc:'A global research university anchored in the heart of Manhattan\'s Greenwich Village. NYU is renowned for its programs in business, law, film, and the arts, with a campus that is the city itself.',
     img:'https://www.usnews.com/dims4/USNEWS/97d747d/17177859217/resize/800x540%3E/quality/85/?url=https%3A%2F%2Fwww.usnews.com%2Fcmsmedia%2F9d%2Fd819230374ef6531890bb7eee1dac0%2FNYU_WSP_Header.jpg',
     igPosts: ['DXyBTSojVve'] },
+  { name:'Cal State Fullerton', city:'Fullerton, CA', lat:33.8825, lng:-117.8851, color:'#003DA5', color2:'#FF8200',
+    desc:'The largest campus in the Cal State system by enrollment, located in the heart of Orange County. CSUF is known for its strong business, communications, and arts programs, and is one of the most diverse universities in the nation.',
+    img:'https://news.fullerton.edu/app/uploads/2020/11/TSU-Expansion-Titans-800x500.jpg',
+    igPosts: ['DX2fRGskgm3'] },
 ];
 
 /* ── Map helpers ── */
 const BAY_AREA_UNIS = ['Stanford University', 'UC Berkeley', 'USF', 'San Francisco State', 'Cabrillo College', 'Northeastern University (Oakland)', 'San Jose State'];
-const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'San Diego State', 'USC', 'LMU', 'Pepperdine University', 'Occidental College', 'Irvine Valley College', 'Cypress College', 'University of La Verne', 'Cal Poly SLO', 'CSU Long Beach', 'UC Riverside'];
+const SOCAL_UNIS    = ['UCLA', 'UC Irvine', 'UC San Diego', 'San Diego State', 'USC', 'LMU', 'Pepperdine University', 'Occidental College', 'Irvine Valley College', 'Cypress College', 'University of La Verne', 'Cal Poly SLO', 'CSU Long Beach', 'UC Riverside', 'Cal State Fullerton'];
 
 // County FIPS codes (numeric). California state code = 06, so county IDs start with 6xxx.
 const BAY_AREA_COUNTIES = [6001,6013,6041,6055,6075,6081,6085,6087,6095,6097];
@@ -2631,7 +2639,7 @@ function showPage(id, btn) {
 /* ── Archive data — add/remove shortcodes here to update carousels ── */
 const ARCHIVE_SECTIONS = [
   { id: 'arc-videos',  label: 'Videos',          cols: 2, type: 'reel', comingSoon: false,
-    posts: ['DNv8MtA5NXn', 'DOEzRUkkgSU', 'DXvO18RoLeC', 'DX0L0pIyCrM'] },
+    posts: ['DNv8MtA5NXn', 'DOEzRUkkgSU', 'DXvO18RoLeC', 'DX0L0pIyCrM', 'DX2zWMCIFAJ'] },
   { id: 'arc-lfd',     label: 'Last First Day',   cols: 3, type: 'p',    comingSoon: false,
     images: [
       {file:'DNUB7KkyalX.webp', post:'DNUB7KkyalX'},{file:'DNUB9K7Sx2j.webp', post:'DNUB9K7Sx2j'},
@@ -3208,8 +3216,13 @@ const FAVORITES = [
   { src: 'images/favs/UCLAmom.webp',                 event: 'Flour Baby',            caption: 'Amreen I' },
   { src: 'images/favs/2+2+2+2.webp',                event: '',                      caption: 'Luke D, Paloma A & Nyala A' },
   { src: 'images/favs/DarkMoonEmoji.webp',           event: 'Flour Baby',            caption: 'Kiana V & Nancy S' },
+  // Page 19 — col0: Pose(0.67)+MogOff(1.33)=2.00 | col1: TuffestParents(0.67)+CollaborationTime(1.33)=2.00 | col2: 26Poster(0.83)+Kona(0.75)=1.58
   { src: 'images/favs/Pose.webp',                    event: '',                      caption: 'Andrew C' },
   { src: 'images/favs/TuffestParents.webp',          event: 'Flour Baby',            caption: 'Ryan Y, Evan M & Nico M' },
+  { src: 'images/favs/26Poster.webp',                event: '',                      caption: 'Milo M, Cash T, Brandon Ca, Daemeon M & Leslie T' },
+  { src: 'images/favs/MogOff.webp',                  event: '',                      caption: 'Brent L, Evan M & Shirom M' },
+  { src: 'images/favs/CollaborationTime.webp',       event: '',                      caption: 'Jayden C, Sacha P, Milo M & Santiago C' },
+  { src: 'images/favs/Kona.webp',                    event: '',                      caption: 'Amani C & Kiyomi P' },
 ];
 
 let favOrder = FAVORITES.map((_, i) => i);
