@@ -989,6 +989,7 @@
     <button onclick="scrollToSection('arc-bonfire')">Senior Bonfire</button>
     <button onclick="scrollToSection('arc-sdd')">Senior Ditch Day</button>
     <button onclick="scrollToSection('arc-prom')">Prom</button>
+    <button onclick="scrollToSection('arc-soak')">Soak a Senior</button>
     <button onclick="scrollToSection('arc-graduation')">Graduation</button>
   </div>
   <div class="archive-layout">
@@ -1069,6 +1070,16 @@
         <div class="timeline-card">
           <div class="timeline-left">
             <div class="timeline-title">Prom</div>
+            <div class="timeline-date">Apr 2026</div>
+          </div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
+        </div>
+      </div>
+      <div class="timeline-item has-anchor" onclick="scrollToSection('arc-soak')">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-left">
+            <div class="timeline-title">Soak a Senior</div>
             <div class="timeline-date">Apr 2026</div>
           </div>
           <div class="timeline-right"><span class="timeline-arrow">›</span></div>
@@ -1609,7 +1620,13 @@ function closePopup() {
 
 function openArcLightbox(src, post) {
   document.getElementById('arc-lb-img').src = src;
-  document.getElementById('arc-lb-ig').href = `https://www.instagram.com/p/${post}/`;
+  const igLink = document.getElementById('arc-lb-ig');
+  if (post) {
+    igLink.href = `https://www.instagram.com/p/${post}/`;
+    igLink.style.display = '';
+  } else {
+    igLink.style.display = 'none';
+  }
   document.getElementById('arc-lightbox').classList.add('open');
 }
 
@@ -2039,7 +2056,7 @@ const universities = [
     igPosts: ['DXsUG0KAb_w'] },
   { name:'University of La Verne', city:'La Verne, CA', lat:34.1008, lng:-117.7678, color:'#2C5234', color2:'#C4962B',
     desc:'A private university in the San Gabriel Valley known for its personalized education, strong community ties, and diverse student body.',
-    img:'https://laverne.edu/news/wp-content/uploads/sites/5/2023/08/20210805-founders-hall-2-2100x1400-0230fbdf-b171-4a11-a38a-77ae84c32549-1920x1280.jpg',
+    img:'https://d13b2ieg84qqce.cloudfront.net/19063e4eac6ae21f24427d42d4480e032f98a54e',
     igPosts: ['DWx4s0YjQB8'] },
   { name:'Cal Poly SLO', city:'San Luis Obispo, CA', lat:35.3001, lng:-120.6597, color:'#154734', color2:'#C69214',
     desc:'A premier polytechnic university on the Central Coast known for its hands-on "Learn by Doing" philosophy, strong engineering programs, and stunning campus near the Pacific.',
@@ -2069,10 +2086,6 @@ const universities = [
     desc:'A UC campus in the Inland Empire with a rapidly growing research profile and one of the most diverse student bodies in the UC system. Known for strong programs in agricultural sciences, engineering, and business.',
     img:'https://admissions.ucr.edu/sites/default/files/styles/hero_slider_large_wide/public/2024-06/homepage-banner-ucr-campus.jpg?h=75585b40&itok=J7wrLKDF',
     igPosts: ['DXn4uccjdke'] },
-  { name:'University of Texas at Dallas', city:'Richardson, TX', lat:32.9858, lng:-96.7502, color:'#E87722', color2:'#154734',
-    desc:'A public research university in Richardson, Texas, part of the UT System. Known for strong programs in engineering, computer science, and business, with a rapidly growing research profile in the heart of the Dallas tech corridor.',
-    img:'https://www.utdallas.edu/files/2024/04/campus-mall-drone-shot-spring-2023-f9da6375e486abef.jpg',
-    igPosts: [] },
   { name:'University of Pittsburgh', city:'Pittsburgh, PA', lat:40.4444, lng:-79.9601, color:'#003594', color2:'#FFB81C',
     desc:'A major public research university in the heart of Pittsburgh. Known for its top-ranked medical school, pharmacy programs, and the iconic 42-story Cathedral of Learning at the center of campus.',
     img:'https://www.welcome.pitt.edu/sites/default/files/styles/feature_image_left/public/feature-img/Homepage_2-01_0.png?itok=ahE8pbAn',
@@ -2807,11 +2820,40 @@ const ARCHIVE_SECTIONS = [
       {file:'DXyFE8tjiW1.webp', post:'DXyFE8tjiW1'},{file:'DXyFRmijnHv.webp', post:'DXyFRmijnHv'},
       {file:'DXyFbpNDiOu.webp', post:'DXyFbpNDiOu'},{file:'DXyFvM7jnhr.webp', post:'DXyFvM7jnhr'},
       {file:'DXyFxVhju4Z.webp', post:'DXyFxVhju4Z'},{file:'DXyGOoRjlkG.webp', post:'DXyGOoRjlkG'},
-      {file:'DXyHHyHjsUW.webp', post:'DXyHHyHjsUW'},{file:'DXyEwKKjjp7.webp', post:'DXyEwKKjjp7'}
+      {file:'DXyHHyHjsUW.webp', post:'DXyHHyHjsUW'},{file:'DXyEwKKjjp7.webp', post:'DXyEwKKjjp7'},
+      {file:'DXyE1IGDuZr.webp', post:'DXyE1IGDuZr'},{file:'DXyFkiqjsRn.webp', post:'DXyFkiqjsRn'},
+      {file:'DXyGS-YDlT2.webp', post:'DXyGS-YDlT2'}
     ],
-    posts: [
-      'DXyE1IGDuZr','DXyFkiqjsRn','DXyGS-YDlT2'
-    ] },
+    posts: [] },
+  { id: 'arc-soak',        label: 'Soak a Senior',    cols: 3, type: 'p',    comingSoon: false,
+    imgFolder: 'sas',
+    images: [
+      {file:'BCsoaksAM.webp', post:''},{file:'SubmergedtotheMax.webp', post:''},
+      {file:'ChineseTorture.webp', post:''},{file:'CarsonSplash.webp', post:''},
+      {file:'Shirom&Jackson.webp', post:''},{file:'DoubleSoak.webp', post:''},
+      {file:'LiccSoak.webp', post:''},{file:'RowlandSoak.webp', post:''},
+      {file:'SaigonExecution.webp', post:''},{file:'TChaseSoak.webp', post:''},
+      {file:'IbraSoak.webp', post:''},{file:'MIB.webp', post:''},
+      {file:'4kSoak.webp', post:''},{file:'SneakAttack.webp', post:''},
+      {file:'LiccStrikesBack.webp', post:''},{file:'PointBlank.webp', post:''},
+      {file:'CCFightsOn.webp', post:''},{file:'BCAcceptsIt.webp', post:''},
+      {file:'Acceptance.webp', post:''},{file:'LilAryanSoaks.webp', post:''},
+      {file:'TuffBrandonCh.webp', post:''},{file:'TotalSoak.webp', post:''},
+      {file:'Aggressive.webp', post:''},{file:'22sMyWord.webp', post:''},
+      {file:'TuffLineup.webp', post:''},{file:'Sharpshooter.webp', post:''},
+      {file:'TuffAndSoaked.webp', post:''},{file:'T10.webp', post:''},
+      {file:'Cuties.webp', post:''},{file:'TustinTres.webp', post:''},
+      {file:'Scrunch.webp', post:''},{file:'BeckmanBetrayal.webp', post:''},
+      {file:'LiccAndJO.webp', post:''},{file:'DoubleTeam.webp', post:''},
+      {file:'JOTorture.webp', post:''},{file:'LTHeisman.webp', post:''},
+      {file:'FightOff.webp', post:''},{file:'BCSquadWipe.webp', post:''},
+      {file:'BrandonCaDistress.webp', post:''},{file:'SoakedClaps.webp', post:''},
+      {file:'BraceForImpact.webp', post:''},{file:'TippingBucket.webp', post:''},
+      {file:'AIConsumesWater.webp', post:''},{file:'TonyStark.webp', post:''},
+      {file:'MuradSiblingSoak.webp', post:''},{file:'AvaBrotherSoak.webp', post:''},
+      {file:'FinalSoakLineup.webp', post:''}
+    ],
+    posts: [] },
   { id: 'arc-graduation', label: 'Graduation',      cols: 3, type: 'p',    comingSoon: true,
     posts: [] },
 ];
@@ -3132,109 +3174,56 @@ const FAVORITES = [
   { src: 'images/favs/BonnieNClyde.webp',             event: '',                      caption: 'Michael H & Milo M' },
   { src: 'images/favs/Lounge.webp',                   event: '',                      caption: 'Amani C, Farishta I, Luna C, Brandon Ch & Michael H' },
   { src: 'images/favs/Flash.webp',                    event: '',                      caption: 'Andrew C, Santiago C, Brandon Ca & Kai A' },
-  // Page 12 — col0: BCsoaksAM(1.50)+Girlies(0.75)+DubCouch(1.33)+TuffAtBeckman(0.67)=4.25 | col1: SiplySquad(1.33)+Dybala(0.75)+SubmergedtotheMax(1.50)+Scuba(0.67)=4.25 | col2: Photobooth(1.33)+KingNQueen(1.33)+Hearts(0.75)+Couch(0.75)=4.16
-  { src: 'images/favs/BCsoaksAM.webp',                event: 'Soak a Senior',         caption: 'Brandon Ch & Abram M' },
+  // Pages 12–17 (post-SaS-extraction; non-SaS + 7 SaS keepers)
   { src: 'images/favs/SiplySquad.webp',               event: 'VE Warriors',           caption: 'Uma J, Kai A, Santiago C, Josue G, Milo M, James W, Julian A, Elijah B, Nolan E, Daemeon M, Brandon Ca & Jayden C' },
   { src: 'images/favs/Photobooth.webp',               event: 'Prom',                  caption: 'Evan M, Nancy S, Aryanna M & Ryan Y' },
   { src: 'images/favs/Girlies.webp',                  event: 'Prom',                  caption: 'Leslie T, Kailee K, Aiza Q & Petra M' },
   { src: 'images/favs/Dybala.webp',                   event: '',                      caption: 'Josue G' },
   { src: 'images/favs/KingNQueen.webp',               event: 'Prom',                  caption: 'Aryanna M & Artin R' },
   { src: 'images/favs/DubCouch.webp',                 event: '',                      caption: 'Milo M, Richard C, Arnav S, Rayan G & Pearce W' },
-  { src: 'images/favs/SubmergedtotheMax.webp',        event: 'Soak a Senior',         caption: 'Max C & Rayan G' },
   { src: 'images/favs/Hearts.webp',                   event: '',                      caption: 'Milo M & James W' },
   { src: 'images/favs/TuffAtBeckman.webp',            event: '',                      caption: 'Milo M & Brandon Ca' },
   { src: 'images/favs/Scuba.webp',                    event: '',                      caption: 'Kailee K & Uma J' },
   { src: 'images/favs/Couch.webp',                    event: '',                      caption: 'Milo M & Santiago C' },
-  // Page 13 — col0: ChineseTorture(1.50)+Belligerent(0.67)+LiccSoak(1.50)+Lineup(0.67)=4.34 | col1: CarsonSplash(1.50)+Daycare(0.67)+RowlandSoak(1.50)+RushHour(0.67)=4.34 | col2: Shirom&Jackson(1.50)+DoubleSoak(0.67)+SaigonExecution(1.50)+Squad(0.67)=4.34
-  { src: 'images/favs/ChineseTorture.webp',           event: 'Soak a Senior',         caption: 'Sacha P & Santino S' },
-  { src: 'images/favs/CarsonSplash.webp',             event: 'Soak a Senior',         caption: 'Carson C, Katally L, Rayan G & Arnav S' },
-  { src: 'images/favs/Shirom&Jackson.webp',           event: 'Soak a Senior',         caption: 'Jackson R & Shirom M' },
-  { src: 'images/favs/Belligerent.webp',              event: 'HS Volleyball',    caption: 'Sacha P, Baran C & Jayden C' },
+  { src: 'images/favs/Belligerent.webp',              event: 'HS Volleyball',         caption: 'Sacha P, Baran C & Jayden C' },
   { src: 'images/favs/Daycare.webp',                  event: '',                      caption: 'Andrew C, Brandon Ca, Baran C & Sacha P' },
-  { src: 'images/favs/DoubleSoak.webp',               event: 'Soak a Senior',         caption: 'Rayan G, Arnav S & Abram M' },
-  { src: 'images/favs/LiccSoak.webp',                 event: 'Soak a Senior',         caption: 'Abram M' },
-  { src: 'images/favs/RowlandSoak.webp',              event: 'Soak a Senior',         caption: 'Jackson R' },
-  { src: 'images/favs/SaigonExecution.webp',          event: 'Soak a Senior',         caption: 'Rayan G' },
   { src: 'images/favs/Lineup.webp',                   event: '',                      caption: 'Max C, Omar A, Sacha P, Katally L, Rayan G, Arnav S, Abram M & Jackson R' },
   { src: 'images/favs/RushHour.webp',                 event: '',                      caption: 'Daemeon M & Kailee K' },
   { src: 'images/favs/Squad.webp',                    event: '',                      caption: 'Sacha P, Andrew C, Baran C, Daemeon M & Omar A' },
-  // Page 14 — col0: TChaseSoak(1.50)+MIB(0.95)+UCBUCLA(0.67)+WholeLottAsians(0.67)=3.79 | col1: JussABebe(1.50)+SlightlyPeDe(1.00)+Ultras(0.75)+ChemStuff(0.67)=3.92 | col2: IbraSoak(1.50)+KawaiiDesuNe(1.00)+ThumbsUp(0.67)+4kSoak(0.67)=3.84
-  { src: 'images/favs/TChaseSoak.webp',               event: 'Soak a Senior',         caption: 'Max C & Sacha P' },
   { src: 'images/favs/JussABebe.webp',                event: 'Flour Baby',            caption: 'Amreen I, Aiza Q & Uma J' },
-  { src: 'images/favs/IbraSoak.webp',                 event: 'Soak a Senior',         caption: 'Andrew C & Ibrahim M' },
-  { src: 'images/favs/MIB.webp',                      event: 'Soak a Senior',         caption: 'Cooper M & Jayden T' },
   { src: 'images/favs/SlightlyPeDe.webp',             event: '',                      caption: 'Andrew C & Jayden C' },
   { src: 'images/favs/KawaiiDesuNe.webp',             event: '',                      caption: 'Max C & Milo M' },
   { src: 'images/favs/UCBUCLA.webp',                  event: '',                      caption: 'Rayan G & Katally L' },
   { src: 'images/favs/Ultras.webp',                   event: '',                      caption: 'Nathan H, Andrew C, Baran C, Sacha P & Jayden C' },
-  { src: 'images/favs/ThumbsUp.webp',                 event: 'HS Volleyball',    caption: 'Uma J, Jayden O & Katally L' },
+  { src: 'images/favs/ThumbsUp.webp',                 event: 'HS Volleyball',         caption: 'Uma J, Jayden O & Katally L' },
   { src: 'images/favs/WholeLottAsians.webp',          event: '',                      caption: 'Jayden O, Max C, Rayan G & Katally L' },
   { src: 'images/favs/ChemStuff.webp',                event: '',                      caption: 'Leslie T, Janae A & Murad M' },
-  { src: 'images/favs/4kSoak.webp',                   event: 'Soak a Senior',         caption: 'Destiny P, Michael H & Abram M' },
-  // Page 15 — col0: SneakAttack(1.59)+LTattacksChild(1.49)+FinestEsscentialsEmployee(0.67)+TonyStark(1.49)=5.24 | col1: BraceForImpact(1.19)+TippingBucket(1.49)+PointBlank(1.00)+AIConsumesWater(1.49)=5.17 | col2: CashBebe(1.49)+LiccStrikesBack(1.49)+CCFightsOn(1.49)+UCSystem(0.67)=5.14
-  { src: 'images/favs/SneakAttack.webp',              event: 'Soak a Senior',         caption: 'Aiza Q, Cooper M, Destiny P & Brandon Ch' },
-  { src: 'images/favs/BraceForImpact.webp',           event: 'Soak a Senior',         caption: 'Abram M & Parin L' },
   { src: 'images/favs/CashBebe.webp',                 event: 'Flour Baby',            caption: 'Cash T' },
   { src: 'images/favs/LTattacksChild.webp',           event: 'Flour Baby',            caption: 'Santiago C & Leslie T' },
-  { src: 'images/favs/TippingBucket.webp',            event: 'Soak a Senior',         caption: 'Rayan R, Amreen I, Audrey L, Max C, Aiza Q & Brandon Ch' },
-  { src: 'images/favs/LiccStrikesBack.webp',          event: 'Soak a Senior',         caption: 'Connor P, Mason N & Parin L' },
   { src: 'images/favs/FinestEsscentialsEmployee.webp',event: 'Flour Baby',            caption: 'Milo M' },
-  { src: 'images/favs/PointBlank.webp',               event: 'Soak a Senior',         caption: 'Abram M & Mason N' },
-  { src: 'images/favs/CCFightsOn.webp',               event: 'Soak a Senior',         caption: 'Carson C, Mason N, Rayan R & Amreen I' },
-  { src: 'images/favs/TonyStark.webp',                event: 'Soak a Senior',         caption: 'Michael H, Cooper M, Jayden T & Jianna D' },
-  { src: 'images/favs/AIConsumesWater.webp',          event: 'Soak a Senior',         caption: 'Amreen I, Audrey L & Aiza Q' },
   { src: 'images/favs/UCSystem.webp',                 event: '',                      caption: 'Rayan G & Katally L' },
-  // Page 16 — col0: BCAcceptsIt(1.49)+LilAryanSoaks(1.49)+Aggressive(1.49)+TuffLineup(0.67)=5.14 | col1: JulianSneak(1.49)+TuffBrandonCh(1.49)+22sMyWord(1.00)+Sharpshooter(0.67)=4.65 | col2: Acceptance(1.49)+TotalSoak(1.49)+2sUp(1.00)+TuffAndSoaked(0.67)=4.65
-  { src: 'images/favs/BCAcceptsIt.webp',              event: 'Soak a Senior',         caption: 'Brandon Ch' },
   { src: 'images/favs/JulianSneak.webp',              event: '',                      caption: 'Santiago C, Daemeon M, Rayan R, Amreen I & Audrey L' },
-  { src: 'images/favs/Acceptance.webp',               event: 'Soak a Senior',         caption: 'Mason N, Abram M & Parin L' },
-  { src: 'images/favs/LilAryanSoaks.webp',            event: 'Soak a Senior',         caption: 'Rayan R' },
-  { src: 'images/favs/TuffBrandonCh.webp',            event: 'Soak a Senior',         caption: 'Brandon Ch' },
-  { src: 'images/favs/TotalSoak.webp',                event: 'Soak a Senior',         caption: 'Rayan R, Amreen I & Audrey L' },
-  { src: 'images/favs/Aggressive.webp',               event: 'Soak a Senior',         caption: 'Rayan R, Amreen I, Audrey L, Aiza Q & Brandon Ch' },
-  { src: 'images/favs/22sMyWord.webp',                event: 'Soak a Senior',         caption: 'Rayan R & Amreen I' },
   { src: 'images/favs/2sUp.webp',                     event: '',                      caption: 'Kailee K & Uma J' },
-  { src: 'images/favs/TuffLineup.webp',               event: 'Soak a Senior',         caption: 'Connor P, Parin L, Santiago C & Daemeon M' },
-  { src: 'images/favs/Sharpshooter.webp',             event: 'Soak a Senior',         caption: 'Max C, Connor P, Parin L, Santiago C, Daemeon M, Rayan R & Amreen I' },
-  { src: 'images/favs/TuffAndSoaked.webp',            event: 'Soak a Senior',         caption: 'Parin L, Santiago C & Daemeon M' },
-  // Page 17 — col0: T10(0.67)=0.67
-  { src: 'images/favs/T10.webp',                      event: 'Soak a Senior',         caption: 'Katally L, Rayan G & Arnav S' },
-  { src: 'images/favs/ZotZotZot.webp',               event: '',                      caption: 'Ruth Z, Ellie C, Jianna D & Farishta I' },
-  { src: 'images/favs/FinalSoakLineup.webp',         event: 'Soak a Senior',         caption: 'Kai A, Andrew C, Milo M, Brandon Ca, Jayden C, Jayden O & Carson C' },
-  { src: 'images/favs/Cuties.webp',                  event: 'Soak a Senior',         caption: 'Milo M & Brandon C' },
-  { src: 'images/favs/TustinTres.webp',              event: 'Soak a Senior',         caption: 'Milo M, Brandon Ca & Jayden C' },
-  { src: 'images/favs/Scrunch.webp',                 event: 'Soak a Senior',         caption: 'Elijah B, Milo M & Brandon Ca' },
-  { src: 'images/favs/BeckmanBetrayal.webp',         event: 'Soak a Senior',         caption: 'Brandon Ca, Jayden O & Carson C' },
-  { src: 'images/favs/LiccAndJO.webp',               event: 'Soak a Senior',         caption: 'Jayden O & Carson C' },
-  { src: 'images/favs/DoubleTeam.webp',              event: 'Soak a Senior',         caption: 'Kai A, Andrew C, Milo M & Brandon Ca' },
-  { src: 'images/favs/JOTorture.webp',               event: 'Soak a Senior',         caption: 'Jayden O' },
-  { src: 'images/favs/Quadruplets.webp',             event: 'Flour Baby',            caption: 'Rayan R' },
-  { src: 'images/favs/YahnDad.webp',                 event: 'Flour Baby',            caption: 'Ryan Y' },
-  { src: 'images/favs/LTHeisman.webp',               event: 'Soak a Senior',         caption: 'Uma J & Leslie T' },
-  { src: 'images/favs/FightOff.webp',                event: 'Soak a Senior',         caption: 'Jayden C, Jayden O, Carson C, Luna C, Grace D & Murad M' },
-  { src: 'images/favs/BCSquadWipe.webp',             event: 'Soak a Senior',         caption: 'Brandon Ch, Carson C, Luna C, Grace D & Murad M' },
-  { src: 'images/favs/MuradSiblingSoak.webp',        event: 'Soak a Senior',         caption: 'Luna C & Murad M' },
-  { src: 'images/favs/AvaBrotherSoak.webp',          event: 'Soak a Senior',         caption: 'Cash T, Ava L & Uma J' },
-  { src: 'images/favs/BrandonCaDistress.webp',       event: 'Soak a Senior',         caption: 'Kai A, Andrew C, Milo M, Brandon Ca, Kailee K, Jayden C & Jayden O' },
-  { src: 'images/favs/SoakedClaps.webp',             event: 'Soak a Senior',         caption: 'Andrew C, Milo M, Brandon Ca & Jayden C' },
-  { src: 'images/favs/Parents.webp',                 event: 'Flour Baby',            caption: 'Evan M, Nancy S, Aryanna M, Miriam Y & Kiana V' },
-  { src: 'images/favs/Omoggers.webp',                event: 'Flour Baby',            caption: 'Evan M, Milo M & Brent L' },
-  { src: 'images/favs/UCLAmom.webp',                 event: 'Flour Baby',            caption: 'Amreen I' },
-  { src: 'images/favs/2+2+2+2.webp',                event: '',                      caption: 'Luke D, Paloma A & Nyala A' },
-  { src: 'images/favs/DarkMoonEmoji.webp',           event: 'Flour Baby',            caption: 'Kiana V & Nancy S' },
-  // Page 19 — desktop col0(0,3,6,9): SiplyConn(1.54)+Pose(0.67)+TuffestParents(0.67)+JGWet(1.33)=4.21 | col1(1,4,7,10): JessGng(1.33)+Mlem(0.75)+Kona(0.75)+CollabTime(1.33)=4.17 | col2(2,5,8,11): Infiltration(1.33)+26Poster(0.83)+FirstDaySoak(0.68)+MogOff(1.33)=4.17 — mobile col0(even)=6.30 col1(odd)=6.25
-  { src: 'images/favs/SiplyConnection.webp',         event: 'HS Volleyball',         caption: 'Parin L & Daemeon M' },
-  { src: 'images/favs/JessGng.webp',                 event: 'Prom',                  caption: 'James W & Richard C' },
-  { src: 'images/favs/Infiltration.webp',            event: 'HS Volleyball',         caption: 'Nathan S, Pearce W & Katally L' },
-  { src: 'images/favs/Pose.webp',                    event: '',                      caption: 'Andrew C' },
-  { src: 'images/favs/Mlem.webp',                    event: '',                      caption: 'Aryanna M, Kailee K & Ella S' },
-  { src: 'images/favs/26Poster.webp',                event: '',                      caption: 'Milo M, Cash T, Brandon Ca, Daemeon M & Leslie T' },
-  { src: 'images/favs/TuffestParents.webp',          event: 'Flour Baby',            caption: 'Ryan Y, Evan M & Nico M' },
-  { src: 'images/favs/Kona.webp',                    event: '',                      caption: 'Amani C & Kiyomi P' },
-  { src: 'images/favs/FirstDayofSoakASenior.webp',   event: 'Soak a Senior',         caption: 'Brent L, Santino S, Baran C, Josue G, Matt C, Nathan S & Kailee K' },
-  { src: 'images/favs/JGWet.webp',                   event: 'Soak a Senior',         caption: 'Josue G' },
-  { src: 'images/favs/CollaborationTime.webp',       event: '',                      caption: 'Jayden C, Sacha P, Milo M & Santiago C' },
-  { src: 'images/favs/MogOff.webp',                  event: '',                      caption: 'Brent L, Evan M & Shirom M' },
+  { src: 'images/favs/ZotZotZot.webp',                event: '',                      caption: 'Ruth Z, Ellie C, Jianna D & Farishta I' },
+  { src: 'images/favs/Quadruplets.webp',              event: 'Flour Baby',            caption: 'Rayan R' },
+  { src: 'images/favs/YahnDad.webp',                  event: 'Flour Baby',            caption: 'Ryan Y' },
+  { src: 'images/favs/FirstDayofSoakASenior.webp',    event: 'Soak a Senior',         caption: 'Brent L, Santino S, Baran C, Josue G, Matt C, Nathan S & Kailee K' },
+  { src: 'images/favs/JGWet.webp',                    event: 'Soak a Senior',         caption: 'Josue G' },
+  { src: 'images/favs/Parents.webp',                  event: 'Flour Baby',            caption: 'Evan M, Nancy S, Aryanna M, Miriam Y & Kiana V' },
+  { src: 'images/favs/Omoggers.webp',                 event: 'Flour Baby',            caption: 'Evan M, Milo M & Brent L' },
+  { src: 'images/favs/UCLAmom.webp',                  event: 'Flour Baby',            caption: 'Amreen I' },
+  { src: 'images/favs/2+2+2+2.webp',                  event: '',                      caption: 'Luke D, Paloma A & Nyala A' },
+  { src: 'images/favs/DarkMoonEmoji.webp',            event: 'Flour Baby',            caption: 'Kiana V & Nancy S' },
+  { src: 'images/favs/SiplyConnection.webp',          event: 'HS Volleyball',         caption: 'Parin L & Daemeon M' },
+  { src: 'images/favs/JessGng.webp',                  event: 'Prom',                  caption: 'James W & Richard C' },
+  { src: 'images/favs/Infiltration.webp',             event: 'HS Volleyball',         caption: 'Nathan S, Pearce W & Katally L' },
+  { src: 'images/favs/Pose.webp',                     event: '',                      caption: 'Andrew C' },
+  { src: 'images/favs/Mlem.webp',                     event: '',                      caption: 'Aryanna M, Kailee K & Ella S' },
+  { src: 'images/favs/26Poster.webp',                 event: '',                      caption: 'Milo M, Cash T, Brandon Ca, Daemeon M & Leslie T' },
+  { src: 'images/favs/TuffestParents.webp',           event: 'Flour Baby',            caption: 'Ryan Y, Evan M & Nico M' },
+  { src: 'images/favs/Kona.webp',                     event: '',                      caption: 'Amani C & Kiyomi P' },
+  { src: 'images/favs/CollaborationTime.webp',        event: '',                      caption: 'Jayden C, Sacha P, Milo M & Santiago C' },
+  { src: 'images/favs/MogOff.webp',                   event: '',                      caption: 'Brent L, Evan M & Shirom M' },
   // Page 20 — col0: UCHardworking(0.75)+Monkeys(1.50)=2.25 | col1: FBLA(0.75)+Mars(0.67)=1.42 | col2: Mario(1.50)=1.50
   { src: 'images/favs/UCHardworking.webp',           event: '',                      caption: 'Artin R & Katally L' },
   { src: 'images/favs/FBLA.webp',                    event: 'FBLA',                  caption: 'Sacha P, Rayan G & Artin R' },
