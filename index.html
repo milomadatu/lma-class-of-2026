@@ -388,8 +388,6 @@
   .rearrange-btn { transition: background 0.2s, color 0.2s, box-shadow 0.18s, transform 0.15s; min-width: 82px; text-align: center; }
   .rearrange-btn.active { background: var(--gold-lt); color: var(--gold); box-shadow: none; }
   .groups-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  .groups-grid .ve-card:last-child:nth-child(3n+1) { grid-column: 2; }
-  .groups-grid .ve-card:last-child:nth-child(3n+2) { grid-column: span 2; }
   .person-card {
     flex: 0 0 calc((100% - 72px) / 10);
     aspect-ratio: 1; border-radius: 12px; overflow: hidden; cursor: pointer;
@@ -438,6 +436,8 @@
   .group-sheet-close:hover { background: var(--surface-2); }
   .group-sheet-body { overflow-y: auto; padding: 16px 20px; flex: 1; }
   .group-sheet-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .group-sheet-section + .group-sheet-section { margin-top: 18px; }
+  .group-sheet-section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin-bottom: 8px; }
   .group-sheet-member { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
   .group-sheet-member-photo { width: 100%; aspect-ratio: 1; border-radius: 10px; overflow: hidden; background: var(--bg); transition: transform 0.15s; }
   .group-sheet-member:active .group-sheet-member-photo { transform: scale(0.94); }
@@ -811,6 +811,9 @@
     .map-panel-img { width: 72px; height: 72px; border-radius: 8px; flex-shrink: 0; }
     .map-panel-text { padding-right: 28px; }
     .map-panel-ig { zoom: 1; max-height: 400px; }
+
+    /* Lock horizontal scroll on mobile */
+    html, body { overflow-x: hidden; }
 
     /* People */
     .people-header { flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 0; }
@@ -1306,8 +1309,8 @@ const people = [
   {img:'images/Headshots/Brandon Ca.webp',name:'Brandon Campos',role:'IVC — College',ig:'@brandoncamp.os',email:'brandonac4292@gmail.com',birthday:'September 16, 2008',quote:"Don't be a judger bro.",quoteBy:'Ken Carson',bio:"Brandon is committed to IVC, planning to transfer. His favorite memory was Kai vs. Jesiah. He will miss his friends the most and is most excited for traveling and exploring."},
   {img:'images/Headshots/Santiago C.webp',name:'Santiago Cardenas-Huerta',role:'IVC',ig:'@Santiago_cahu',email:'Santiagoc4183@mytusd.org',birthday:'April 26, 2008',quote:'God is absolutely above all, trust in Him and you\'ll end up where He wants you to be.',quoteBy:'',bio:'Santiago is committed to IVC, planning to get married, start a family, and achieve financial stability. His favorite memory was with the boys. He will miss the bonds and friendships he has built and is most excited to figure things out.'},
   {img:'images/Headshots/Carson C.webp',name:'Carson Carter',role:'4 Year College — Business',ig:'@carsoniancarter',email:'carsonmaccarter@outlook.com',birthday:'February 13, 2008',quote:"Don't cry because it's over, smile because it happened",quoteBy:'Dr. Seuss',bio:"Carson is headed to a 4-year college, planning to major in business and eventually own a company or work in investment/consulting. His favorite memory was being in ASB. He will miss all his friends he talks to every day and is most excited for college life."},
-  {img:'',name:'Rebecca Casillas',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Rebecca is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'images/Headshots/Richard C.webp',name:'Richard Casillas',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Richard is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Rebecca C.webp',name:'Rebecca Casillas',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Rebecca is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Richard C.webp',name:'Richard Casillas',role:'Cal Poly SLO — Mechanical Engineering',ig:'@richard.casillasgarcia',email:'richardcasillasgarcia@gmail.com',birthday:'February 14, 2008',quote:'Keep moving forward',quoteBy:'',bio:"Richard is committed to Cal Poly SLO, planning to complete a 4-year undergrad plus a 1-year master's in mechanical engineering. In 10 years he hopes to have built the experience, connections, and funding to found his own startup and create a positive impact. His favorite memory was four square. He will miss his close friends the most and is most excited for a change where he is surrounded by smart, ambitious people who want to learn and do similar things to him."},
   {img:'images/Headshots/Jayden C.webp',name:'Jayden Cerda',role:'IVC — Photography',ig:'@Vibewth.Jayden',email:'Cerdajay792@gmail.com',birthday:'July 27, 2008',quote:'You will never truly know the value of a moment until it becomes a memory',quoteBy:'',bio:'Jayden is committed to IVC, planning to become a photographer like Larry Chen — or a firefighter. His favorite memory was ESC. He will miss seeing his people every day and is most excited to stop waking up early for school.'},
   {img:'images/Headshots/Baran C.webp',name:'Baran Cerrahoglu',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Baran is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Brandon Ch.webp',name:'Brandon Chang',role:'Purdue University — Automotive / Motorsports',ig:'@oafishkoala_1159x',email:'brandonchang0907@gmail.com',birthday:'September 7, 2007',quote:'If you\'re having a rough time, just remember that Sisyphus is trapped for eternity.',quoteBy:'',bio:'Brandon is headed to Purdue University, planning to work in the automotive industry designing next-generation motorsport vehicles. His favorite memory was the EV Challenge racing event. He will miss hanging out with friends and is most excited for senior activities in the final stretch of high school.'},
@@ -1323,7 +1326,7 @@ const people = [
   {img:'images/Headshots/Luke D.webp',name:'Luke Dinley',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Luke is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Alethia D.webp',name:'Alethia Duggan',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Alethia is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Rayan G.webp',name:'Rayan Garg',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Rayan is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
-  {img:'',name:'Betsy Guevara',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Betsy is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Betsy G.webp',name:'Betsy Guevara',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Betsy is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Josue G.webp',name:'Josue Guzman',role:'_____— _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Josue is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Logan H.webp',name:'Logan Haney',role:'Community College',ig:'',email:'loganh3472@mytusd.org',birthday:'June 28, 2008',quote:'The speed of LMA work has me feeling a burning sensation like Icy-hot',quoteBy:'',bio:'Logan is heading to community college. He will miss Mr. Jones and Dr. M the most and is most excited for getting hella bands.'},
   {img:'images/Headshots/Jesiah H.webp',name:'Jesiah Hezekiah',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Jesiah is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
@@ -1382,7 +1385,7 @@ const people = [
   {img:'images/Headshots/Justin T.webp',name:'Justin Tangker',role:'Job',ig:'',email:'justint0011@mytusd.org',birthday:'March 26, 2008',quote:'I\'ve been dead for 18 years. Today is the day I live.',quoteBy:'',bio:'Justin is heading straight into the workforce, planning to get a job and finally live his happiest chapter yet. His favorite memory from LMA was leaving. He will miss his friends but is way more excited to get out of here.'},
   {img:'images/Headshots/Leslie T.webp',name:'Leslie Tawagon',role:'_____— _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Leslie is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Cash T.webp',name:'Cash Thomson',role:'CSU Long Beach — Physical Therapy',ig:'@cash_thomson',email:'cashthomson69@gmail.com',birthday:'February 20, 2008',quote:'Denial is a river in Egypt. You don\'t wanna be in denial',quoteBy:'',bio:'Cash is committed to CSU Long Beach, planning to become a physical therapist — working with fighters and athletes or running his own practice. His favorite memory was junior year. He will miss his teachers and friends the most and is most excited to start college and a new chapter of life.'},
-  {img:'images/Headshots/Austin V.webp',name:'Austin Van',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Austin is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
+  {img:'images/Headshots/Austin V.webp',name:'Austin Van',role:'Business',ig:'@astnvan',email:'projectaj11@gmail.com',birthday:'November 6, 2007',quote:'',quoteBy:'',bio:"Austin is figuring it out as he goes — focused on scaling his business and seeing where it takes him. In 10 years he sees himself either homeless or well off. His favorite memories were signing out, Bakersfield trips, and Spain. He'll miss the Bakersfield trips the most and is most excited for whatever's next."},
   {img:'images/Headshots/Kiana V.webp',name:'Kiana Vuong',role:'Community College',ig:'@kianaaa.vuong',email:'kianavuong0@gmail.com',birthday:'December 27, 2007',quote:'Be the art that life is breathing. Be the soul the world is living.',quoteBy:'Lana Del Rey',bio:'Kiana is planning to travel and establish her career — in ten years, she hopes to be rich with a happy and healthy family. Her favorite memory was when school shut down due to the hangar fire. She will miss talking and seeing her friends every day, but is most excited to see everyone, including herself, succeed and achieve their dreams.'},
   {img:'images/Headshots/Preston W.webp',name:'Preston Wong',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Preston is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
   {img:'images/Headshots/Pearce W.webp',name:'Pearce Walter',role:'_____ — _____',ig:'@_____',email:'',birthday:'',quote:'Dropped the wave runners now we run the wave',quoteBy:'goat',bio:'Pearce is committed to _____ for _____, planning to _____. Their favorite memory has been _____ and they will miss _____ the most. They are most excited for _____ in the next 10 years.'},
@@ -1653,7 +1656,7 @@ function openGroupSheet(gidx) {
   igBtn.href = vc?.site ?? (vc ? `https://www.instagram.com/${vc.handle}/` : '#');
   igBtn.style.display = (vc?.site || vc) ? '' : 'none';
   document.getElementById('ve-sheet-members-label').textContent = `${members.length} members`;
-  document.getElementById('ve-sheet-grid').innerHTML = members.map(p => {
+  const memberCardHTML = p => {
     const idx = people.indexOf(p);
     const itn = p.name.split(' ').map(w => w[0]).slice(0, 2).join('');
     const bg = pastels[idx % pastels.length];
@@ -1664,7 +1667,27 @@ function openGroupSheet(gidx) {
       <div class="group-sheet-member-photo">${photo}</div>
       <div class="group-sheet-member-name">${p.name.split(' ')[0]}</div>
     </div>`;
-  }).join('');
+  };
+  const grid = document.getElementById('ve-sheet-grid');
+  if (g.sections?.length) {
+    const sectioned = new Set(g.sections.flatMap(s => s.members));
+    const lead = g.members.filter(n => !sectioned.has(n));
+    const all = [
+      ...(lead.length ? [{ label: '', members: lead }] : []),
+      ...g.sections,
+    ];
+    grid.className = '';
+    grid.innerHTML = all.map(s => {
+      const sm = s.members.map(n => people.find(p => p.name === n)).filter(Boolean);
+      return `<div class="group-sheet-section">
+        ${s.label ? `<div class="group-sheet-section-label">${s.label}</div>` : ''}
+        <div class="ve-sheet-grid">${sm.map(memberCardHTML).join('')}</div>
+      </div>`;
+    }).join('');
+  } else {
+    grid.className = 've-sheet-grid';
+    grid.innerHTML = members.map(memberCardHTML).join('');
+  }
   const postsEl = document.getElementById('ve-sheet-posts');
   if (vc) {
     const profileEmbed = `<blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/${vc.handle}/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px;flex-shrink:0;width:100%;min-width:0;padding:0;"></blockquote>`;
@@ -1758,13 +1781,70 @@ renderGrid();
 /* ── Friend Groups ── */
 // Add groups here — members must match exact names in the people array.
 const GROUPS = [
-  { name: 'Siply', members: ['Milo Madolora', 'Sacha Papadakis', 'Daemeon Mitchell', 'Josue Guzman', 'Andrew Camacho', 'James Wang', 'Nico Mena', 'Preston Wong', 'Iffah Sheikh', 'Santiago Cardenas-Huerta', 'Luna Chen', 'Ruth Zhang', 'Parin Ladva', 'Austin Van', 'Evan Morones', 'Elijah Bagnol', 'Uma Joshi', 'Brandon Campos', 'Cash Thomson', 'Jayden Cerda', 'Kai Arellano', 'Kiana Vuong', 'Nancy Silva', 'Destiny Vivianna Perez'] },
-  { name: 'TrueVue', members: ['Carson Carter', 'Richard Casillas', 'Rayan Rouhizad', 'Peyton Tan', 'Matthew Ciecek', 'Leslie Tawagon', 'Brent Limbo', 'Baran Cerrahoglu', 'Audrey Lee', 'Rebecca Casillas', 'Mason Nguyen', 'Luke Dinley', 'Pearce Walter', 'Hunter Williams', 'Nathan Saltzer', 'Danya Ibrahim', 'Sierra Minjares', 'Ali Aryan Lalani', 'Max Chang', 'Hannah Spiezer', 'Joshua Saltzer', 'Josh Kim', 'Chris Cowdell'] },
-  { name: 'Sunmoon Snacks', members: ['Rayan Garg', 'Katally Lin', 'Michael Hsieh', 'Arnav Sheth', 'Amreen Islam', 'Ava Lorenzana', 'Marie-France Demuro', 'Morgan Melching', 'Samana Nadig', 'Cooper Mayhew', 'Jaedon Baluyut', 'Aryanna Martinez', 'Kailee Kwok', 'Ella Schubert', 'Abram Militante', 'Artin Rastegar', 'Jayden Tamura', 'Alethia Duggan', 'Jayden Ohashi', 'Kiyomi Pizarro'] },
-  { name: 'Setta', members: ['Evelynn Ngo', 'Santino Sebastian Salonga', 'Jianna DiLellio', 'Aiza Qureshi', 'Ellie Chung', 'Jesiah Hezekiah', 'Miriam Yassa', 'Connor Paxton', 'Farishta Islam', 'Nathan Hong'] },
-  { name: 'Legacy Enterprises', members: ['Amani Clark', 'Betsy Guevara', 'Brandon Chang', 'Grace De La Cruz', 'Emily Wang', 'Jackson Rowland', 'Janae Alsabti', 'Jeromy Munguia', 'Justin Tangker', 'Logan Haney', 'Logan Woods', 'Matthew Ibarra', 'Murad Malik', 'Nima Parto', 'Paloma Ayala', 'Ryan Yahn', 'Sam Skaron', 'Seth Pham', 'Shirom Mukherjee', 'Zach Avalos', 'Eden Woods', 'Ibrahim Memon', 'Nyala Ali', 'Omar Anees'] },
-  { name: 'Dihcheck', members: ['Sacha Papadakis', 'Nathan Hong', 'Daemeon Mitchell', 'Josue Guzman', 'Santiago Cardenas-Huerta', 'Andrew Camacho', 'Kai Arellano', 'Jayden Cerda', 'Arnav Sheth', 'Omar Anees', 'Rayan Garg', 'Ibrahim Memon', 'James Wang', 'Brent Limbo', 'Jayden Ohashi', 'Brandon Campos', 'Richard Casillas', 'Milo Madolora'] },
-  { name: 'Sneakyboos', members: ['Nancy Silva', 'Ella Schubert', 'Aryanna Martinez', 'Miriam Yassa', 'Sierra Minjares', 'Nyala Ali', 'Jesiah Hezekiah', 'Kiana Vuong'] },
+  { name: 'Siply', members: [
+    'Milo Madolora', 'Sacha Papadakis', 'Daemeon Mitchell', 'Josue Guzman',
+    'Andrew Camacho', 'James Wang', 'Nico Mena', 'Preston Wong',
+    'Iffah Sheikh', 'Santiago Cardenas-Huerta', 'Luna Chen', 'Ruth Zhang',
+    'Parin Ladva', 'Austin Van', 'Evan Morones', 'Elijah Bagnol',
+    'Uma Joshi', 'Brandon Campos', 'Cash Thomson', 'Jayden Cerda',
+    'Kai Arellano', 'Kiana Vuong', 'Nancy Silva', 'Destiny Vivianna Perez',
+  ] },
+  { name: 'TrueVue', members: [
+    'Carson Carter', 'Richard Casillas', 'Rayan Rouhizad', 'Peyton Tan',
+    'Matthew Ciecek', 'Leslie Tawagon', 'Brent Limbo', 'Baran Cerrahoglu',
+    'Audrey Lee', 'Rebecca Casillas', 'Mason Nguyen', 'Luke Dinley',
+    'Pearce Walter', 'Hunter Williams', 'Nathan Saltzer', 'Danya Ibrahim',
+    'Sierra Minjares', 'Ali Aryan Lalani', 'Max Chang', 'Hannah Spiezer',
+    'Joshua Saltzer', 'Josh Kim', 'Chris Cowdell',
+  ] },
+  { name: 'Sunmoon Snacks', members: [
+    'Rayan Garg', 'Katally Lin', 'Michael Hsieh', 'Arnav Sheth',
+    'Amreen Islam', 'Ava Lorenzana', 'Marie-France Demuro', 'Morgan Melching',
+    'Samana Nadig', 'Cooper Mayhew', 'Jaedon Baluyut', 'Aryanna Martinez',
+    'Kailee Kwok', 'Ella Schubert', 'Abram Militante', 'Artin Rastegar',
+    'Jayden Tamura', 'Alethia Duggan', 'Jayden Ohashi', 'Kiyomi Pizarro',
+  ] },
+  { name: 'Setta', members: [
+    'Evelynn Ngo', 'Santino Sebastian Salonga', 'Jianna DiLellio', 'Aiza Qureshi',
+    'Ellie Chung', 'Jesiah Hezekiah', 'Miriam Yassa', 'Connor Paxton',
+    'Farishta Islam', 'Nathan Hong',
+  ] },
+  { name: 'Legacy Enterprises', members: [
+    'Amani Clark', 'Betsy Guevara', 'Brandon Chang', 'Grace De La Cruz',
+    'Emily Wang', 'Jackson Rowland', 'Janae Alsabti', 'Jeromy Munguia',
+    'Justin Tangker', 'Logan Haney', 'Logan Woods', 'Matthew Ibarra',
+    'Murad Malik', 'Nima Parto', 'Paloma Ayala', 'Ryan Yahn',
+    'Sam Skaron', 'Seth Pham', 'Shirom Mukherjee', 'Zach Avalos',
+    'Eden Woods', 'Ibrahim Memon', 'Nyala Ali', 'Omar Anees',
+  ] },
+  { name: 'Dihcheck', members: [
+    'Sacha Papadakis', 'Nathan Hong', 'Daemeon Mitchell', 'Josue Guzman',
+    'Santiago Cardenas-Huerta', 'Andrew Camacho', 'Kai Arellano', 'Jayden Cerda',
+    'Arnav Sheth', 'Omar Anees', 'Rayan Garg', 'Ibrahim Memon',
+    'James Wang', 'Brent Limbo', 'Jayden Ohashi', 'Brandon Campos',
+    'Richard Casillas', 'Milo Madolora', 'Nico Mena',
+  ] },
+  { name: 'Sneakyboos', members: [
+    'Nancy Silva', 'Ella Schubert', 'Aryanna Martinez', 'Miriam Yassa',
+    'Sierra Minjares', 'Nyala Ali', 'Jesiah Hezekiah', 'Kiana Vuong',
+    'Milo Madolora',
+  ] },
+  { name: 'Library Goons', members: [
+    'Rayan Rouhizad', 'Kailee Kwok', 'Baran Cerrahoglu', 'Amreen Islam',
+    'Jayden Cerda', 'Uma Joshi', 'Josue Guzman', 'Ava Lorenzana',
+    'Aiza Qureshi', 'Santiago Cardenas-Huerta',
+  ] },
+  { name: "Shirom's Friendly Opps", members: [
+    'Shirom Mukherjee', 'Elijah Bagnol', 'Jackson Rowland', 'Paloma Ayala',
+    'Sierra Minjares', 'Destiny Vivianna Perez', 'Grace De La Cruz', 'Abram Militante',
+  ], sections: [
+    { label: 'Best Friends', members: [
+      'Elijah Bagnol', 'Jackson Rowland', 'Paloma Ayala', 'Sierra Minjares',
+    ] },
+    { label: 'Friendly Opps', members: [
+      'Destiny Vivianna Perez', 'Grace De La Cruz', 'Abram Militante',
+    ] },
+  ] },
 ];
 const GROUPS_ORIG = [...GROUPS];
 
@@ -1852,7 +1932,7 @@ const SURVEY_DATA = {
     {text:'Small',value:12},{text:'Communication',value:12},
     {text:'Distinctive',value:10},{text:'Nice',value:11},{text:'Eventful',value:10},{text:'Intriguing',value:10},{text:'Drab',value:10},
     {text:'Entertaining',value:10},{text:'Complex',value:10},{text:'Ok',value:10},
-    {text:'Divergent',value:10},{text:'Creativity',value:10},
+    {text:'Divergent',value:10},{text:'Creativity',value:10},{text:'Decent',value:10},{text:'Weird',value:10},
     {text:'Unforgettable',value:11},
     {text:'rollercoaster',value:10},
     {text:'Opportunity',value:10},{text:'Arches',value:10},
@@ -3224,12 +3304,22 @@ const FAVORITES = [
   { src: 'images/favs/Kona.webp',                     event: '',                      caption: 'Amani C & Kiyomi P' },
   { src: 'images/favs/CollaborationTime.webp',        event: '',                      caption: 'Jayden C, Sacha P, Milo M & Santiago C' },
   { src: 'images/favs/MogOff.webp',                   event: '',                      caption: 'Brent L, Evan M & Shirom M' },
-  // Page 20 — col0: UCHardworking(0.75)+Monkeys(1.50)=2.25 | col1: FBLA(0.75)+Mars(0.67)=1.42 | col2: Mario(1.50)=1.50
-  { src: 'images/favs/UCHardworking.webp',           event: '',                      caption: 'Artin R & Katally L' },
-  { src: 'images/favs/FBLA.webp',                    event: 'FBLA',                  caption: 'Sacha P, Rayan G & Artin R' },
-  { src: 'images/favs/Mario.webp',                   event: '',                      caption: 'Milo M' },
-  { src: 'images/favs/Monkeys.webp',                 event: '',                      caption: 'Nico M' },
-  { src: 'images/favs/Mars.webp',                    event: '',                      caption: 'Santino S & Preston W' },
+  { src: 'images/favs/UCHardworking.webp',            event: '',                      caption: 'Artin R & Katally L' },
+  { src: 'images/favs/FBLA.webp',                     event: 'FBLA',                  caption: 'Sacha P, Rayan G & Artin R' },
+  { src: 'images/favs/Mario.webp',                    event: '',                      caption: 'Milo M' },
+  { src: 'images/favs/Monkeys.webp',                  event: '',                      caption: 'Nico M' },
+  { src: 'images/favs/Mars.webp',                     event: '',                      caption: 'Santino S & Preston W' },
+  { src: 'images/favs/Calpico.webp',                  event: '',                      caption: 'Amreen I & Leslie T' },
+  { src: 'images/favs/2GPATypaPic.webp',              event: '',                      caption: 'Santino S' },
+  { src: 'images/favs/Janae&Omar.webp',               event: 'Prom',                  caption: 'Janae A & Omar A' },
+  { src: 'images/favs/Precision.webp',                event: '',                      caption: 'Evan M, Connor P & Abram M' },
+  { src: 'images/favs/ChicknDaves.webp',              event: '',                      caption: 'Aryan L & Arnav S' },
+  { src: 'images/favs/Gamblers.webp',                 event: 'Prom',                  caption: 'Katally L, Rayan G, Max C, Arnav S & James W' },
+  { src: 'images/favs/Meniscus.webp',                 event: '',                      caption: 'Amani C, Danya I & Destiny P' },
+  { src: 'images/favs/ThreeMusketeers.webp',          event: '',                      caption: 'Jeromy M, Zach A & Matthew I' },
+  { src: 'images/favs/RankingChips.webp',             event: '',                      caption: 'Pearce W & Evelynn N' },
+  { src: 'images/favs/JamesVan.webp',                 event: '',                      caption: 'Santino S, Preston W, James W & Nico M' },
+  { src: 'images/favs/ImproperLabSafety.webp',        event: '',                      caption: 'Grace D & Luna C' },
 ];
 
 let favOrder = FAVORITES.map((_, i) => i);
