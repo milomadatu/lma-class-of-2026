@@ -2,6 +2,23 @@
 
 Static senior-yearbook site. Single-file architecture: `index.html` is monolithic (HTML, CSS, JS all inline, ~3700 lines). No build step, no package.json. Hosted on GitHub at `milomadatu/lma-class-of-2026`, branch `master`.
 
+## Git Commit Rules
+
+- Never commit folders/files unless explicitly requested (e.g., YBHeadshots, backup folders)
+- Only commit when user explicitly asks; do not auto-commit during multi-step tasks
+- Wait for user confirmation that assets (photos, headshots) are uploaded before committing
+
+## Scope Discipline
+
+- Only modify what the user explicitly requested. Do not add bannerPos, fields, or items to groups/entries that weren't mentioned
+- When user provides image URLs, use them directly — do not WebSearch for alternatives
+- When interpreting photo captions or notes, do not assume they are new data entries (groups, favorites) without confirming
+
+## Destructive Operation Safety
+
+- Never delete original files or backup folders during batch operations (cropping, renaming) until the user confirms results are acceptable
+- For image processing scripts, default to a non-destructive workflow: write to a new folder, keep originals intact
+
 ## Asset folders
 
 - `images/Headshots/` — one webp per senior, filename pattern `First L.webp` (e.g. `Milo M.webp`, `Brandon Ca.webp`, `Marie D.webp`). Disambiguator letter when first-letter collisions exist (Brandon Ca/Ch, Matt C, Marie D for Demuro).
@@ -23,7 +40,7 @@ Static senior-yearbook site. Single-file architecture: `index.html` is monolithi
 
 `FAV_PER_PAGE = 12`. Desktop 3-col, mobile 2-col round-robin (col0=0,3,6,9 / col1=1,4,7,10 / col2=2,5,8,11).
 
-Landing stats at lines ~921–923: Seniors / Universities / States. Universities counter only includes schools with non-empty `igPosts`.
+Landing stats at lines ~921–923: Seniors / Universities / States. (See Universities Counting Rule below.)
 
 ## Caption conventions
 
@@ -31,6 +48,7 @@ Landing stats at lines ~921–923: Seniors / Universities / States. Universities
 - 2-name caption: `'A & B'`. 3+: `'A, B, C & D'` (Oxford comma omitted, ampersand before the last name).
 - Empty event: `event: ''`.
 - The smart fav-group matcher silently skips names not in the `people` array — non-class names like `Zane N`, `Nolan E`, `Julian A`, `Hudson G`, `Shriyes C`, `Mukhtaj S`, `Josh T` are valid in captions but won't link.
+- Teachers may appear in captions using `Initial Lastname` form (e.g. `T Chase`, `R Tanara` in `MuradTripleT`). Preserve verbatim — they intentionally don't follow the `First L` student convention and won't link to a card.
 
 ## Event tag conventions (case-sensitive, used in FAVORITES)
 
@@ -45,6 +63,12 @@ Landing stats at lines ~921–923: Seniors / Universities / States. Universities
 - Edit `index.html` directly with `Edit` tool. The file is large but greppable.
 - Test locally with `python -m http.server 8000` from project root, or VS Code Live Server. Hard-refresh (Ctrl+Shift+R) to bypass image cache after banner edits.
 - Confirm before committing — user explicitly requests "commit and push" when ready. Don't auto-push.
+
+## Project Conventions
+
+### Universities Counting Rule
+
+- Only count universities that have embeds (non-empty `igPosts`) when displaying the universities count on the landing stats (lines ~921–923)
 
 ## Persona note
 
