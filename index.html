@@ -90,7 +90,6 @@
   .archive-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .archive-section-header .section-label { margin-bottom: 0; }
   /* Timeline filter */
-  .archive-right { flex: 1; min-width: 0; }
   .archive-search-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; }
   .archive-filter-input {
     position: relative;
@@ -145,6 +144,14 @@
   .archive-suggestion:hover, .archive-suggestion.active { background: var(--surface-2); }
   .archive-suggestion-kind { font-size: 9px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
   .archive-search-count { font-size: 12px; color: var(--ink-3); font-weight: 500; }
+  .archive-search-count.clickable { cursor: pointer; color: var(--ink-2); transition: color 0.15s; user-select: none; }
+  .archive-search-count.clickable:hover { color: var(--ink); }
+  @keyframes matchPulse {
+    0%   { transform: scale(1); }
+    45%  { transform: scale(1.045); }
+    100% { transform: scale(1); }
+  }
+  .carousel-slide.match-pulse a.local-img-link { animation: matchPulse 0.6s cubic-bezier(0.16,1,0.3,1); }
   .archive-clear-btn { font-size: 11px; font-weight: 600; color: var(--ink-2); background: transparent; border: none; padding: 6px 10px; border-radius: 980px; cursor: pointer; transition: background 0.15s, color 0.15s; }
   .archive-clear-btn:hover { background: var(--surface-2); color: var(--ink); }
   .carousel-slide { transition: opacity 0.2s ease; }
@@ -779,7 +786,14 @@
 
   /* ── Timeline ── */
   .archive-layout { display: flex; gap: 2rem; align-items: flex-start; }
-  .timeline-sidebar { flex: 0 0 180px; position: sticky; top: 64px; }
+  .timeline-sidebar { flex: 0 0 240px; position: sticky; top: 64px; }
+  .timeline-sidebar .sidebar-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin: 0 0 10px 2px; }
+  .timeline-sidebar .archive-search-bar + .sidebar-label { margin-left: 28px; }
+  .timeline-sidebar .archive-search-bar { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 0.5px solid var(--border); }
+  .timeline-sidebar .archive-filter-input { flex-basis: 100%; min-width: 0; max-width: none; }
+  .timeline-sidebar .archive-chips { gap: 3px; }
+  .timeline-sidebar .archive-clear-btn { padding: 4px 10px; margin-left: -4px; }
+  .timeline-sidebar #archive-search-count { padding-right: 2px; }
   .archive-carousels { flex: 1; min-width: 0; }
   .timeline { position: relative; padding: 0 0 1rem; }
   .timeline::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 1.5px; background: var(--border); }
@@ -814,9 +828,17 @@
 
   /* ── Mobile ── */
   @media (max-width: 768px) {
-    /* Archive layout — hide sidebar, show pill nav */
-    .archive-layout { flex-direction: column; gap: 0; }
-    .timeline-sidebar { display: none; }
+    /* Archive layout — sidebar collapses to search-only, pill nav handles sections */
+    .archive-layout { display: block; }
+    .timeline-sidebar {
+      width: 100%;
+      position: sticky; top: 98px; z-index: 7;
+      background: var(--bg); border-bottom: 0.5px solid var(--border);
+      padding: 10px 1rem; margin-bottom: 4px;
+    }
+    .timeline-sidebar .sidebar-label { display: none; }
+    .timeline-sidebar .timeline { display: none; }
+    .timeline-sidebar .archive-search-bar { flex-direction: row; margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
     #page-archive { padding: 0; }
     .archive-mobile-nav {
       display: flex; gap: 6px; overflow-x: auto;
@@ -1104,6 +1126,17 @@
   </div>
   <div class="archive-layout">
     <div class="timeline-sidebar">
+      <div class="sidebar-label">Filter</div>
+      <div class="archive-search-bar">
+        <div class="archive-filter-input">
+          <div class="archive-chips" id="archive-chips"></div>
+          <input class="archive-search-text" id="archive-search" type="text" placeholder="Filter by person or group…" oninput="onArchiveSearchInput()" onkeydown="onArchiveSearchKey(event)" onfocus="onArchiveSearchInput()" autocomplete="off">
+          <div class="archive-suggestions" id="archive-suggestions"></div>
+        </div>
+        <button class="archive-clear-btn" id="archive-clear-btn" onclick="clearArchiveChips()" style="display:none">Clear</button>
+        <span id="archive-search-count" class="archive-search-count"></span>
+      </div>
+      <div class="sidebar-label">Timeline</div>
     <div class="timeline" id="archive-timeline">
       <div class="timeline-item has-anchor" onclick="scrollToSection('arc-videos')">
         <div class="timeline-dot"></div>
@@ -1207,18 +1240,7 @@
       </div>
     </div>
     </div><!-- /.timeline-sidebar -->
-    <div class="archive-right">
-      <div class="archive-search-bar">
-        <div class="archive-filter-input">
-          <div class="archive-chips" id="archive-chips"></div>
-          <input class="archive-search-text" id="archive-search" type="text" placeholder="Filter by person or group…" oninput="onArchiveSearchInput()" onkeydown="onArchiveSearchKey(event)" onfocus="onArchiveSearchInput()" autocomplete="off">
-          <div class="archive-suggestions" id="archive-suggestions"></div>
-        </div>
-        <button class="archive-clear-btn" id="archive-clear-btn" onclick="clearArchiveChips()" style="display:none">Clear</button>
-        <span id="archive-search-count" class="archive-search-count"></span>
-      </div>
-      <div class="archive-carousels" id="archive-carousels"></div><!-- /.archive-carousels -->
-    </div>
+    <div class="archive-carousels" id="archive-carousels"></div><!-- /.archive-carousels -->
   </div><!-- /.archive-layout -->
   </div><!-- /#archive-main -->
   </div>
@@ -3356,6 +3378,8 @@ function buildArchive() {
 /* ── Timeline chip filter ── */
 let _archiveFilterables = null;
 let _archiveChips = [];
+let _archiveJumpIdx = -1;
+let _archiveJumpTotal = 0;
 
 function _buildArchiveFilterables() {
   if (_archiveFilterables) return _archiveFilterables;
@@ -3497,11 +3521,42 @@ document.addEventListener('click', e => {
   if (sug && wrap && !wrap.contains(e.target)) sug.classList.remove('visible');
 });
 
+function _archiveStickyOffset() {
+  if (window.innerWidth > 768) return 76;
+  let h = 52;
+  ['.archive-mobile-nav', '.timeline-sidebar'].forEach(sel => {
+    const el = document.querySelector(sel);
+    if (el && getComputedStyle(el).position === 'sticky') h += el.offsetHeight;
+  });
+  return h + 8;
+}
+
+function jumpToArchiveMatch() {
+  const matches = [...document.querySelectorAll('#archive-carousels .carousel-slide.match-highlight')];
+  if (!matches.length) return;
+  _archiveJumpIdx = (_archiveJumpIdx + 1) % matches.length;
+  _archiveJumpTotal = matches.length;
+  const target = matches[_archiveJumpIdx];
+  const outer = target.closest('.carousel-outer');
+  if (outer && outer._goToSlideEl) outer._goToSlideEl(target);
+  const section = target.closest('.archive-section');
+  if (section) {
+    const top = section.getBoundingClientRect().top + window.scrollY - _archiveStickyOffset();
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+  target.classList.remove('match-pulse');
+  void target.offsetWidth;
+  target.classList.add('match-pulse');
+  const countEl = document.getElementById('archive-search-count');
+  if (countEl) countEl.textContent = `Match ${_archiveJumpIdx + 1} of ${_archiveJumpTotal} →`;
+}
+
 function _applyArchiveFilter() {
   const container = document.getElementById('archive-carousels');
   const countEl = document.getElementById('archive-search-count');
   if (!container) return;
   const hasFilters = _archiveChips.length > 0;
+  _archiveJumpIdx = -1;
 
   if (hasFilters) {
     container.querySelectorAll('.archive-section').forEach(el => {
@@ -3532,9 +3587,15 @@ function _applyArchiveFilter() {
   if (clearBtn) clearBtn.style.display = _archiveChips.length >= 2 ? '' : 'none';
 
   if (countEl) {
+    countEl.onclick = null;
+    countEl.classList.remove('clickable');
     if (!hasFilters) countEl.textContent = '';
     else if (!totalMatches) countEl.textContent = 'No matches';
-    else countEl.textContent = `${totalMatches} match${totalMatches === 1 ? '' : 'es'} in ${sectionsWithMatches} carousel${sectionsWithMatches === 1 ? '' : 's'}`;
+    else {
+      countEl.textContent = `${totalMatches} match${totalMatches === 1 ? '' : 'es'} in ${sectionsWithMatches} carousel${sectionsWithMatches === 1 ? '' : 's'} →`;
+      countEl.classList.add('clickable');
+      countEl.onclick = jumpToArchiveMatch;
+    }
   }
 }
 
@@ -3589,6 +3650,13 @@ function initCarousels(root) {
     viewport._swReset = () => { _sw = 0; requestAnimationFrame(() => goTo(idx, false)); };
     _carouselRO.observe(viewport);
     requestAnimationFrame(() => goTo(0, false));
+
+    outer._goToSlideEl = (slideEl) => {
+      const i = slides.indexOf(slideEl);
+      if (i < 0) return;
+      stopSlideshow();
+      goTo(Math.min(i, maxIdx), true);
+    };
 
     let tx0 = null;
     viewport.addEventListener('touchstart', e => { tx0 = e.touches[0].clientX; }, { passive: true });
@@ -3767,7 +3835,7 @@ const FAVORITES = [
   { src: 'images/favs/DoUNoticeMe.webp',              event: 'Pep Rally',             caption: 'Milo M' },
   { src: 'images/favs/SBBeach.webp',                  event: '',                      caption: 'Aryanna M, Miriam Y, Ella S, Nancy S & Nyala A' },
   { src: 'images/favs/Bullish.webp',                  event: 'VE Warriors',           caption: 'Santiago C' },
-  { src: 'images/favs/VEWarriors.webp',               event: 'VE Warriors',           caption: 'Milo M, Santino S & James W' },
+  { src: 'images/favs/VEWarriors.webp',               event: 'VE Warriors',           caption: 'Milo M, Ayden V, Santino S, Zane N & James W' },
   { src: 'images/favs/WalkEmDown.webp',               event: 'Senior Assassin',       caption: 'Daemeon M' },
   { src: 'images/favs/Lonzo.webp',                    event: 'Senior Assassin',       caption: 'Milo M' },
   { src: 'images/favs/TrollingJH.webp',               event: 'Senior Assassin',       caption: 'Milo M, Jesiah H & Evelynn N' },
