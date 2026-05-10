@@ -54,6 +54,10 @@ Landing stats at lines ~921–923: Seniors / Universities / States. (See Univers
 
 `In the Lab`, `Pie a Senior`, `Halloween`, `HS Volleyball`, `HS Water Polo`, `Senior Assassin`, `Flour Baby`, `VE Warriors`, `Soak a Senior`, `Winter Formal`, `Prom`, `Pep Rally`, `Trunk or Treat`, `Karaoke`, `Tustin Tiller Days`, `Los Alamos`, `Senior Blues`, `Field Trip`, `PJ Day`, `Twin Day`, `BJ's Restaurant`, `FBLA`, `Friday Night Lights`, `Ricky's Birthday`, `Filipino Club Bonfire`, `SoFi Stadium`, `Shot by Jayden C`, `White Lies`, `Robotics`, `Not in the Class of 2026`.
 
+## Carousel captions (timeline)
+
+`ARCHIVE_SECTIONS` (line ~2784) holds the timeline carousel data. Image entries can carry a `caption` field (`First L` names, same convention as FAVORITES). Captions render only inside the `arc-lightbox` popup — no hover overlay on slides. Slides without `caption` (e.g. video reels) are excluded from the timeline chip filter and stay clickable.
+
 ## Group banners
 
 `.ve-card-banner { height: 170px; background-size: cover }`. Each `GROUPS` entry can override default centering with `bannerPos: 'X% Y%'` — X is horizontal (0%=left), Y is vertical (0%=top). Decrease Y to show more of image's top (heads); increase to show bottom.
