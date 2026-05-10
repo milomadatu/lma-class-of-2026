@@ -89,6 +89,73 @@
   /* ── Carousel play/pause ── */
   .archive-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .archive-section-header .section-label { margin-bottom: 0; }
+  /* Timeline filter */
+  .archive-right { flex: 1; min-width: 0; }
+  .archive-search-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; }
+  .archive-filter-input {
+    position: relative;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+    background: var(--surface); border-radius: 980px;
+    padding: 4px 12px 4px 36px;
+    box-shadow: var(--shadow-sm);
+    min-width: 240px; max-width: 520px; flex: 1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23aeaeb2' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: 14px center;
+    transition: box-shadow 0.18s;
+  }
+  .archive-filter-input:focus-within { box-shadow: var(--shadow-md); }
+  .archive-chips { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+  .archive-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--ink); color: #fff;
+    font-size: 11px; font-weight: 600;
+    padding: 3px 4px 3px 10px;
+    border-radius: 980px;
+    line-height: 1.4;
+  }
+  .archive-chip.group { background: var(--gold-bright); color: var(--ink); }
+  .archive-chip-x {
+    cursor: pointer; opacity: 0.65; padding: 0 4px;
+    font-size: 14px; line-height: 1;
+  }
+  .archive-chip-x:hover { opacity: 1; }
+  .archive-search-text {
+    flex: 1; min-width: 100px;
+    border: none; background: transparent; outline: none;
+    font-size: 13px; color: var(--ink);
+    padding: 5px 4px;
+  }
+  .archive-search-text::placeholder { color: var(--ink-3); }
+  .archive-suggestions {
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+    background: var(--surface); border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    max-height: 280px; overflow-y: auto;
+    z-index: 20;
+    display: none;
+    padding: 4px 0;
+  }
+  .archive-suggestions.visible { display: block; }
+  .archive-suggestion {
+    padding: 8px 14px; cursor: pointer;
+    font-size: 13px;
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    transition: background 0.12s;
+  }
+  .archive-suggestion:hover, .archive-suggestion.active { background: var(--surface-2); }
+  .archive-suggestion-kind { font-size: 9px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+  .archive-search-count { font-size: 12px; color: var(--ink-3); font-weight: 500; }
+  .archive-clear-btn { font-size: 11px; font-weight: 600; color: var(--ink-2); background: transparent; border: none; padding: 6px 10px; border-radius: 980px; cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .archive-clear-btn:hover { background: var(--surface-2); color: var(--ink); }
+  .carousel-slide { transition: opacity 0.2s ease; }
+  .carousel-slide.match-highlight a.local-img-link { box-shadow: 0 0 0 3px var(--gold-bright), var(--shadow-md); }
+  .carousel-slide.match-dim { opacity: 0.28; pointer-events: none; }
+  .archive-section.no-matches { opacity: 0.55; transition: opacity 0.2s ease; }
+  @media (max-width: 768px) {
+    .archive-search-bar { gap: 6px; }
+    .archive-filter-input { width: 100%; max-width: none; flex-basis: 100%; }
+    .archive-search-count { font-size: 11px; flex-basis: 100%; }
+  }
   .carousel-btns { display: flex; gap: 4px; align-items: center; }
   .carousel-play, .carousel-reset {
     font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 26px;
@@ -387,6 +454,8 @@
   .groups-grid.rearranging .ve-card:active { cursor: grabbing; }
   .rearrange-btn { transition: background 0.2s, color 0.2s, box-shadow 0.18s, transform 0.15s; min-width: 82px; text-align: center; }
   .rearrange-btn.active { background: var(--gold-lt); color: var(--gold); box-shadow: none; }
+  .people-more-btn { display: none; }
+  .people-more-actions { display: flex; gap: 8px; }
   .groups-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .person-card {
     flex: 0 0 calc((100% - 72px) / 10);
@@ -563,6 +632,9 @@
   #arc-lightbox.open #arc-lb-img { opacity: 1; transform: scale(1); }
   #arc-lb-close { position: absolute; top: 16px; right: 16px; width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.12); border: none; color: #fff; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
   #arc-lb-close:hover { background: rgba(255,255,255,0.25); }
+  #arc-lb-caption { color: rgba(255,255,255,0.92); font-size: 14px; font-weight: 500; text-align: center; max-width: min(92vw, 800px); line-height: 1.4; opacity: 0; transition: opacity 0.22s ease 0.08s; }
+  #arc-lightbox.open #arc-lb-caption { opacity: 1; }
+  #arc-lb-caption:empty { display: none; }
   #arc-lb-ig { display: inline-flex; align-items: center; gap: 6px; padding: 10px 22px; border-radius: 980px; background: #fff; color: #000; font-size: 14px; font-weight: 700; text-decoration: none; opacity: 0; transition: opacity 0.22s ease 0.1s, background 0.15s; }
   #arc-lightbox.open #arc-lb-ig { opacity: 1; }
   #arc-lb-ig:hover { background: rgba(255,255,255,0.88); }
@@ -766,6 +838,41 @@
     .favorites-view.visible { padding: 10px 1rem 1.5rem; }
     .favorites-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; overflow: hidden; }
     .rearrange-btn { min-width: 0; padding: 7px 10px; }
+    .people-more-btn { display: inline-flex; align-items: center; justify-content: center; padding: 7px 12px; font-size: 16px; line-height: 1; min-width: 0; }
+    .people-more-actions {
+      position: fixed;
+      flex-direction: column; gap: 0;
+      background: #fff; border-radius: 12px;
+      border: 0.5px solid var(--border);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.05);
+      padding: 6px;
+      z-index: 100;
+      display: none;
+      min-width: 200px;
+      animation: peopleMoreIn 0.16s cubic-bezier(0.16,1,0.3,1);
+    }
+    .people-more-actions.open { display: flex; }
+    .people-more-actions .shuffle-btn {
+      box-shadow: none; min-width: 0; width: 100%;
+      padding: 10px 14px;
+      text-align: left; justify-content: flex-start;
+      background: transparent; border-radius: 8px;
+      font-size: 14px; font-weight: 500; color: var(--ink);
+      transition: background 0.12s;
+      position: relative;
+    }
+    .people-more-actions .shuffle-btn:hover { background: var(--surface-2); }
+    .people-more-actions .shuffle-btn.active { background: var(--surface-2); }
+    .people-more-actions .shuffle-btn.active::after {
+      content: ""; position: absolute; right: 14px; top: 50%;
+      width: 14px; height: 14px;
+      transform: translateY(-50%);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-size: contain;
+    }
+    @keyframes peopleMoreIn { from { opacity: 0; transform: translate(-50%, -4px); } to { opacity: 1; transform: translate(-50%, 0); } }
+    .people-more-backdrop { display: none; position: fixed; inset: 0; z-index: 99; background: transparent; }
+    .people-more-backdrop.open { display: block; }
     #fav-pagination-top { display: none !important; }
     .fav-search { flex: 1; width: auto; min-width: 0; }
     .fav-page-btn { display: none; }
@@ -826,8 +933,8 @@
     .people-controls::-webkit-scrollbar { display: none; }
     .people-grid { margin-top: 12px; }
     .person-card { flex: 0 0 calc((100% - 24px) / 4); }
-    .people-search { width: 90px; }
-    .people-search:focus { width: 110px; }
+    .people-search { width: 160px; }
+    .people-search:focus { width: 160px; }
     .groups-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
 
     /* Popup */
@@ -1100,7 +1207,18 @@
       </div>
     </div>
     </div><!-- /.timeline-sidebar -->
-    <div class="archive-carousels" id="archive-carousels"></div><!-- /.archive-carousels -->
+    <div class="archive-right">
+      <div class="archive-search-bar">
+        <div class="archive-filter-input">
+          <div class="archive-chips" id="archive-chips"></div>
+          <input class="archive-search-text" id="archive-search" type="text" placeholder="Filter by person or group…" oninput="onArchiveSearchInput()" onkeydown="onArchiveSearchKey(event)" onfocus="onArchiveSearchInput()" autocomplete="off">
+          <div class="archive-suggestions" id="archive-suggestions"></div>
+        </div>
+        <button class="archive-clear-btn" id="archive-clear-btn" onclick="clearArchiveChips()" style="display:none">Clear</button>
+        <span id="archive-search-count" class="archive-search-count"></span>
+      </div>
+      <div class="archive-carousels" id="archive-carousels"></div><!-- /.archive-carousels -->
+    </div>
   </div><!-- /.archive-layout -->
   </div><!-- /#archive-main -->
   </div>
@@ -1119,9 +1237,11 @@
           <button class="view-btn" data-view="groups" onclick="setPeopleView('groups')">Groups</button>
         </div>
         <input class="people-search" id="people-search" type="search" placeholder="Search people…" oninput="debouncedPeopleSearch()" autocomplete="off">
-        <div style="display:flex;gap:8px;">
-          <button class="shuffle-btn" id="shuffle-btn" onclick="toggleShuffle()">Shuffle</button>
-          <button class="shuffle-btn rearrange-btn" id="rearrange-btn" onclick="toggleRearrange()">Rearrange</button>
+        <button class="shuffle-btn people-more-btn" onclick="togglePeopleMore(event)" aria-label="More options">⋯</button>
+        <div class="people-more-backdrop" id="people-more-backdrop" onclick="_closePeopleMore()"></div>
+        <div class="people-more-actions" id="people-more-actions">
+          <button class="shuffle-btn" id="shuffle-btn" onclick="toggleShuffle();_closePeopleMore()">Shuffle</button>
+          <button class="shuffle-btn rearrange-btn" id="rearrange-btn" onclick="toggleRearrange();_closePeopleMore()">Rearrange</button>
         </div>
       </div>
     </div>
@@ -1259,6 +1379,7 @@
 <div id="arc-lightbox" onclick="if(event.target===this)closeArcLightbox()">
   <button id="arc-lb-close" onclick="closeArcLightbox()">✕</button>
   <img id="arc-lb-img" src="" alt="">
+  <div id="arc-lb-caption"></div>
   <a id="arc-lb-ig" href="#" target="_blank" rel="noopener">View on Instagram ↗</a>
 </div>
 
@@ -1446,7 +1567,9 @@ function toggleShuffle() {
       for (let i = GROUPS.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [GROUPS[i],GROUPS[j]] = [GROUPS[j],GROUPS[i]]; }
     }
     groupsShuffled = !groupsShuffled;
-    document.getElementById('shuffle-btn').textContent = groupsShuffled ? 'Revert' : 'Shuffle';
+    const sb = document.getElementById('shuffle-btn');
+    sb.textContent = groupsShuffled ? 'Revert' : 'Shuffle';
+    sb.classList.toggle('active', groupsShuffled);
     renderGroups();
     return;
   }
@@ -1456,12 +1579,36 @@ function toggleShuffle() {
     for (let i = people.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [people[i],people[j]] = [people[j],people[i]]; }
   }
   gridShuffled = !gridShuffled;
-  document.getElementById('shuffle-btn').textContent = gridShuffled ? 'Revert' : 'Shuffle';
+  const sb = document.getElementById('shuffle-btn');
+  sb.textContent = gridShuffled ? 'Revert' : 'Shuffle';
+  sb.classList.toggle('active', gridShuffled);
   renderGrid();
 }
 
 let rearranging = false;
 let dragSrcIdx = null;
+
+function togglePeopleMore(e) {
+  if (e) e.stopPropagation();
+  const menu = document.getElementById('people-more-actions');
+  const backdrop = document.getElementById('people-more-backdrop');
+  const btn = document.querySelector('.people-more-btn');
+  if (!menu || !btn) return;
+  if (menu.classList.contains('open')) { _closePeopleMore(); return; }
+  const r = btn.getBoundingClientRect();
+  menu.style.top = (r.bottom + 6) + 'px';
+  menu.style.left = '50%';
+  menu.style.right = 'auto';
+  menu.style.transform = 'translateX(-50%)';
+  menu.classList.add('open');
+  if (backdrop) backdrop.classList.add('open');
+}
+function _closePeopleMore() {
+  const menu = document.getElementById('people-more-actions');
+  const backdrop = document.getElementById('people-more-backdrop');
+  if (menu) menu.classList.remove('open');
+  if (backdrop) backdrop.classList.remove('open');
+}
 
 function toggleRearrange() {
   rearranging = !rearranging;
@@ -1621,8 +1768,9 @@ function closePopup() {
   document.getElementById('popup').classList.remove('open');
 }
 
-function openArcLightbox(src, post) {
+function openArcLightbox(src, post, caption) {
   document.getElementById('arc-lb-img').src = src;
+  document.getElementById('arc-lb-caption').textContent = caption || '';
   const igLink = document.getElementById('arc-lb-ig');
   if (post) {
     igLink.href = `https://www.instagram.com/p/${post}/`;
@@ -1950,7 +2098,10 @@ function setPeopleView(view) {
   const active = document.querySelector('.view-btn.active');
   const slider = document.getElementById('people-view-slider');
   if (active && slider) { slider.style.left = active.offsetLeft + 'px'; slider.style.width = active.offsetWidth + 'px'; }
-  document.getElementById('shuffle-btn').textContent = (view === 'groups' ? groupsShuffled : gridShuffled) ? 'Revert' : 'Shuffle';
+  const isShuffled = view === 'groups' ? groupsShuffled : gridShuffled;
+  const sb = document.getElementById('shuffle-btn');
+  sb.textContent = isShuffled ? 'Revert' : 'Shuffle';
+  sb.classList.toggle('active', isShuffled);
   if (view === 'groups') renderGroups();
 }
 
@@ -2783,201 +2934,351 @@ const ARCHIVE_SECTIONS = [
     posts: ['DNv8MtA5NXn', 'DOEzRUkkgSU', 'DXvO18RoLeC', 'DX0L0pIyCrM', 'DX2zWMCIFAJ', 'DYB8d9ptw-4'] },
   { id: 'arc-lfd',     label: 'Last First Day',   cols: 3, type: 'p',    comingSoon: false,
     images: [
-      {file:'DNUB7KkyalX.webp', post:'DNUB7KkyalX'},{file:'DNUB9K7Sx2j.webp', post:'DNUB9K7Sx2j'},
-      {file:'DNUB_73yeFA.webp', post:'DNUB_73yeFA'},{file:'DNUCCwkSi87.webp', post:'DNUCCwkSi87'},
-      {file:'DNUCNj-yfNa.webp', post:'DNUCNj-yfNa'},{file:'DNUCRxKyoEP.webp', post:'DNUCRxKyoEP'},
-      {file:'DNUCUMyyYzW.webp', post:'DNUCUMyyYzW'},{file:'DNUCWO4yh64.webp', post:'DNUCWO4yh64'},
-      {file:'DNUCYSjyPJ0.webp', post:'DNUCYSjyPJ0'},{file:'DNUCaOWyDog.webp', post:'DNUCaOWyDog'},
-      {file:'DNUCb8ASpOa.webp', post:'DNUCb8ASpOa'},{file:'DNUCeLly97V.webp', post:'DNUCeLly97V'},
-      {file:'DNUCfiRycuY.webp', post:'DNUCfiRycuY'},{file:'DNUChePy_0N.webp', post:'DNUChePy_0N'},
-      {file:'DNUCkxHSfKL.webp', post:'DNUCkxHSfKL'},{file:'DNUCm4SSlnj.webp', post:'DNUCm4SSlnj'},
-      {file:'DNUCoqHy0Wg.webp', post:'DNUCoqHy0Wg'},{file:'DNUCq9rSHDu.webp', post:'DNUCq9rSHDu'},
-      {file:'DNUCsfqyf7l.webp', post:'DNUCsfqyf7l'},{file:'DNUDBQkyAYE.webp', post:'DNUDBQkyAYE'},
-      {file:'DNUDC5iSVCv.webp', post:'DNUDC5iSVCv'},{file:'DNUDEZLyBEi.webp', post:'DNUDEZLyBEi'},
-      {file:'DNWTYnPyU_w.webp', post:'DNWTYnPyU_w'},{file:'DNWTZyMy9R1.webp', post:'DNWTZyMy9R1'},
-      {file:'DNWTa7QSkBV.webp', post:'DNWTa7QSkBV'},{file:'DNWTcIIyaF9.webp', post:'DNWTcIIyaF9'},
-      {file:'DNWTd3FSMCz.webp', post:'DNWTd3FSMCz'},{file:'DNWTfrqyKLw.webp', post:'DNWTfrqyKLw'},
-      {file:'DNWThc5yGcl.webp', post:'DNWThc5yGcl'},{file:'DNWTkATySFx.webp', post:'DNWTkATySFx'},
-      {file:'DNWTlJtSNzi.webp', post:'DNWTlJtSNzi'},{file:'DNWTl68yYd6.webp', post:'DNWTl68yYd6'},
-      {file:'DNWTqcPSxv9.webp', post:'DNWTqcPSxv9'},{file:'DNWTucSy3X7.webp', post:'DNWTucSy3X7'},
-      {file:'DNWTvyDyxrb.webp', post:'DNWTvyDyxrb'},{file:'DNWTw5uSvqe.webp', post:'DNWTw5uSvqe'},
-      {file:'DNWTyZsynVH.webp', post:'DNWTyZsynVH'},{file:'DNWT0SJyNnl.webp', post:'DNWT0SJyNnl'},
-      {file:'DNkPOaZOPEl.webp', post:'DNkPOaZOPEl'},{file:'DNq6x8Ay98T.webp', post:'DNq6x8Ay98T'},
-      {file:'DNq6yhPS4wy.webp', post:'DNq6yhPS4wy'},{file:'DNq6z4iy7zV.webp', post:'DNq6z4iy7zV'},
-      {file:'DNq6212S8HV.webp', post:'DNq6212S8HV'},{file:'DNq63GYy13T.webp', post:'DNq63GYy13T'},
-      {file:'DNq63xVS-DF.webp', post:'DNq63xVS-DF'},{file:'DNq7RZO5CEC.webp', post:'DNq7RZO5CEC'}
+      {file:'DNUB7KkyalX.webp', post:'DNUB7KkyalX', caption:'Evan M'},
+      {file:'DNUB9K7Sx2j.webp', post:'DNUB9K7Sx2j', caption:'Evelynn N'},
+      {file:'DNUB_73yeFA.webp', post:'DNUB_73yeFA', caption:'Rayan R'},
+      {file:'DNUCCwkSi87.webp', post:'DNUCCwkSi87', caption:'Nancy S'},
+      {file:'DNUCNj-yfNa.webp', post:'DNUCNj-yfNa', caption:'Leslie T'},
+      {file:'DNUCRxKyoEP.webp', post:'DNUCRxKyoEP', caption:'Uma J'},
+      {file:'DNUCUMyyYzW.webp', post:'DNUCUMyyYzW', caption:'Nima P'},
+      {file:'DNUCWO4yh64.webp', post:'DNUCWO4yh64', caption:'Miriam Y'},
+      {file:'DNUCYSjyPJ0.webp', post:'DNUCYSjyPJ0', caption:'Cash T'},
+      {file:'DNUCaOWyDog.webp', post:'DNUCaOWyDog', caption:'Max C'},
+      {file:'DNUCb8ASpOa.webp', post:'DNUCb8ASpOa', caption:'Parin L'},
+      {file:'DNUCeLly97V.webp', post:'DNUCeLly97V', caption:'Aryan L'},
+      {file:'DNUCfiRycuY.webp', post:'DNUCfiRycuY', caption:'Sacha P'},
+      {file:'DNUChePy_0N.webp', post:'DNUChePy_0N', caption:'Nathan H'},
+      {file:'DNUCkxHSfKL.webp', post:'DNUCkxHSfKL', caption:'Nancy S & Evelynn N'},
+      {file:'DNUCm4SSlnj.webp', post:'DNUCm4SSlnj', caption:'Uma J, Rayan R & Leslie T'},
+      {file:'DNUCoqHy0Wg.webp', post:'DNUCoqHy0Wg', caption:'Nancy S, Miriam Y & Evelynn N'},
+      {file:'DNUCq9rSHDu.webp', post:'DNUCq9rSHDu', caption:'Uma J, Nancy S & Leslie T'},
+      {file:'DNUCsfqyf7l.webp', post:'DNUCsfqyf7l', caption:'James W & Brent L'},
+      {file:'DNUDBQkyAYE.webp', post:'DNUDBQkyAYE', caption:'Evelynn N'},
+      {file:'DNUDC5iSVCv.webp', post:'DNUDC5iSVCv', caption:'Nathan H & Sacha P'},
+      {file:'DNUDEZLyBEi.webp', post:'DNUDEZLyBEi', caption:'Leslie T & Uma J'},
+      {file:'DNWTYnPyU_w.webp', post:'DNWTYnPyU_w', caption:'Milo M'},
+      {file:'DNWTZyMy9R1.webp', post:'DNWTZyMy9R1', caption:'Audrey L'},
+      {file:'DNWTa7QSkBV.webp', post:'DNWTa7QSkBV', caption:'Nathan S'},
+      {file:'DNWTcIIyaF9.webp', post:'DNWTcIIyaF9', caption:'Milo M'},
+      {file:'DNWTd3FSMCz.webp', post:'DNWTd3FSMCz', caption:'Brandon Ca'},
+      {file:'DNWTfrqyKLw.webp', post:'DNWTfrqyKLw', caption:'Audrey L'},
+      {file:'DNWThc5yGcl.webp', post:'DNWThc5yGcl', caption:'Nathan S'},
+      {file:'DNWTkATySFx.webp', post:'DNWTkATySFx', caption:'Hunter W'},
+      {file:'DNWTlJtSNzi.webp', post:'DNWTlJtSNzi', caption:'Zach A'},
+      {file:'DNWTl68yYd6.webp', post:'DNWTl68yYd6', caption:'Matt I'},
+      {file:'DNWTqcPSxv9.webp', post:'DNWTqcPSxv9', caption:'Leslie T'},
+      {file:'DNWTucSy3X7.webp', post:'DNWTucSy3X7', caption:'Jesiah H, Kai A, Sacha P & Milo M'},
+      {file:'DNWTvyDyxrb.webp', post:'DNWTvyDyxrb', caption:'Katally L, Kailee K, Amreen I & Morgan M'},
+      {file:'DNWTw5uSvqe.webp', post:'DNWTw5uSvqe', caption:'Jesiah H, Baran C & Andrew C'},
+      {file:'DNWTyZsynVH.webp', post:'DNWTyZsynVH', caption:'Uma J & Audrey L'},
+      {file:'DNWT0SJyNnl.webp', post:'DNWT0SJyNnl', caption:'Kailee K, Amreen I & Katally L'},
+      {file:'DNkPOaZOPEl.webp', post:'DNkPOaZOPEl', caption:'Katally L'},
+      {file:'DNq6x8Ay98T.webp', post:'DNq6x8Ay98T', caption:'Kiana V'},
+      {file:'DNq6yhPS4wy.webp', post:'DNq6yhPS4wy', caption:'Aryanna M'},
+      {file:'DNq6z4iy7zV.webp', post:'DNq6z4iy7zV', caption:'Abram M'},
+      {file:'DNq6212S8HV.webp', post:'DNq6212S8HV', caption:'Kiana V & Aryanna M'},
+      {file:'DNq63GYy13T.webp', post:'DNq63GYy13T', caption:'Jayden O'},
+      {file:'DNq63xVS-DF.webp', post:'DNq63xVS-DF', caption:'Hannah S'},
+      {file:'DNq7RZO5CEC.webp', post:'DNq7RZO5CEC', caption:'Uma J & Nancy S'}
     ],
     posts: [] },
   { id: 'arc-sunrise', label: 'Senior Sunrise',   cols: 3, type: 'p',    comingSoon: false,
     imgFolder: 'ss',
     images: [
-      {file:'DN8_N1Akuef.webp', post:'DN8_N1Akuef'},{file:'DN8_QHVkuYa.webp', post:'DN8_QHVkuYa'},
-      {file:'DN8_Sc1Ev7T.webp', post:'DN8_Sc1Ev7T'},{file:'DN8_Tf0kimC.webp', post:'DN8_Tf0kimC'},
-      {file:'DN8_VSsEn4s.webp', post:'DN8_VSsEn4s'},{file:'DN8_WjhkrM-.webp', post:'DN8_WjhkrM-'},
-      {file:'DN8_YrXEks8.webp', post:'DN8_YrXEks8'},{file:'DN8__W2kjSz.webp', post:'DN8__W2kjSz'},
-      {file:'DN8_aPFElbH.webp', post:'DN8_aPFElbH'},{file:'DN8_cgUEjzB.webp', post:'DN8_cgUEjzB'},
-      {file:'DN8_dvIkqqF.webp', post:'DN8_dvIkqqF'},{file:'DN8_e6Bkn_3.webp', post:'DN8_e6Bkn_3'},
-      {file:'DN8_gEhEqeM.webp', post:'DN8_gEhEqeM'},{file:'DN8_hdqEjL3.webp', post:'DN8_hdqEjL3'},
-      {file:'DN8_iZDEiyE.webp', post:'DN8_iZDEiyE'},{file:'DN8_jY8knnz.webp', post:'DN8_jY8knnz'},
-      {file:'DN8_kj1Elhl.webp', post:'DN8_kj1Elhl'},{file:'DN8_nizEh7v.webp', post:'DN8_nizEh7v'},
-      {file:'DN8_pDEEtsn.webp', post:'DN8_pDEEtsn'},{file:'DN8_qgjEn8h.webp', post:'DN8_qgjEn8h'},
-      {file:'DN8_vW0kiGQ.webp', post:'DN8_vW0kiGQ'},{file:'DN8_wnDEmU0.webp', post:'DN8_wnDEmU0'},
-      {file:'DN8_xqMElCV.webp', post:'DN8_xqMElCV'},{file:'DN8_zY8kvCp.webp', post:'DN8_zY8kvCp'},
-      {file:'DN8_0sUklBe.webp', post:'DN8_0sUklBe'},{file:'DN8_2M6ku3p.webp', post:'DN8_2M6ku3p'},
-      {file:'DN8_4mJkoUx.webp', post:'DN8_4mJkoUx'},{file:'DN8_58mkvRe.webp', post:'DN8_58mkvRe'},
-      {file:'DN8_7mYkv3c.webp', post:'DN8_7mYkv3c'},{file:'DN9AArwkpgG.webp', post:'DN9AArwkpgG'},
-      {file:'DN9ACBqkj-H.webp', post:'DN9ACBqkj-H'},{file:'DN9AC_bEub5.webp', post:'DN9AC_bEub5'},
-      {file:'DN9AEPtkllV.webp', post:'DN9AEPtkllV'},{file:'DN9AFTrkvLI.webp', post:'DN9AFTrkvLI'},
-      {file:'DN9AHoLkkyj.webp', post:'DN9AHoLkkyj'},{file:'DN9AI73EpZm.webp', post:'DN9AI73EpZm'},
-      {file:'DN9AKmtkoVV.webp', post:'DN9AKmtkoVV'},{file:'DN9AL7rkkfB.webp', post:'DN9AL7rkkfB'},
-      {file:'DN9AO-wknQr.webp', post:'DN9AO-wknQr'},{file:'DN9AP_-EiE9.webp', post:'DN9AP_-EiE9'},
-      {file:'DN9AS_rkg47.webp', post:'DN9AS_rkg47'},{file:'DN9AUSfEth3.webp', post:'DN9AUSfEth3'},
-      {file:'DN9AVcNEiPW.webp', post:'DN9AVcNEiPW'},{file:'DN9AW_Qktnh.webp', post:'DN9AW_Qktnh'},
-      {file:'DN9AXnuErE9.webp', post:'DN9AXnuErE9'},{file:'DN9AZfZEo5i.webp', post:'DN9AZfZEo5i'},
-      {file:'DN9AcXQEjCk.webp', post:'DN9AcXQEjCk'},{file:'DN9Adi5ksgf.webp', post:'DN9Adi5ksgf'},
-      {file:'DN9AmJmkmtc.webp', post:'DN9AmJmkmtc'},{file:'DN9AoNmEuwQ.webp', post:'DN9AoNmEuwQ'},
-      {file:'DN9Api0ElNF.webp', post:'DN9Api0ElNF'},{file:'DN9ArE9EnjZ.webp', post:'DN9ArE9EnjZ'},
-      {file:'DN9Asdckjin.webp', post:'DN9Asdckjin'},{file:'DN9AuRSkt1C.webp', post:'DN9AuRSkt1C'},
-      {file:'DN9AzTukrjS.webp', post:'DN9AzTukrjS'},{file:'DN9A0XyEm5C.webp', post:'DN9A0XyEm5C'},
-      {file:'DN9A2siEiBE.webp', post:'DN9A2siEiBE'},{file:'DN9BARhEmqO.webp', post:'DN9BARhEmqO'},
-      {file:'DN9BCTPEgg8.webp', post:'DN9BCTPEgg8'},{file:'DN9BEjpEo-k.webp', post:'DN9BEjpEo-k'},
-      {file:'DN9BF5CksEg.webp', post:'DN9BF5CksEg'},{file:'DN9BJzpEvgf.webp', post:'DN9BJzpEvgf'},
-      {file:'DN9BMuaEgZE.webp', post:'DN9BMuaEgZE'},{file:'DN9BQVvEqpY.webp', post:'DN9BQVvEqpY'},
-      {file:'DN9BSGjku2q.webp', post:'DN9BSGjku2q'},
-      {file:'DOB8w5wks1m.webp', post:'DOB8w5wks1m'},{file:'DOB8xX1kv3h.webp', post:'DOB8xX1kv3h'},
-      {file:'DOB8x_PEk9L.webp', post:'DOB8x_PEk9L'},{file:'DOB8y0PElt4.webp', post:'DOB8y0PElt4'},
-      {file:'DOB8zYmEi_c.webp', post:'DOB8zYmEi_c'},{file:'DOB8z9EEpRt.webp', post:'DOB8z9EEpRt'},
-      {file:'DOB80pckv33.webp', post:'DOB80pckv33'},{file:'DOB81OskhxT.webp', post:'DOB81OskhxT'},
-      {file:'DOB83u5Ek_8.webp', post:'DOB83u5Ek_8'},{file:'DOB84ZBEvJX.webp', post:'DOB84ZBEvJX'},
-      {file:'DOB85dokmQZ.webp', post:'DOB85dokmQZ'}
+      {file:'DN8_N1Akuef.webp', post:'DN8_N1Akuef', caption:'Leslie T'},
+      {file:'DN8_QHVkuYa.webp', post:'DN8_QHVkuYa', caption:'Katally L & Kailee K'},
+      {file:'DN8_Sc1Ev7T.webp', post:'DN8_Sc1Ev7T', caption:'Brandon Ca & Uma J'},
+      {file:'DN8_Tf0kimC.webp', post:'DN8_Tf0kimC', caption:'James W, Milo M & James W'},
+      {file:'DN8_VSsEn4s.webp', post:'DN8_VSsEn4s', caption:'Nathan S, Josh S, Artin R, Baran C, Cash T, Daemeon M, Brandon Ca, Santiago C, Kai A, Sacha P, James W, Nathan H, Andrew C, Milo M, Max C, Pearce W & Arnav S'},
+      {file:'DN8_WjhkrM-.webp', post:'DN8_WjhkrM-', caption:'Elijah B & Artin R'},
+      {file:'DN8_YrXEks8.webp', post:'DN8_YrXEks8', caption:'James W, Brent L, Milo M & Katally L'},
+      {file:'DN8__W2kjSz.webp', post:'DN8__W2kjSz', caption:'Amreen I'},
+      {file:'DN8_aPFElbH.webp', post:'DN8_aPFElbH', caption:'Kailee K, Morgan M & Alethia D'},
+      {file:'DN8_cgUEjzB.webp', post:'DN8_cgUEjzB', caption:'Nathan S & Josh S'},
+      {file:'DN8_dvIkqqF.webp', post:'DN8_dvIkqqF', caption:'Baran C, Josue G, Jayden C, Santiago C, Santino S & Andrew C'},
+      {file:'DN8_e6Bkn_3.webp', post:'DN8_e6Bkn_3', caption:'Evan M & Rayan R'},
+      {file:'DN8_gEhEqeM.webp', post:'DN8_gEhEqeM', caption:'Kailee K & Rebecca C'},
+      {file:'DN8_hdqEjL3.webp', post:'DN8_hdqEjL3', caption:'Hunter W'},
+      {file:'DN8_iZDEiyE.webp', post:'DN8_iZDEiyE', caption:'Luke D, Amreen I & Uma J'},
+      {file:'DN8_jY8knnz.webp', post:'DN8_jY8knnz', caption:'Evelynn N & Miriam Y'},
+      {file:'DN8_kj1Elhl.webp', post:'DN8_kj1Elhl', caption:'Austin V, Brandon Ch, Michael H & Josh K'},
+      {file:'DN8_nizEh7v.webp', post:'DN8_nizEh7v', caption:'Luke D & Leslie T'},
+      {file:'DN8_pDEEtsn.webp', post:'DN8_pDEEtsn', caption:'Katally L & Rebecca C'},
+      {file:'DN8_qgjEn8h.webp', post:'DN8_qgjEn8h', caption:'Josh S, Jayden O & Nathan S'},
+      {file:'DN8_vW0kiGQ.webp', post:'DN8_vW0kiGQ', caption:'Kailee K, Amreen I & Uma J'},
+      {file:'DN8_wnDEmU0.webp', post:'DN8_wnDEmU0', caption:'Janae A, Marie D & Betsy G'},
+      {file:'DN8_xqMElCV.webp', post:'DN8_xqMElCV', caption:'Nathan S & Pearce W'},
+      {file:'DN8_zY8kvCp.webp', post:'DN8_zY8kvCp', caption:'Evan M, Jayden T & Cooper M'},
+      {file:'DN8_0sUklBe.webp', post:'DN8_0sUklBe', caption:'Evelynn N & Leslie T'},
+      {file:'DN8_2M6ku3p.webp', post:'DN8_2M6ku3p', caption:'Kai A, Jayden C, Milo M, Omar A, Brandon Ca, Santiago C, Sacha P, Santino S, Brent L, Baran C, Josue G, Nathan H & Andrew C'},
+      {file:'DN8_4mJkoUx.webp', post:'DN8_4mJkoUx', caption:'Zach A & Connor P'},
+      {file:'DN8_58mkvRe.webp', post:'DN8_58mkvRe', caption:'Jayden O, Nathan S, Josh S, Jayden O, Rayan G, Max C, Artin R & Abram M'},
+      {file:'DN8_7mYkv3c.webp', post:'DN8_7mYkv3c'},
+      {file:'DN9AArwkpgG.webp', post:'DN9AArwkpgG', caption:'Audrey L'},
+      {file:'DN9ACBqkj-H.webp', post:'DN9ACBqkj-H', caption:'Baran C & Josue G'},
+      {file:'DN9AC_bEub5.webp', post:'DN9AC_bEub5', caption:'Jayden O & Max C'},
+      {file:'DN9AEPtkllV.webp', post:'DN9AEPtkllV', caption:'Matt I, Sam S & Ryan Y'},
+      {file:'DN9AFTrkvLI.webp', post:'DN9AFTrkvLI', caption:'Nancy S & Jayden I'},
+      {file:'DN9AHoLkkyj.webp', post:'DN9AHoLkkyj', caption:'Rayan R, Uma J & Leslie T'},
+      {file:'DN9AI73EpZm.webp', post:'DN9AI73EpZm', caption:'Kailee K'},
+      {file:'DN9AKmtkoVV.webp', post:'DN9AKmtkoVV', caption:'Luke D, Rayan R, Kailee K, Amreen I & Katally L'},
+      {file:'DN9AL7rkkfB.webp', post:'DN9AL7rkkfB', caption:'Amreen I, Kailee K, Luke D, Alethia D, Rebecca C, Katally L & Morgan M'},
+      {file:'DN9AO-wknQr.webp', post:'DN9AO-wknQr', caption:'Shirom M'},
+      {file:'DN9AP_-EiE9.webp', post:'DN9AP_-EiE9', caption:'Miriam Y & Nancy S'},
+      {file:'DN9AS_rkg47.webp', post:'DN9AS_rkg47', caption:'Uma J & Amreen I'},
+      {file:'DN9AUSfEth3.webp', post:'DN9AUSfEth3', caption:'Nancy S, Katally L, Max C, Nancy S & Josh S'},
+      {file:'DN9AVcNEiPW.webp', post:'DN9AVcNEiPW', caption:'Josh S'},
+      {file:'DN9AW_Qktnh.webp', post:'DN9AW_Qktnh', caption:'Audrey L & Hunter W'},
+      {file:'DN9AXnuErE9.webp', post:'DN9AXnuErE9', caption:'Luke D, Amreen I, Kailee K, Rebecca C, Alethia D & Morgan M'},
+      {file:'DN9AZfZEo5i.webp', post:'DN9AZfZEo5i', caption:'Milo M, Daemeon M, Kai A & Nathan H'},
+      {file:'DN9AcXQEjCk.webp', post:'DN9AcXQEjCk', caption:'Santino S & Jesiah H'},
+      {file:'DN9Adi5ksgf.webp', post:'DN9Adi5ksgf', caption:'Santiago C & James W'},
+      {file:'DN9AmJmkmtc.webp', post:'DN9AmJmkmtc', caption:'Uma J'},
+      {file:'DN9AoNmEuwQ.webp', post:'DN9AoNmEuwQ', caption:'Rayan R & Sam S'},
+      {file:'DN9Api0ElNF.webp', post:'DN9Api0ElNF', caption:'Alethia D, Rebecca C, Evan M, Rayan R, Morgan M, Amreen I, Kailee K & Katally L'},
+      {file:'DN9ArE9EnjZ.webp', post:'DN9ArE9EnjZ', caption:'Daemeon M, Kailee K, Amreen I & Brandon Ca'},
+      {file:'DN9Asdckjin.webp', post:'DN9Asdckjin', caption:'Luke D'},
+      {file:'DN9AuRSkt1C.webp', post:'DN9AuRSkt1C', caption:'Amani C, Ellie C, Hannah S, Farishta I, Luna C, Destiny P, Danya I & Jianna D'},
+      {file:'DN9AzTukrjS.webp', post:'DN9AzTukrjS', caption:'Nathan S, Leslie T & Josh S'},
+      {file:'DN9A0XyEm5C.webp', post:'DN9A0XyEm5C', caption:'Uma J & Audrey L'},
+      {file:'DN9A2siEiBE.webp', post:'DN9A2siEiBE', caption:'Morgan M, Alethia D & Rebecca C'},
+      {file:'DN9BARhEmqO.webp', post:'DN9BARhEmqO', caption:'Kai A, Jayden C, Milo M, Omar A, Pearce W, Nathan H, Brandon Ca, Sacha P, Santiago C, James W, Santino S, Brent L, Richard C, Preston W, Ibrahim M, Baran C, Josue G & Andrew C'},
+      {file:'DN9BCTPEgg8.webp', post:'DN9BCTPEgg8', caption:'Uma J & Nancy S'},
+      {file:'DN9BEjpEo-k.webp', post:'DN9BEjpEo-k', caption:'Brandon Ca, Daemeon M, Kai A, Nathan H & Milo M'},
+      {file:'DN9BF5CksEg.webp', post:'DN9BF5CksEg', caption:'Hunter W, Matt C & Audrey L'},
+      {file:'DN9BJzpEvgf.webp', post:'DN9BJzpEvgf', caption:'Evan M, Morgan M, Rebecca C, Alethia D, Danya I, Katally L, Luke D, Kailee K, Miriam Y, Amreen I, Evelynn N, Leslie T, Uma J, Audrey L, Aryanna M & Kiana V'},
+      {file:'DN9BMuaEgZE.webp', post:'DN9BMuaEgZE', caption:'Kai A, Jayden C, Hunter W, Milo M, Daemeon M, Omar A, Brandon Ca, Nathan H, Baran C, Josue G, Andrew C, Santiago C, Pearce W, Sacha P, Brent L, James W, Santino S, Richard C, Cash T, Aryan L, Nathan S, Jayden O, Josh S, Ibrahim M, Rayan G & Arnav S'},
+      {file:'DN9BQVvEqpY.webp', post:'DN9BQVvEqpY', caption:'Betsy G, Marie D, Farishta I, Jianna D, Iffah S, Danya I, Sierra M, Amreen I, Kailee K, Katally L, Uma J, Leslie T, Ella S, Evelynn N, Miriam Y, Kiana V, Aryanna M, Alethia D, Morgan M, Rebecca C, Janae A, Luna C, Ellie C, Destiny P, Amani C, Audrey L, Samana N, Sam S & Hannah S'},
+      {file:'DN9BSGjku2q.webp', post:'DN9BSGjku2q', caption:'Class of 2026'},
+      {file:'DOB8w5wks1m.webp', post:'DOB8w5wks1m', caption:'Aryanna M & Kiana V'},
+      {file:'DOB8xX1kv3h.webp', post:'DOB8xX1kv3h', caption:'Josh S'},
+      {file:'DOB8x_PEk9L.webp', post:'DOB8x_PEk9L', caption:'Brandon Ca, Kai A & Andrew C'},
+      {file:'DOB8y0PElt4.webp', post:'DOB8y0PElt4', caption:'Baran C, Sacha P, Daemeon M, Jayden C & Santiago C'},
+      {file:'DOB8zYmEi_c.webp', post:'DOB8zYmEi_c', caption:'Elijah B & Artin R'},
+      {file:'DOB8z9EEpRt.webp', post:'DOB8z9EEpRt', caption:'Marie D'},
+      {file:'DOB80pckv33.webp', post:'DOB80pckv33', caption:'Morgan M & Alethia D'},
+      {file:'DOB81OskhxT.webp', post:'DOB81OskhxT', caption:'Hannah S & Sam S'},
+      {file:'DOB83u5Ek_8.webp', post:'DOB83u5Ek_8', caption:'Rayan G, Jayden O, Santino S, Nathan S & James W'},
+      {file:'DOB84ZBEvJX.webp', post:'DOB84ZBEvJX', caption:'Iffah S & Farishta I'},
+      {file:'DOB85dokmQZ.webp', post:'DOB85dokmQZ', caption:'Nathan S, Max C & Rayan G'}
     ],
     posts: [] },
   { id: 'arc-events',  label: 'In School Events', cols: 3, type: 'p',    comingSoon: false,
     imgFolder: 'inschoolevents',
     images: [
-      {file:'DPFGrwUkmxw.webp', post:'DPFGrwUkmxw'},{file:'DPFGs0hkrF2.webp', post:'DPFGs0hkrF2'},
-      {file:'DPFGuAAEiJq.webp', post:'DPFGuAAEiJq'},{file:'DPFGvmNEpqi.webp', post:'DPFGvmNEpqi'},
-      {file:'DPFGycbEiK2.webp', post:'DPFGycbEiK2'},{file:'DPFG0NNkuH_.webp', post:'DPFG0NNkuH_'},
-      {file:'DPFG1GTEk7y.webp', post:'DPFG1GTEk7y'},{file:'DPFG4FUElPx.webp', post:'DPFG4FUElPx'},
-      {file:'DPFG40hEqjW.webp', post:'DPFG40hEqjW'},{file:'DPFG5v5kpJ9.webp', post:'DPFG5v5kpJ9'},
-      {file:'DPFG8h-knpa.webp', post:'DPFG8h-knpa'},{file:'DPFG9nMEg4o.webp', post:'DPFG9nMEg4o'},
-      {file:'DPFG-pekpZL.webp', post:'DPFG-pekpZL'},{file:'DPFHAlZksC1.webp', post:'DPFHAlZksC1'},
-      {file:'DPFHB1zEigR.webp', post:'DPFHB1zEigR'},{file:'DPFHEnkEs_o.webp', post:'DPFHEnkEs_o'},
-      {file:'DPFHGq6ktSy.webp', post:'DPFHGq6ktSy'},{file:'DPFHJOKkoXi.webp', post:'DPFHJOKkoXi'},
-      {file:'DPFHKyZkp4f.webp', post:'DPFHKyZkp4f'},{file:'DPFHMYYEpeA.webp', post:'DPFHMYYEpeA'},
-      {file:'DPFHNfokuPL.webp', post:'DPFHNfokuPL'},{file:'DPFHP0ZkoP6.webp', post:'DPFHP0ZkoP6'},
-      {file:'DPFHTV_Es8g.webp', post:'DPFHTV_Es8g'},{file:'DPFHVI4Ei3G.webp', post:'DPFHVI4Ei3G'},
-      {file:'DPFHcN1Ek_n.webp', post:'DPFHcN1Ek_n'},{file:'DPFHdB_kjZF.webp', post:'DPFHdB_kjZF'},
-      {file:'DPFHegLkuc3.webp', post:'DPFHegLkuc3'},{file:'DPFHfypEiCi.webp', post:'DPFHfypEiCi'},
-      {file:'DPFHjUeknIt.webp', post:'DPFHjUeknIt'},{file:'DPFHnrHEtEU.webp', post:'DPFHnrHEtEU'},
-      {file:'DPFHuFOkmQ1.webp', post:'DPFHuFOkmQ1'},{file:'DPFHxG4kr9z.webp', post:'DPFHxG4kr9z'},
-      {file:'DPFHza2Ehhx.webp', post:'DPFHza2Ehhx'},{file:'DPFH4VUkiwd.webp', post:'DPFH4VUkiwd'},
-      {file:'DPFH5zxkgME.webp', post:'DPFH5zxkgME'}
+      {file:'DPFGrwUkmxw.webp', post:'DPFGrwUkmxw', caption:'Jayden O & Pearce W'},
+      {file:'DPFGs0hkrF2.webp', post:'DPFGs0hkrF2', caption:'Kailee K & Morgan M'},
+      {file:'DPFGuAAEiJq.webp', post:'DPFGuAAEiJq', caption:'Santino S & Sam S'},
+      {file:'DPFGvmNEpqi.webp', post:'DPFGvmNEpqi', caption:'Leslie T & Uma J'},
+      {file:'DPFGycbEiK2.webp', post:'DPFGycbEiK2', caption:'Amreen I & Kailee K'},
+      {file:'DPFG0NNkuH_.webp', post:'DPFG0NNkuH_', caption:'Kailee K & Rayan R'},
+      {file:'DPFG1GTEk7y.webp', post:'DPFG1GTEk7y', caption:'Abram M'},
+      {file:'DPFG4FUElPx.webp', post:'DPFG4FUElPx', caption:'Nathan H, Brandon Ca & Milo M'},
+      {file:'DPFG40hEqjW.webp', post:'DPFG40hEqjW', caption:'Max C'},
+      {file:'DPFG5v5kpJ9.webp', post:'DPFG5v5kpJ9', caption:'Baran C & Jesiah H'},
+      {file:'DPFG8h-knpa.webp', post:'DPFG8h-knpa', caption:'Brandon Ca & Milo M'},
+      {file:'DPFG9nMEg4o.webp', post:'DPFG9nMEg4o', caption:'Luke D & Leslie T'},
+      {file:'DPFG-pekpZL.webp', post:'DPFG-pekpZL', caption:'Cash T'},
+      {file:'DPFHAlZksC1.webp', post:'DPFHAlZksC1', caption:'Amreen I & Uma J'},
+      {file:'DPFHB1zEigR.webp', post:'DPFHB1zEigR', caption:'Evan M'},
+      {file:'DPFHEnkEs_o.webp', post:'DPFHEnkEs_o', caption:'Nathan H, Brandon Ca & Milo M'},
+      {file:'DPFHGq6ktSy.webp', post:'DPFHGq6ktSy', caption:'Leslie T & Uma J'},
+      {file:'DPFHJOKkoXi.webp', post:'DPFHJOKkoXi', caption:'Audrey L & Aiza Q'},
+      {file:'DPFHKyZkp4f.webp', post:'DPFHKyZkp4f', caption:'Farishta I, Luna C, Jianna D, Kiyomi P, Hannah S, Ellie C, Danya I, Destiny P & Iffah S'},
+      {file:'DPFHMYYEpeA.webp', post:'DPFHMYYEpeA', caption:'Rayan R'},
+      {file:'DPFHNfokuPL.webp', post:'DPFHNfokuPL', caption:'Santiago C, D Licciardo & Jayden C'},
+      {file:'DPFHP0ZkoP6.webp', post:'DPFHP0ZkoP6', caption:'Kailee K, Amreen I & Morgan M'},
+      {file:'DPFHTV_Es8g.webp', post:'DPFHTV_Es8g', caption:'Brandon Ca & Cash T'},
+      {file:'DPFHVI4Ei3G.webp', post:'DPFHVI4Ei3G', caption:'Uma J & Audrey L'},
+      {file:'DPFHcN1Ek_n.webp', post:'DPFHcN1Ek_n', caption:'Class of 2026'},
+      {file:'DPFHdB_kjZF.webp', post:'DPFHdB_kjZF', caption:'Katally L & Kailee K'},
+      {file:'DPFHegLkuc3.webp', post:'DPFHegLkuc3', caption:'Rayan R & Uma J'},
+      {file:'DPFHfypEiCi.webp', post:'DPFHfypEiCi', caption:'Aiza Q'},
+      {file:'DPFHjUeknIt.webp', post:'DPFHjUeknIt', caption:'Rayan R'},
+      {file:'DPFHnrHEtEU.webp', post:'DPFHnrHEtEU', caption:'Uma J & Amreen I'},
+      {file:'DPFHuFOkmQ1.webp', post:'DPFHuFOkmQ1', caption:'Audrey L & Aiza Q'},
+      {file:'DPFHxG4kr9z.webp', post:'DPFHxG4kr9z', caption:'Uma J & Kailee K'},
+      {file:'DPFHza2Ehhx.webp', post:'DPFHza2Ehhx', caption:'Class of 2026'},
+      {file:'DPFH4VUkiwd.webp', post:'DPFH4VUkiwd', caption:'Leslie T & Uma J'},
+      {file:'DPFH5zxkgME.webp', post:'DPFH5zxkgME', caption:'Class of 2026'}
     ],
     posts: [] },
   { id: 'arc-blues',   label: 'Senior Blues',     cols: 3, type: 'p',    comingSoon: false,
     imgFolder: 'mb',
     images: [
-      {file:'DPJs-XeEdqo.webp', post:'DPJs-XeEdqo'},{file:'DPJtCTUkb_f.webp', post:'DPJtCTUkb_f'},
-      {file:'DPJtJbeERrr.webp', post:'DPJtJbeERrr'},{file:'DPJtNvfkTvk.webp', post:'DPJtNvfkTvk'},
-      {file:'DPJtQ5pkSpz.webp', post:'DPJtQ5pkSpz'},{file:'DPJtbCkkfm5.webp', post:'DPJtbCkkfm5'},
-      {file:'DPJteT8kbfY.webp', post:'DPJteT8kbfY'},{file:'DPJthE-EVNc.webp', post:'DPJthE-EVNc'},
-      {file:'DPJti-lkaJ_.webp', post:'DPJti-lkaJ_'},{file:'DPJtmFrkdhD.webp', post:'DPJtmFrkdhD'},
-      {file:'DPJts4SEd9B.webp', post:'DPJts4SEd9B'},{file:'DPJtvALETG8.webp', post:'DPJtvALETG8'},
-      {file:'DPJtwuDEQTk.webp', post:'DPJtwuDEQTk'},{file:'DPJt9v4kR44.webp', post:'DPJt9v4kR44'},
-      {file:'DPJt_JqEQgw.webp', post:'DPJt_JqEQgw'},{file:'DPJuD3fkdGV.webp', post:'DPJuD3fkdGV'},
-      {file:'DPJuKkkkdpJ.webp', post:'DPJuKkkkdpJ'},{file:'DPJuM_dkb9h.webp', post:'DPJuM_dkb9h'},
-      {file:'DPJuaqIkb9S.webp', post:'DPJuaqIkb9S'},{file:'DPJucoVETz5.webp', post:'DPJucoVETz5'},
-      {file:'DPJufAkkY30.webp', post:'DPJufAkkY30'},{file:'DPJugORET4W.webp', post:'DPJugORET4W'},
-      {file:'DPJupQOkfji.webp', post:'DPJupQOkfji'},{file:'DPJuqMNkYk0.webp', post:'DPJuqMNkYk0'},
-      {file:'DPJurutEanH.webp', post:'DPJurutEanH'},{file:'DPJuwpAka9y.webp', post:'DPJuwpAka9y'},
-      {file:'DPJu83NkdoG.webp', post:'DPJu83NkdoG'},{file:'DPJvBnDkSb2.webp', post:'DPJvBnDkSb2'},
-      {file:'DPJvFJ5kS7Z.webp', post:'DPJvFJ5kS7Z'},{file:'DPJvPPqka05.webp', post:'DPJvPPqka05'},
-      {file:'DPJvRivkS6v.webp', post:'DPJvRivkS6v'},{file:'DPJ3wRMDxo9.webp', post:'DPJ3wRMDxo9'},
-      {file:'DPJ7ob0D2Us.webp', post:'DPJ7ob0D2Us'}
+      {file:'DPJs-XeEdqo.webp', post:'DPJs-XeEdqo', caption:'Sacha P'},
+      {file:'DPJtCTUkb_f.webp', post:'DPJtCTUkb_f', caption:'Evan M, Josh K, Santino S, James W, Brandon Ca & Abram M'},
+      {file:'DPJtJbeERrr.webp', post:'DPJtJbeERrr', caption:'Kailee K & Uma J'},
+      {file:'DPJtNvfkTvk.webp', post:'DPJtNvfkTvk', caption:'Aryanna M, Luke D, Evelynn N & Evan M'},
+      {file:'DPJtQ5pkSpz.webp', post:'DPJtQ5pkSpz', caption:'Jayden O, Pearce W, Rayan G, Kai A & Milo M'},
+      {file:'DPJtbCkkfm5.webp', post:'DPJtbCkkfm5', caption:'Rayan G, Pearce W, Brandon Ca, Abram M, Evan M, Santino S & Josh K'},
+      {file:'DPJteT8kbfY.webp', post:'DPJteT8kbfY', caption:'Andrew C & Rayan G'},
+      {file:'DPJthE-EVNc.webp', post:'DPJthE-EVNc', caption:'Sierra M, Alethia D & Kailee K'},
+      {file:'DPJti-lkaJ_.webp', post:'DPJti-lkaJ_', caption:'Leslie T, Evelynn N, Miriam Y, Aryanna M, Kiana V, Nyala A & Luke D'},
+      {file:'DPJtmFrkdhD.webp', post:'DPJtmFrkdhD', caption:'Santino S & Evan M'},
+      {file:'DPJts4SEd9B.webp', post:'DPJts4SEd9B', caption:'Audrey L, Hunter W, Katally L, Rayan G, Amreen I & Aiza Q'},
+      {file:'DPJtvALETG8.webp', post:'DPJtvALETG8', caption:'Uma J, Amreen I & Kailee K'},
+      {file:'DPJtwuDEQTk.webp', post:'DPJtwuDEQTk', caption:'Mason N, Cash T, Hunter W & Matt C'},
+      {file:'DPJt9v4kR44.webp', post:'DPJt9v4kR44', caption:'Kai A, Sacha P, Omar A & Andrew C'},
+      {file:'DPJt_JqEQgw.webp', post:'DPJt_JqEQgw', caption:'Luke D & Leslie T'},
+      {file:'DPJuD3fkdGV.webp', post:'DPJuD3fkdGV', caption:'Jayden C & Omar A'},
+      {file:'DPJuKkkkdpJ.webp', post:'DPJuKkkkdpJ', caption:'Class of 2026'},
+      {file:'DPJuM_dkb9h.webp', post:'DPJuM_dkb9h', caption:'Luke D & Rayan R'},
+      {file:'DPJuaqIkb9S.webp', post:'DPJuaqIkb9S', caption:'Amreen I & Kailee K'},
+      {file:'DPJucoVETz5.webp', post:'DPJucoVETz5', caption:'Pearce W, Daemeon M, Cash T, Sacha P, Brandon Ca & Hunter W'},
+      {file:'DPJufAkkY30.webp', post:'DPJufAkkY30', caption:'Uma J & Amreen I'},
+      {file:'DPJugORET4W.webp', post:'DPJugORET4W', caption:'Nathan H, Jayden C, Daemeon M, Josh K & Jayden O'},
+      {file:'DPJupQOkfji.webp', post:'DPJupQOkfji', caption:'Abram M & Mason N'},
+      {file:'DPJuqMNkYk0.webp', post:'DPJuqMNkYk0', caption:'Aiza Q & Audrey L'},
+      {file:'DPJurutEanH.webp', post:'DPJurutEanH', caption:'Alethia D & Kailee K'},
+      {file:'DPJuwpAka9y.webp', post:'DPJuwpAka9y', caption:'James W, Jesiah H, Andrew C, Baran C, Kai A & Milo M'},
+      {file:'DPJu83NkdoG.webp', post:'DPJu83NkdoG', caption:'Josh K, James W, Santino S, Kai A & Aryan L'},
+      {file:'DPJvBnDkSb2.webp', post:'DPJvBnDkSb2', caption:'Amreen I, Katally L & Kailee K'},
+      {file:'DPJvFJ5kS7Z.webp', post:'DPJvFJ5kS7Z', caption:'Evelynn N, Miriam Y, Aryanna M, Kiana V & Nyala A'},
+      {file:'DPJvPPqka05.webp', post:'DPJvPPqka05', caption:'Nathan H, Baran C, Sacha P, Kai A & James W'},
+      {file:'DPJvRivkS6v.webp', post:'DPJvRivkS6v', caption:'Class of 2026'},
+      {file:'DPJ3wRMDxo9.webp', post:'DPJ3wRMDxo9', caption:'Katally L, Amreen I, Kailee K, Luke D & Rayan R'},
+      {file:'DPJ7ob0D2Us.webp', post:'DPJ7ob0D2Us', caption:'Katally L & Rayan G'}
     ],
     posts: [] },
   { id: 'arc-bonfire', label: 'Senior Bonfire',   cols: 3, type: 'p',    comingSoon: false,
     imgFolder: 'sb',
     images: [
-      {file:'DT80kSoEjCv.webp', post:'DT80kSoEjCv'},{file:'DT80peRkvm0.webp', post:'DT80peRkvm0'},
-      {file:'DT80slykpUD.webp', post:'DT80slykpUD'},{file:'DT80vCMkqc2.webp', post:'DT80vCMkqc2'},
-      {file:'DT80xMDEkHy.webp', post:'DT80xMDEkHy'},{file:'DT80zJzknVq.webp', post:'DT80zJzknVq'},
-      {file:'DT801bBEuFI.webp', post:'DT801bBEuFI'},{file:'DT807LjEvAW.webp', post:'DT807LjEvAW'},
-      {file:'DT80-ktEsQ3.webp', post:'DT80-ktEsQ3'},{file:'DT81IGoEos_.webp', post:'DT81IGoEos_'},
-      {file:'DT81Ma2kqM5.webp', post:'DT81Ma2kqM5'}
+      {file:'DT80kSoEjCv.webp', post:'DT80kSoEjCv'},
+      {file:'DT80peRkvm0.webp', post:'DT80peRkvm0', caption:'Miriam Y & Leslie T'},
+      {file:'DT80slykpUD.webp', post:'DT80slykpUD', caption:'Nathan S, Parin L, Baran C, Abram M & Mason N'},
+      {file:'DT80vCMkqc2.webp', post:'DT80vCMkqc2', caption:'Andrew C & Evelynn N'},
+      {file:'DT80xMDEkHy.webp', post:'DT80xMDEkHy', caption:'Pearce W, Aryan L & Max C'},
+      {file:'DT80zJzknVq.webp', post:'DT80zJzknVq', caption:'Pearce W, Aryan L & Nathan S'},
+      {file:'DT801bBEuFI.webp', post:'DT801bBEuFI', caption:'Leslie T, Katally L & Evelynn N'},
+      {file:'DT807LjEvAW.webp', post:'DT807LjEvAW', caption:'Sacha P, Jesiah H, Milo M & Shirom M'},
+      {file:'DT80-ktEsQ3.webp', post:'DT80-ktEsQ3', caption:'Sacha P & James W'},
+      {file:'DT81IGoEos_.webp', post:'DT81IGoEos_', caption:'Miriam Y & Ella S'},
+      {file:'DT81Ma2kqM5.webp', post:'DT81Ma2kqM5', caption:'Max C, Jayden O & Evelynn N'}
     ],
     posts: [] },
   { id: 'arc-sdd',         label: 'Senior Ditch Day', cols: 3, type: 'p',    comingSoon: false,
     imgFolder: 'sdd',
     images: [
-      {file:'DXrh0rVjnn7.webp', post:'DXrh0rVjnn7'},{file:'DXrh8_8DvtA.webp', post:'DXrh8_8DvtA'},
-      {file:'DXriBNjjgzg.webp', post:'DXriBNjjgzg'},{file:'DXriG42DrtX.webp', post:'DXriG42DrtX'},
-      {file:'DXriLqEDvcl.webp', post:'DXriLqEDvcl'},{file:'DXriTsrDsil.webp', post:'DXriTsrDsil'},
-      {file:'DXriVqQjt6z.webp', post:'DXriVqQjt6z'},{file:'DXriYcRjqE7.webp', post:'DXriYcRjqE7'},
-      {file:'DXrianpDup4.webp', post:'DXrianpDup4'},{file:'DXriccijryP.webp', post:'DXriccijryP'},
-      {file:'DXrie-BDqQ6.webp', post:'DXrie-BDqQ6'},{file:'DXrig9XDv3w.webp', post:'DXrig9XDv3w'},
-      {file:'DXrik3pjsOH.webp', post:'DXrik3pjsOH'},{file:'DXripEtDtAX.webp', post:'DXripEtDtAX'},
+      {file:'DXrh0rVjnn7.webp', post:'DXrh0rVjnn7', caption:'Pearce W, Jayden O, Rayan G, Elijah B & Josh S'},
+      {file:'DXrh8_8DvtA.webp', post:'DXrh8_8DvtA', caption:'Uma J & Aiza Q'},
+      {file:'DXriBNjjgzg.webp', post:'DXriBNjjgzg', caption:'Jayden O, Max C, Josh S & Rayan G'},
+      {file:'DXriG42DrtX.webp', post:'DXriG42DrtX', caption:'Evelynn N, Rayan G, James W, Elijah B, Katally L & Austin V'},
+      {file:'DXriLqEDvcl.webp', post:'DXriLqEDvcl', caption:'Nathan S, Josh S & Jayden O'},
+      {file:'DXriTsrDsil.webp', post:'DXriTsrDsil', caption:'Uma J, Amreen I & Aiza Q'},
+      {file:'DXriVqQjt6z.webp', post:'DXriVqQjt6z', caption:'Katally L'},
+      {file:'DXriYcRjqE7.webp', post:'DXriYcRjqE7', caption:'Class of 2026'},
+      {file:'DXrianpDup4.webp', post:'DXrianpDup4', caption:'Austin V & Max C'},
+      {file:'DXriccijryP.webp', post:'DXriccijryP', caption:'Abram M, Parin L & Evan M'},
+      {file:'DXrie-BDqQ6.webp', post:'DXrie-BDqQ6', caption:'Evelynn N & Leslie T'},
+      {file:'DXrig9XDv3w.webp', post:'DXrig9XDv3w', caption:'James W, Jesiah H, Milo M & Abram M'},
+      {file:'DXrik3pjsOH.webp', post:'DXrik3pjsOH', caption:'Samana N, Cash T & Hannah S'},
+      {file:'DXripEtDtAX.webp', post:'DXripEtDtAX', caption:'Austin V, Jayden C & Jesiah H'},
       {file:'DXriq6Pjulw.webp', post:'DXriq6Pjulw'}
     ],
     posts: [] },
   { id: 'arc-prom',        label: 'Prom',             cols: 3, type: 'p',    comingSoon: false,
     imgFolder: 'prom',
     images: [
-      {file:'DXBF7TfFL0p.webp', post:'DXBF7TfFL0p'},{file:'DXNRjb0Et6z.webp', post:'DXNRjb0Et6z'},
-      {file:'DXPoB6PD1cr.webp', post:'DXPoB6PD1cr'},{file:'DXQY1folAG4.webp', post:'DXQY1folAG4'},
-      {file:'DXSwoF4mgPn.webp', post:'DXSwoF4mgPn'},{file:'DXXi4sokoOb.webp', post:'DXXi4sokoOb'},
-      {file:'DXa0imUlGOP.webp', post:'DXa0imUlGOP'},{file:'DXca7zEjwwC.webp', post:'DXca7zEjwwC'},
-      {file:'DXyEitPjurk.webp', post:'DXyEitPjurk'},{file:'DXyEk0QDnAG.webp', post:'DXyEk0QDnAG'},
-      {file:'DXyEo1cDgSK.webp', post:'DXyEo1cDgSK'},{file:'DXyFJYyDkDF.webp', post:'DXyFJYyDkDF'},
-      {file:'DXyFiyTjm7P.webp', post:'DXyFiyTjm7P'},{file:'DXyF3Hwju_w.webp', post:'DXyF3Hwju_w'},
-      {file:'DXyF-mODgNW.webp', post:'DXyF-mODgNW'},{file:'DXyGBEoDrtT.webp', post:'DXyGBEoDrtT'},
-      {file:'DXyGWKdjnkR.webp', post:'DXyGWKdjnkR'},{file:'DXyGjpwjo7z.webp', post:'DXyGjpwjo7z'},
-      {file:'DXyHA-pDnx6.webp', post:'DXyHA-pDnx6'},
-      {file:'DXz7DqvEkeF.webp', post:'DXz7DqvEkeF'},{file:'DXz7IrSknrc.webp', post:'DXz7IrSknrc'},
-      {file:'DXz7M6mElfo.webp', post:'DXz7M6mElfo'},{file:'DXz7RgMks2l.webp', post:'DXz7RgMks2l'},
-      {file:'DXyEdwwDner.webp', post:'DXyEdwwDner'},{file:'DXyGQGtDkNA.webp', post:'DXyGQGtDkNA'},
-      {file:'DXyGmdqDlY1.webp', post:'DXyGmdqDlY1'},{file:'DXyHDlQDtUA.webp', post:'DXyHDlQDtUA'},
-      {file:'DXyHVLtDsOr.webp', post:'DXyHVLtDsOr'},
-      {file:'DXyF1W_Di8V.webp', post:'DXyF1W_Di8V'},{file:'DXyFTzsjnDA.webp', post:'DXyFTzsjnDA'},
-      {file:'DXyFY9ODs4G.webp', post:'DXyFY9ODs4G'},{file:'DXyFnCBjiKM.webp', post:'DXyFnCBjiKM'},
-      {file:'DXyGYsZDkjT.webp', post:'DXyGYsZDkjT'},{file:'DXyHS1QjpgW.webp', post:'DXyHS1QjpgW'},
-      {file:'DXyEYw-jjIj.webp', post:'DXyEYw-jjIj'},{file:'DXyE8lxjk-w.webp', post:'DXyE8lxjk-w'},
-      {file:'DXyFE8tjiW1.webp', post:'DXyFE8tjiW1'},{file:'DXyFRmijnHv.webp', post:'DXyFRmijnHv'},
-      {file:'DXyFbpNDiOu.webp', post:'DXyFbpNDiOu'},{file:'DXyFvM7jnhr.webp', post:'DXyFvM7jnhr'},
-      {file:'DXyFxVhju4Z.webp', post:'DXyFxVhju4Z'},{file:'DXyGOoRjlkG.webp', post:'DXyGOoRjlkG'},
-      {file:'DXyHHyHjsUW.webp', post:'DXyHHyHjsUW'},{file:'DXyEwKKjjp7.webp', post:'DXyEwKKjjp7'},
-      {file:'DXyE1IGDuZr.webp', post:'DXyE1IGDuZr'},{file:'DXyFkiqjsRn.webp', post:'DXyFkiqjsRn'},
-      {file:'DXyGS-YDlT2.webp', post:'DXyGS-YDlT2'}
+      {file:'DXBF7TfFL0p.webp', post:'DXBF7TfFL0p', caption:'Julian A & Leslie T'},
+      {file:'DXNRjb0Et6z.webp', post:'DXNRjb0Et6z', caption:'Daemeon M & Kailee K'},
+      {file:'DXPoB6PD1cr.webp', post:'DXPoB6PD1cr', caption:'Evelynn N & Baran C'},
+      {file:'DXQY1folAG4.webp', post:'DXQY1folAG4', caption:'Katelyn M & Santiago C'},
+      {file:'DXSwoF4mgPn.webp', post:'DXSwoF4mgPn', caption:'Josh T & Ava L'},
+      {file:'DXXi4sokoOb.webp', post:'DXXi4sokoOb', caption:'Rayan R & Uma J'},
+      {file:'DXa0imUlGOP.webp', post:'DXa0imUlGOP', caption:'Destiny P & Amani C'},
+      {file:'DXca7zEjwwC.webp', post:'DXca7zEjwwC', caption:'Josh S & Eva K'},
+      {file:'DXyEitPjurk.webp', post:'DXyEitPjurk', caption:'Rayan R & Uma J'},
+      {file:'DXyEk0QDnAG.webp', post:'DXyEk0QDnAG', caption:'Aryan L, Pearce W & Richard C'},
+      {file:'DXyEo1cDgSK.webp', post:'DXyEo1cDgSK', caption:'Mason N, Cash T, Matt C & Hunter W'},
+      {file:'DXyFJYyDkDF.webp', post:'DXyFJYyDkDF', caption:'Rayan R, Jayden O, Richard C, Julian A, Rayan G, Aryan L, James W, Pearce W, Artin R, Daemeon M, Santiago C, Elijah B, Nathan S, Josh S, Baran C, Max C, Brandon Ca, Nolan E, Kai A, Nathan H, Milo M & Jayden C'},
+      {file:'DXyFiyTjm7P.webp', post:'DXyFiyTjm7P', caption:'Elijah B, Josh S, Rayan G, Max C, Pearce W, Jayden O, Nathan S & Artin R'},
+      {file:'DXyF3Hwju_w.webp', post:'DXyF3Hwju_w', caption:'Hunter W & Cash T'},
+      {file:'DXyF-mODgNW.webp', post:'DXyF-mODgNW', caption:'Uma J, Amreen I, Kailee K & Aiza Q'},
+      {file:'DXyGBEoDrtT.webp', post:'DXyGBEoDrtT', caption:'Daemeon M, Josh T & Josue G'},
+      {file:'DXyGWKdjnkR.webp', post:'DXyGWKdjnkR', caption:'Jayden O, Jayden C, Daemeon M & Sacha P'},
+      {file:'DXyGjpwjo7z.webp', post:'DXyGjpwjo7z', caption:'Josh S, Elijah B & Nathan S'},
+      {file:'DXyHA-pDnx6.webp', post:'DXyHA-pDnx6', caption:'Matt C & Mason N'},
+      {file:'DXz7DqvEkeF.webp', post:'DXz7DqvEkeF', caption:'Miriam Y & Nyala A'},
+      {file:'DXz7IrSknrc.webp', post:'DXz7IrSknrc', caption:'Nancy S, Aryanna M, Jesiah H & Miriam Y'},
+      {file:'DXz7M6mElfo.webp', post:'DXz7M6mElfo', caption:'Nyala A, Miriam Y & Nancy S'},
+      {file:'DXz7RgMks2l.webp', post:'DXz7RgMks2l', caption:'Nyala A, Miriam Y, Kiana V, Nancy S & Aryanna M'},
+      {file:'DXyEdwwDner.webp', post:'DXyEdwwDner', caption:'Rebecca C, Ava L & Kailee K'},
+      {file:'DXyGQGtDkNA.webp', post:'DXyGQGtDkNA', caption:'Morgan M & Kailee K'},
+      {file:'DXyGmdqDlY1.webp', post:'DXyGmdqDlY1', caption:'Nathan H, Josue G, James W, Artin R, Rayan G, Max C, Josh T, Brandon Ca, Milo M & Elijah B'},
+      {file:'DXyHDlQDtUA.webp', post:'DXyHDlQDtUA', caption:'Aiza Q, Amreen I, Audrey L, Rebecca C & Uma J'},
+      {file:'DXyHVLtDsOr.webp', post:'DXyHVLtDsOr', caption:'Kailee K & Audrey L'},
+      {file:'DXyF1W_Di8V.webp', post:'DXyF1W_Di8V', caption:'Parin L, Jayden T, Evan M & Ryan Y'},
+      {file:'DXyFTzsjnDA.webp', post:'DXyFTzsjnDA', caption:'Amani C, Samana N, Jianna D, Kiyomi P, Ellie C, Luna C & Grace D'},
+      {file:'DXyFY9ODs4G.webp', post:'DXyFY9ODs4G', caption:'Samana N & Parin L'},
+      {file:'DXyFnCBjiKM.webp', post:'DXyFnCBjiKM', caption:'Rebecca C, Luke D, Alethia D, Morgan M, Ava L & Josh T'},
+      {file:'DXyGYsZDkjT.webp', post:'DXyGYsZDkjT', caption:'Peyton T, Jayden T, Ellie C, Luna C, Kiyomi P, Samana N, Michael H, Murad M, Grace D, Jianna D, Jaedon B, Brandon Ch, Cooper M & Destiny P'},
+      {file:'DXyHS1QjpgW.webp', post:'DXyHS1QjpgW', caption:'Morgan M, Alethia D, Luke D, Rebecca C & Ava L'},
+      {file:'DXyEYw-jjIj.webp', post:'DXyEYw-jjIj'},
+      {file:'DXyE8lxjk-w.webp', post:'DXyE8lxjk-w', caption:'Evelynn N & Leslie T'},
+      {file:'DXyFE8tjiW1.webp', post:'DXyFE8tjiW1', caption:'Daemeon M & Baran C'},
+      {file:'DXyFRmijnHv.webp', post:'DXyFRmijnHv', caption:'Brandon Ca, Evelynn N, Kailee K & Daemeon M'},
+      {file:'DXyFbpNDiOu.webp', post:'DXyFbpNDiOu', caption:'Amreen I & Aiza Q'},
+      {file:'DXyFvM7jnhr.webp', post:'DXyFvM7jnhr', caption:'Andrew C & Baran C'},
+      {file:'DXyFxVhju4Z.webp', post:'DXyFxVhju4Z', caption:'Katally L, Aryanna M, Petra M, Betsy G, Katelyn M, Uma J, Kailee K, Aiza Q, Eva K, Janae A, Evelynn N & Leslie T'},
+      {file:'DXyGOoRjlkG.webp', post:'DXyGOoRjlkG', caption:'Uma J & Brandon Ca'},
+      {file:'DXyHHyHjsUW.webp', post:'DXyHHyHjsUW', caption:'Aryan L & Pearce W'},
+      {file:'DXyEwKKjjp7.webp', post:'DXyEwKKjjp7', caption:'Connor P, Parin L & Carson C'},
+      {file:'DXyE1IGDuZr.webp', post:'DXyE1IGDuZr', caption:'Rebecca C, Ava L, Luke D & Alethia D'},
+      {file:'DXyFkiqjsRn.webp', post:'DXyFkiqjsRn', caption:'Jayden T, Peyton T & Jaedon B'},
+      {file:'DXyGS-YDlT2.webp', post:'DXyGS-YDlT2', caption:'Katally L & Leslie T'}
     ],
     posts: [] },
   { id: 'arc-soak',        label: 'Soak a Senior',    cols: 3, type: 'p',    comingSoon: false,
     imgFolder: 'sas',
     images: [
-      {file:'BCsoaksAM.webp', post:''},{file:'SubmergedtotheMax.webp', post:''},
-      {file:'ChineseTorture.webp', post:''},{file:'CarsonSplash.webp', post:''},
-      {file:'Shirom&Jackson.webp', post:''},{file:'DoubleSoak.webp', post:''},
-      {file:'LiccSoak.webp', post:''},{file:'RowlandSoak.webp', post:''},
-      {file:'SaigonExecution.webp', post:''},{file:'TChaseSoak.webp', post:''},
-      {file:'IbraSoak.webp', post:''},{file:'MIB.webp', post:''},
-      {file:'4kSoak.webp', post:''},{file:'SneakAttack.webp', post:''},
-      {file:'LiccStrikesBack.webp', post:''},{file:'PointBlank.webp', post:''},
-      {file:'CCFightsOn.webp', post:''},{file:'BCAcceptsIt.webp', post:''},
-      {file:'Acceptance.webp', post:''},{file:'LilAryanSoaks.webp', post:''},
-      {file:'TuffBrandonCh.webp', post:''},{file:'TotalSoak.webp', post:''},
-      {file:'Aggressive.webp', post:''},{file:'22sMyWord.webp', post:''},
-      {file:'TuffLineup.webp', post:''},{file:'Sharpshooter.webp', post:''},
-      {file:'TuffAndSoaked.webp', post:''},{file:'T10.webp', post:''},
-      {file:'Cuties.webp', post:''},{file:'TustinTres.webp', post:''},
-      {file:'Scrunch.webp', post:''},{file:'BeckmanBetrayal.webp', post:''},
-      {file:'LiccAndJO.webp', post:''},{file:'DoubleTeam.webp', post:''},
-      {file:'JOTorture.webp', post:''},{file:'LTHeisman.webp', post:''},
-      {file:'FightOff.webp', post:''},{file:'BCSquadWipe.webp', post:''},
-      {file:'BrandonCaDistress.webp', post:''},{file:'SoakedClaps.webp', post:''},
-      {file:'BraceForImpact.webp', post:''},{file:'TippingBucket.webp', post:''},
-      {file:'AIConsumesWater.webp', post:''},{file:'TonyStark.webp', post:''},
-      {file:'MuradSiblingSoak.webp', post:''},{file:'AvaBrotherSoak.webp', post:''},
-      {file:'FinalSoakLineup.webp', post:''}
+      {file:'BCsoaksAM.webp', post:'', caption:'Brandon Ch & Abram M'},
+      {file:'SubmergedtotheMax.webp', post:'', caption:'Max C & Rayan G'},
+      {file:'ChineseTorture.webp', post:'', caption:'Sacha P & Santino S'},
+      {file:'CarsonSplash.webp', post:'', caption:'Carson C, Katally L, Rayan G & Arnav S'},
+      {file:'Shirom&Jackson.webp', post:'', caption:'Jackson R & Shirom M'},
+      {file:'DoubleSoak.webp', post:'', caption:'Rayan G, Arnav S & Abram M'},
+      {file:'LiccSoak.webp', post:'', caption:'Abram M'},
+      {file:'RowlandSoak.webp', post:'', caption:'Jackson R'},
+      {file:'SaigonExecution.webp', post:'', caption:'Rayan G'},
+      {file:'TChaseSoak.webp', post:'', caption:'Max C & Sacha P'},
+      {file:'IbraSoak.webp', post:'', caption:'Andrew C & Ibrahim M'},
+      {file:'MIB.webp', post:'', caption:'Cooper M & Jayden T'},
+      {file:'4kSoak.webp', post:'', caption:'Destiny P, Michael H & Abram M'},
+      {file:'SneakAttack.webp', post:'', caption:'Aiza Q, Cooper M, Destiny P & Brandon Ch'},
+      {file:'LiccStrikesBack.webp', post:'', caption:'Connor P, Mason N & Parin L'},
+      {file:'PointBlank.webp', post:'', caption:'Abram M & Mason N'},
+      {file:'CCFightsOn.webp', post:'', caption:'Carson C, Mason N, Rayan R & Amreen I'},
+      {file:'BCAcceptsIt.webp', post:'', caption:'Brandon Ch'},
+      {file:'Acceptance.webp', post:'', caption:'Mason N, Abram M & Parin L'},
+      {file:'LilAryanSoaks.webp', post:'', caption:'Rayan R'},
+      {file:'TuffBrandonCh.webp', post:'', caption:'Brandon Ch'},
+      {file:'TotalSoak.webp', post:'', caption:'Rayan R, Amreen I & Audrey L'},
+      {file:'Aggressive.webp', post:'', caption:'Rayan R, Amreen I, Audrey L, Aiza Q & Brandon Ch'},
+      {file:'22sMyWord.webp', post:'', caption:'Rayan R & Amreen I'},
+      {file:'TuffLineup.webp', post:'', caption:'Connor P, Parin L, Santiago C & Daemeon M'},
+      {file:'Sharpshooter.webp', post:'', caption:'Max C, Connor P, Parin L, Santiago C, Daemeon M, Rayan R & Amreen I'},
+      {file:'TuffAndSoaked.webp', post:'', caption:'Parin L, Santiago C & Daemeon M'},
+      {file:'T10.webp', post:'', caption:'Katally L, Rayan G & Arnav S'},
+      {file:'Cuties.webp', post:'', caption:'Milo M & Brandon Ca'},
+      {file:'TustinTres.webp', post:'', caption:'Milo M, Brandon Ca & Jayden C'},
+      {file:'Scrunch.webp', post:'', caption:'Elijah B, Milo M & Brandon Ca'},
+      {file:'BeckmanBetrayal.webp', post:'', caption:'Brandon Ca, Jayden O & Carson C'},
+      {file:'LiccAndJO.webp', post:'', caption:'Jayden O & Carson C'},
+      {file:'DoubleTeam.webp', post:'', caption:'Kai A, Andrew C, Milo M & Brandon Ca'},
+      {file:'JOTorture.webp', post:'', caption:'Jayden O'},
+      {file:'LTHeisman.webp', post:'', caption:'Uma J & Leslie T'},
+      {file:'FightOff.webp', post:'', caption:'Jayden C, Jayden O, Carson C, Luna C, Grace D & Murad M'},
+      {file:'BCSquadWipe.webp', post:'', caption:'Brandon Ch, Carson C, Luna C, Grace D & Murad M'},
+      {file:'BrandonCaDistress.webp', post:'', caption:'Kai A, Andrew C, Milo M, Brandon Ca, Kailee K, Jayden C & Jayden O'},
+      {file:'SoakedClaps.webp', post:'', caption:'Andrew C, Milo M, Brandon Ca & Jayden C'},
+      {file:'BraceForImpact.webp', post:'', caption:'Abram M & Parin L'},
+      {file:'TippingBucket.webp', post:'', caption:'Rayan R, Amreen I, Audrey L, Max C, Aiza Q & Brandon Ch'},
+      {file:'AIConsumesWater.webp', post:'', caption:'Amreen I, Audrey L & Aiza Q'},
+      {file:'TonyStark.webp', post:'', caption:'Michael H, Cooper M, Jayden T & Jianna D'},
+      {file:'MuradSiblingSoak.webp', post:'', caption:'Luna C & Murad M'},
+      {file:'AvaBrotherSoak.webp', post:'', caption:'Cash T, Ava L & Uma J'},
+      {file:'FinalSoakLineup.webp', post:'', caption:'Kai A, Andrew C, Milo M, Brandon Ca, Jayden C, Jayden O & Carson C'}
     ],
     posts: [] },
   { id: 'arc-graduation', label: 'Graduation',      cols: 3, type: 'p',    comingSoon: true,
@@ -2991,9 +3292,11 @@ const ICON_PAUSE = `<svg width="11" height="13" viewBox="0 0 11 13" fill="curren
 
 
 function makeCarouselHTML(sec) {
-  const imgSlides = (sec.images || []).map(({file, post}) => {
+  const imgSlides = (sec.images || []).map(({file, post, caption}) => {
     const src = `images/${sec.imgFolder || 'lfd'}/${file}`;
-    return `<div class="carousel-slide"><a class="local-img-link" onclick="openArcLightbox('${src}','${post}');return false;" href="#"><img src="${src}" loading="lazy" decoding="async" alt="${sec.label} photo"></a></div>`;
+    const cap = (caption || '').replace(/'/g, "\\'");
+    const dataCap = (caption || '').replace(/"/g, '&quot;').toLowerCase();
+    return `<div class="carousel-slide" data-caption="${dataCap}"><a class="local-img-link" onclick="openArcLightbox('${src}','${post}','${cap}');return false;" href="#"><img src="${src}" loading="lazy" decoding="async" alt="${sec.label} photo"></a></div>`;
   });
   const embedSlides = (sec.posts || []).map(id => {
     const url = `https://www.instagram.com/${sec.type}/${id}/`;
@@ -3048,6 +3351,191 @@ function buildArchive() {
   }, { rootMargin: '400px 0px' });
 
   container.querySelectorAll('.arc-stub').forEach(stub => obs.observe(stub.closest('.archive-section')));
+}
+
+/* ── Timeline chip filter ── */
+let _archiveFilterables = null;
+let _archiveChips = [];
+
+function _buildArchiveFilterables() {
+  if (_archiveFilterables) return _archiveFilterables;
+  const items = [];
+  if (typeof people !== 'undefined') {
+    people.forEach(p => {
+      const m = p.img.match(/Headshots\/([^.]+)\.webp/);
+      if (m) items.push({ kind: 'person', label: p.name, abbrev: m[1], lc: p.name.toLowerCase() });
+    });
+  }
+  const groupSources = [];
+  if (typeof GROUPS !== 'undefined') groupSources.push(...GROUPS);
+  if (typeof VE_COMPANIES !== 'undefined') groupSources.push(...VE_COMPANIES);
+  const seen = new Set();
+  groupSources.forEach(g => {
+    if (!g.name || seen.has(g.name)) return;
+    seen.add(g.name);
+    const memberAbbrevs = (g.members || [])
+      .map(name => {
+        const p = (typeof people !== 'undefined') ? people.find(p => p.name === name) : null;
+        const m = p && p.img.match(/Headshots\/([^.]+)\.webp/);
+        return m ? m[1] : null;
+      })
+      .filter(Boolean);
+    items.push({ kind: 'group', label: g.name, memberAbbrevs, lc: g.name.toLowerCase() });
+  });
+  _archiveFilterables = items;
+  return items;
+}
+
+function _archiveEscapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+function _archiveCaptionHasAbbrev(captionLower, abbrev) {
+  const re = new RegExp('(^|[^a-z])' + _archiveEscapeRegex(abbrev.toLowerCase()) + '($|[^a-z])');
+  return re.test(captionLower);
+}
+
+function _chipMatchesCaption(chip, captionLower) {
+  if (chip.kind === 'person') return _archiveCaptionHasAbbrev(captionLower, chip.abbrev);
+  // Group: 2+ members in caption
+  let count = 0;
+  for (const ab of chip.memberAbbrevs) {
+    if (_archiveCaptionHasAbbrev(captionLower, ab)) {
+      count++;
+      if (count >= 2) return true;
+    }
+  }
+  return false;
+}
+
+function onArchiveSearchInput() {
+  const input = document.getElementById('archive-search');
+  const sug = document.getElementById('archive-suggestions');
+  if (!input || !sug) return;
+  const q = (input.value || '').toLowerCase().trim();
+  if (!q) { sug.classList.remove('visible'); sug.innerHTML = ''; return; }
+  const items = _buildArchiveFilterables();
+  const taken = new Set(_archiveChips.map(c => c.label));
+  const matched = items
+    .filter(i => i.lc.includes(q) && !taken.has(i.label))
+    .sort((a, b) => {
+      const ai = a.lc.startsWith(q) ? 0 : 1;
+      const bi = b.lc.startsWith(q) ? 0 : 1;
+      return ai - bi || a.label.localeCompare(b.label);
+    })
+    .slice(0, 8);
+  if (!matched.length) { sug.classList.remove('visible'); sug.innerHTML = ''; return; }
+  sug.innerHTML = matched.map((i, idx) => {
+    const realIdx = items.indexOf(i);
+    return `<div class="archive-suggestion${idx === 0 ? ' active' : ''}" data-fidx="${realIdx}" onclick="addArchiveChip(${realIdx})">
+      <span>${i.label}</span>
+      <span class="archive-suggestion-kind">${i.kind}</span>
+    </div>`;
+  }).join('');
+  sug.classList.add('visible');
+}
+
+function addArchiveChip(itemIdx) {
+  const items = _buildArchiveFilterables();
+  const item = items[itemIdx];
+  if (!item || _archiveChips.some(c => c.label === item.label)) return;
+  _archiveChips.push(item);
+  const input = document.getElementById('archive-search');
+  if (input) { input.value = ''; input.focus(); }
+  const sug = document.getElementById('archive-suggestions');
+  if (sug) { sug.classList.remove('visible'); sug.innerHTML = ''; }
+  _renderArchiveChips();
+  _applyArchiveFilter();
+}
+
+function removeArchiveChip(idx) {
+  _archiveChips.splice(idx, 1);
+  _renderArchiveChips();
+  _applyArchiveFilter();
+}
+
+function clearArchiveChips() {
+  _archiveChips = [];
+  _renderArchiveChips();
+  _applyArchiveFilter();
+}
+
+function _renderArchiveChips() {
+  const el = document.getElementById('archive-chips');
+  if (!el) return;
+  el.innerHTML = _archiveChips.map((c, idx) =>
+    `<span class="archive-chip${c.kind === 'group' ? ' group' : ''}">${c.label}<span class="archive-chip-x" onclick="removeArchiveChip(${idx})">×</span></span>`
+  ).join('');
+}
+
+function onArchiveSearchKey(e) {
+  const sug = document.getElementById('archive-suggestions');
+  const items = sug ? [...sug.querySelectorAll('.archive-suggestion')] : [];
+  if (e.key === 'Backspace' && !e.target.value && _archiveChips.length) {
+    removeArchiveChip(_archiveChips.length - 1);
+  } else if (e.key === 'Enter' && items.length) {
+    const active = sug.querySelector('.archive-suggestion.active') || items[0];
+    if (active) {
+      const fidx = parseInt(active.dataset.fidx, 10);
+      if (!Number.isNaN(fidx)) addArchiveChip(fidx);
+    }
+    e.preventDefault();
+  } else if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && items.length) {
+    const cur = items.findIndex(el => el.classList.contains('active'));
+    let next = cur + (e.key === 'ArrowDown' ? 1 : -1);
+    if (next < 0) next = items.length - 1;
+    if (next >= items.length) next = 0;
+    items.forEach(el => el.classList.remove('active'));
+    items[next].classList.add('active');
+    e.preventDefault();
+  } else if (e.key === 'Escape') {
+    if (sug) sug.classList.remove('visible');
+  }
+}
+
+document.addEventListener('click', e => {
+  const wrap = document.querySelector('.archive-filter-input');
+  const sug = document.getElementById('archive-suggestions');
+  if (sug && wrap && !wrap.contains(e.target)) sug.classList.remove('visible');
+});
+
+function _applyArchiveFilter() {
+  const container = document.getElementById('archive-carousels');
+  const countEl = document.getElementById('archive-search-count');
+  if (!container) return;
+  const hasFilters = _archiveChips.length > 0;
+
+  if (hasFilters) {
+    container.querySelectorAll('.archive-section').forEach(el => {
+      if (el.querySelector('.arc-stub') && window._buildArchiveSection) window._buildArchiveSection(el);
+    });
+  }
+
+  let totalMatches = 0, sectionsWithMatches = 0;
+  container.querySelectorAll('.archive-section').forEach(sec => {
+    const slides = sec.querySelectorAll('.carousel-slide');
+    let secMatches = 0, captionedCount = 0;
+    slides.forEach(slide => {
+      // Skip slides without a caption attribute (e.g. video/embed slides)
+      if (!slide.hasAttribute('data-caption')) return;
+      captionedCount++;
+      const cap = slide.dataset.caption || '';
+      const isMatch = hasFilters && _archiveChips.every(chip => _chipMatchesCaption(chip, cap));
+      slide.classList.toggle('match-highlight', !!isMatch);
+      slide.classList.toggle('match-dim', hasFilters && !isMatch);
+      if (isMatch) secMatches++;
+    });
+    sec.classList.toggle('no-matches', hasFilters && captionedCount > 0 && secMatches === 0);
+    if (secMatches > 0) sectionsWithMatches++;
+    totalMatches += secMatches;
+  });
+
+  const clearBtn = document.getElementById('archive-clear-btn');
+  if (clearBtn) clearBtn.style.display = _archiveChips.length >= 2 ? '' : 'none';
+
+  if (countEl) {
+    if (!hasFilters) countEl.textContent = '';
+    else if (!totalMatches) countEl.textContent = 'No matches';
+    else countEl.textContent = `${totalMatches} match${totalMatches === 1 ? '' : 'es'} in ${sectionsWithMatches} carousel${sectionsWithMatches === 1 ? '' : 's'}`;
+  }
 }
 
 function processEmbeds() {
