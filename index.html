@@ -740,17 +740,8 @@
   /* ── Our Favorites ── */
   .favorites-view { display: none; transition: opacity 0.22s ease; }
   .favorites-view.visible { display: block; margin-top: 0.25rem; }
-  .fav-search-bar { margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-  .fav-search {
-    background: var(--surface); color: var(--ink); font-size: 13px;
-    border: none; border-radius: 980px; padding: 7px 16px 7px 36px; outline: none;
-    box-shadow: var(--shadow-sm); width: 200px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23aeaeb2' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: 14px center;
-    transition: box-shadow 0.18s, width 0.22s;
-  }
-  .fav-search:focus { box-shadow: var(--shadow-md); width: 260px; }
-  .fav-search::placeholder { color: var(--ink-3); }
+  .fav-search-bar { margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .fav-search-bar .archive-filter-input { flex: 1; }
   #archive-main { transition: opacity 0.22s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1); }
   .favorites-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; overflow-anchor: none; }
   .fav-pagination { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 16px 0 4px; }
@@ -896,7 +887,9 @@
     .people-more-backdrop { display: none; position: fixed; inset: 0; z-index: 99; background: transparent; }
     .people-more-backdrop.open { display: block; }
     #fav-pagination-top { display: none !important; }
-    .fav-search { flex: 1; width: auto; min-width: 0; }
+    .fav-search-bar { flex-wrap: nowrap; }
+    .fav-search-bar .archive-filter-input { min-width: 0; width: auto; flex: 1 1 0; }
+    .fav-search-bar .archive-search-count { flex-basis: auto; }
     .fav-page-btn { display: none; }
     .fav-pagination { gap: 0; }
     .fav-page-info { font-size: 12px; color: var(--ink-3); }
@@ -1096,7 +1089,13 @@
   </div>
   <div class="favorites-view" id="favorites-view">
     <div class="fav-search-bar">
-      <input class="fav-search" id="fav-search" type="search" placeholder="Search favorites…" oninput="debouncedFavSearch()" autocomplete="off">
+      <div class="archive-filter-input" id="fav-filter-input">
+        <div class="archive-chips" id="fav-chips"></div>
+        <input class="archive-search-text" id="fav-search" type="text" placeholder="Filter favorites…" oninput="onFavSearchInput()" onkeydown="onFavSearchKey(event)" onfocus="onFavSearchInput()" autocomplete="off">
+        <div class="archive-suggestions" id="fav-suggestions"></div>
+      </div>
+      <button class="archive-clear-btn" id="fav-clear-btn" onclick="clearFavChips()" style="display:none">Clear</button>
+      <span id="fav-search-count" class="archive-search-count"></span>
       <button class="shuffle-btn" id="fav-shuffle-btn" onclick="toggleFavShuffle()" style="min-width:72px">Shuffle</button>
       <div id="fav-pagination-top" style="display:none;align-items:center;gap:6px;margin-left:auto">
         <button class="fav-page-btn" id="fav-prev-btn-top" onclick="favPageNav(-1)">&#8592;</button>
@@ -1546,8 +1545,6 @@ let popupOrder = [], popupIdx = -1;
 
 function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
 const debouncedPeopleSearch = debounce(() => { renderGrid(); renderGroups(); }, 150);
-const debouncedFavSearch    = debounce(() => { favPage = 0; renderFavorites(); }, 150);
-
 function renderGrid() {
   const grid = document.getElementById('people-grid');
   const q = (document.getElementById('people-search')?.value || '').toLowerCase().trim();
@@ -1938,9 +1935,11 @@ function seeGroupPhotos(groupName) {
     showPage('archive', archiveBtn);
     requestAnimationFrame(() => requestAnimationFrame(() => {
       setArchiveView('favorites');
-      document.getElementById('fav-search').value = groupName;
-      favPage = 0;
-      renderFavorites();
+      _favChips = [];
+      const items = _buildFavFilterables();
+      const idx = items.findIndex(i => i.kind === 'group' && i.label === groupName);
+      if (idx >= 0) addFavChip(idx);
+      else { renderFavChips(); renderFavorites(); }
     }));
   }, 320);
 }
@@ -2243,16 +2242,18 @@ function buildPieCharts() {
   function _buildWordCloud() {
   const colors = [C_DARK, C_GOLD, '#4a6fa5','#b07830','#2d4a6e','#6e6e73'];
   const container = document.getElementById('wordcloud');
+  const isMobile = window.innerWidth <= 768;
   const W = Math.min(container.offsetWidth || 760, 960);
-  const H = 240;
+  const H = isMobile ? 380 : 240;
+  const scale = isMobile ? (W / 360) : (W / 560);
   d3.layout.cloud()
     .size([W, H])
     .words(SURVEY_DATA.wordCloud.map(d => ({ text: d.text, size: d.value })))
-    .padding(6)
+    .padding(isMobile ? 4 : 6)
     .rotate(() => (Math.random() > 0.75 ? (Math.random() > 0.5 ? 90 : -90) : 0))
     .font('Inter, sans-serif')
     .fontWeight('700')
-    .fontSize(d => d.size * (W / 560))
+    .fontSize(d => Math.max(d.size * scale, isMobile ? 10 : 8))
     .random(() => 0.5)
     .on('end', function(cloudWords) {
       const svg = d3.select('#wordcloud').append('svg')
@@ -3412,19 +3413,24 @@ function _buildArchiveFilterables() {
 
 function _archiveEscapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 
+const _abbrevRegexCache = new Map();
 function _archiveCaptionHasAbbrev(captionLower, abbrev) {
-  const re = new RegExp('(^|[^a-z])' + _archiveEscapeRegex(abbrev.toLowerCase()) + '($|[^a-z])');
+  const key = abbrev.toLowerCase();
+  let re = _abbrevRegexCache.get(key);
+  if (!re) {
+    re = new RegExp('(^|[^a-z])' + _archiveEscapeRegex(key) + '($|[^a-z])');
+    _abbrevRegexCache.set(key, re);
+  }
   return re.test(captionLower);
 }
 
 function _chipMatchesCaption(chip, captionLower) {
-  if (chip.kind === 'person') return _archiveCaptionHasAbbrev(captionLower, chip.abbrev);
-  // Group: 2+ members in caption
-  let count = 0;
-  for (const ab of chip.memberAbbrevs) {
-    if (_archiveCaptionHasAbbrev(captionLower, ab)) {
-      count++;
-      if (count >= 2) return true;
+  if (chip.kind === 'person' || chip.kind === 'faculty' || chip.kind === 'other')
+    return _archiveCaptionHasAbbrev(captionLower, chip.abbrev);
+  if (chip.kind === 'group') {
+    let count = 0;
+    for (const ab of chip.memberAbbrevs) {
+      if (_archiveCaptionHasAbbrev(captionLower, ab) && ++count >= 2) return true;
     }
   }
   return false;
@@ -3516,10 +3522,145 @@ function onArchiveSearchKey(e) {
 }
 
 document.addEventListener('click', e => {
-  const wrap = document.querySelector('.archive-filter-input');
-  const sug = document.getElementById('archive-suggestions');
-  if (sug && wrap && !wrap.contains(e.target)) sug.classList.remove('visible');
+  [['archive-suggestions', '.archive-layout .archive-filter-input'], ['fav-suggestions', '#fav-filter-input']].forEach(([sugId, wrapSel]) => {
+    const sug = document.getElementById(sugId);
+    const wrap = document.querySelector(wrapSel);
+    if (sug && wrap && !wrap.contains(e.target)) sug.classList.remove('visible');
+  });
 });
+
+/* ── Favorites chip filter ── */
+let _favFilterables = null;
+let _favChips = [];
+
+function _buildFavFilterables() {
+  if (_favFilterables) return _favFilterables;
+  const items = [];
+  const classAbbrevs = new Set();
+  const abbrevByName = new Map();
+  if (typeof people !== 'undefined') {
+    people.forEach(p => {
+      const m = p.img.match(/Headshots\/([^.]+)\.webp/);
+      if (!m) return;
+      items.push({ kind: 'person', label: p.name, abbrev: m[1], lc: p.name.toLowerCase() });
+      classAbbrevs.add(m[1].toLowerCase());
+      abbrevByName.set(p.name, m[1]);
+    });
+  }
+  const seen = new Set();
+  const groupSources = [];
+  if (typeof GROUPS !== 'undefined') groupSources.push(...GROUPS);
+  if (typeof VE_COMPANIES !== 'undefined') groupSources.push(...VE_COMPANIES);
+  groupSources.forEach(g => {
+    if (!g.name || seen.has(g.name)) return;
+    seen.add(g.name);
+    const memberAbbrevs = (g.members || []).map(name => abbrevByName.get(name)).filter(Boolean);
+    items.push({ kind: 'group', label: g.name, memberAbbrevs, lc: g.name.toLowerCase() });
+  });
+  const faculty = new Map(), others = new Map();
+  if (typeof FAVORITES !== 'undefined') {
+    FAVORITES.forEach(f => {
+      (f.caption || '').split(/[,&]+/).map(t => t.trim()).filter(Boolean).forEach(tk => {
+        const lc = tk.toLowerCase();
+        if (classAbbrevs.has(lc)) return;
+        if (/^[A-Z]\s[A-Z][a-z]{2,}$/.test(tk)) { if (!faculty.has(lc)) faculty.set(lc, tk); return; }
+        if (/^[A-Z][a-z]+\s[A-Z][a-z]{0,3}$/.test(tk)) { if (!others.has(lc)) others.set(lc, tk); }
+      });
+    });
+  }
+  [...faculty.values()].sort().forEach(label => items.push({ kind: 'faculty', label, abbrev: label, lc: label.toLowerCase() }));
+  [...others.values()].sort().forEach(label  => items.push({ kind: 'other',   label, abbrev: label, lc: label.toLowerCase() }));
+  _favFilterables = items;
+  return items;
+}
+
+function onFavSearchInput() {
+  const input = document.getElementById('fav-search');
+  const sug = document.getElementById('fav-suggestions');
+  if (!input || !sug) return;
+  const q = (input.value || '').toLowerCase().trim();
+  if (!q) { sug.classList.remove('visible'); sug.innerHTML = ''; return; }
+  const items = _buildFavFilterables();
+  const taken = new Set(_favChips.map(c => c.label));
+  const matched = items
+    .filter(i => i.lc.includes(q) && !taken.has(i.label))
+    .sort((a, b) => {
+      const ai = a.lc.startsWith(q) ? 0 : 1;
+      const bi = b.lc.startsWith(q) ? 0 : 1;
+      return ai - bi || a.label.localeCompare(b.label);
+    })
+    .slice(0, 10);
+  if (!matched.length) { sug.classList.remove('visible'); sug.innerHTML = ''; return; }
+  const kindLabel = { person: "Class of '26", group: 'group', faculty: 'faculty', other: 'other' };
+  sug.innerHTML = matched.map((m, i) =>
+    `<div class="archive-suggestion${i === 0 ? ' active' : ''}" onclick="addFavChip(${items.indexOf(m)})"><span>${m.label}</span><span class="archive-suggestion-kind">${kindLabel[m.kind] || m.kind}</span></div>`
+  ).join('');
+  sug.classList.add('visible');
+}
+
+function onFavSearchKey(e) {
+  if (e.key === 'Backspace' && !e.target.value && _favChips.length) {
+    removeFavChip(_favChips.length - 1);
+    return;
+  }
+  const sug = document.getElementById('fav-suggestions');
+  if (!sug || !sug.classList.contains('visible')) return;
+  const items = [...sug.querySelectorAll('.archive-suggestion')];
+  if (!items.length) return;
+  const activeIdx = items.findIndex(el => el.classList.contains('active'));
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    items[activeIdx]?.classList.remove('active');
+    items[(activeIdx + 1) % items.length].classList.add('active');
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    items[activeIdx]?.classList.remove('active');
+    items[(activeIdx - 1 + items.length) % items.length].classList.add('active');
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    items[activeIdx]?.click();
+  } else if (e.key === 'Escape') {
+    sug.classList.remove('visible');
+    e.target.blur();
+  }
+}
+
+function addFavChip(itemIdx) {
+  const items = _buildFavFilterables();
+  const item = items[itemIdx];
+  if (!item || _favChips.some(c => c.label === item.label)) return;
+  _favChips.push(item);
+  const input = document.getElementById('fav-search');
+  if (input) input.value = '';
+  document.getElementById('fav-suggestions').classList.remove('visible');
+  renderFavChips();
+  favPage = 0;
+  renderFavorites();
+}
+
+function removeFavChip(idx) {
+  _favChips.splice(idx, 1);
+  renderFavChips();
+  favPage = 0;
+  renderFavorites();
+}
+
+function clearFavChips() {
+  _favChips = [];
+  renderFavChips();
+  favPage = 0;
+  renderFavorites();
+}
+
+function renderFavChips() {
+  const el = document.getElementById('fav-chips');
+  if (!el) return;
+  el.innerHTML = _favChips.map((c, idx) =>
+    `<span class="archive-chip${c.kind === 'group' ? ' group' : ''}">${c.label}<span class="archive-chip-x" onclick="removeFavChip(${idx})">×</span></span>`
+  ).join('');
+  const clearBtn = document.getElementById('fav-clear-btn');
+  if (clearBtn) clearBtn.style.display = _favChips.length >= 2 ? '' : 'none';
+}
 
 function _archiveStickyOffset() {
   if (window.innerWidth > 768) return 76;
@@ -4064,31 +4205,11 @@ function toggleFavShuffle() {
 }
 
 function getFavFiltered() {
-  const q = (document.getElementById('fav-search')?.value || '').toLowerCase().trim();
   const ordered = favOrder.map(i => ({ f: FAVORITES[i], i }));
-  if (!q) return ordered;
-  const matchedGroup = GROUPS.find(g => g.name.toLowerCase() === q);
-  if (matchedGroup) {
-    return ordered
-      .map(o => ({ ...o, s: scoreFavForGroup(o.f, matchedGroup) }))
-      .filter(o => o.s)
-      .sort((a, b) => b.s.count - a.s.count || b.s.density - a.s.density);
-  }
-  // Resolve query against full people names → "First L" / "First La" abbreviated forms used in captions
-  const personAbbrevs = people
-    .filter(p => p.name.toLowerCase().includes(q))
-    .flatMap(p => {
-      const parts = p.name.split(' ');
-      const fn = parts[0].toLowerCase();
-      const ln = parts[parts.length - 1].toLowerCase();
-      return [fn + ' ' + ln[0], fn + ' ' + ln.substring(0, 2)];
-    });
-  // Match abbrev only when not followed by a letter — so "brandon c" doesn't
-  // pull in "Brandon Ch" captions when searching for Brandon Campos.
-  const abbrevREs = personAbbrevs.map(a => new RegExp(a + '(?![a-z])'));
+  if (!_favChips.length) return ordered;
   return ordered.filter(({ f }) => {
-    const hay = (f.event + ' ' + f.caption).toLowerCase();
-    return hay.includes(q) || abbrevREs.some(re => re.test(hay));
+    const cap = ((f.event || '') + ' ' + (f.caption || '')).toLowerCase();
+    return _favChips.every(chip => _chipMatchesCaption(chip, cap));
   });
 }
 
@@ -4118,6 +4239,12 @@ function renderFavorites() {
   const pagination = document.getElementById('fav-pagination');
   const paginationTop = document.getElementById('fav-pagination-top');
   const filtered = getFavFiltered();
+  const countEl = document.getElementById('fav-search-count');
+  if (countEl && (_favChips.length || countEl.textContent)) {
+    if (!_favChips.length) countEl.textContent = '';
+    else if (!filtered.length) countEl.textContent = 'No matches';
+    else countEl.textContent = `${filtered.length} match${filtered.length === 1 ? '' : 'es'}`;
+  }
   if (!filtered.length) {
     grid.innerHTML = '<div class="favorites-empty">No matches found.</div>';
     if (pagination) pagination.style.display = 'none';
