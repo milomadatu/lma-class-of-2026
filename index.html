@@ -290,7 +290,6 @@
   .mobile-hero-slides { position: absolute; inset: 0; }
   .mobile-hero-slide { position: absolute; inset: 0; background-size: cover; background-position: center 25%; opacity: 0; transform: scale(1.04); transition: opacity 1.6s ease, transform 12s ease; }
   .mobile-hero-slide.active { opacity: 1; transform: scale(1); }
-  .mobile-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
   .mobile-hero-overlay {
     position: absolute; inset: 0;
     background: linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0) 75%);
@@ -989,7 +988,7 @@
     <!-- Mobile hero: slideshow, shown only on ≤768px -->
     <div class="mobile-hero">
       <div class="mobile-hero-slides">
-        <div class="mobile-hero-slide active"><img class="mobile-hero-img" src="images/Class Photo (Mobile).webp" width="601" height="901" fetchpriority="high" decoding="async" alt="LMA Class of 2026"></div>
+        <div class="mobile-hero-slide active" style="background-image:url('images/Class Photo (Mobile).webp')"></div>
         <div class="mobile-hero-slide" data-bg="images/SeniorBlues (Mobile).webp"></div>
         <div class="mobile-hero-slide" data-bg="images/SeniorSunriseGroup (Mobile).webp"></div>
         <div class="mobile-hero-slide" data-bg="images/26 (Mobile).webp"></div>
