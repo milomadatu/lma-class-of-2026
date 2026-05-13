@@ -68,11 +68,25 @@ Landing stats at lines ~921–923: Seniors / Universities / States. (See Univers
 - Test locally with `python -m http.server 8000` from project root, or VS Code Live Server. Hard-refresh (Ctrl+Shift+R) to bypass image cache after banner edits.
 - Confirm before committing — user explicitly requests "commit and push" when ready. Don't auto-push.
 
+### Page lazy-rendering
+
+`showPage(id, btn)` builds the People grid (`renderGrid()`) and Archive carousel shells (`buildArchive()`) on first visit to each page — *not* at module top-level. This keeps the landing-paint DOM small (~360 nodes saved). Don't reintroduce top-level `renderGrid()` / `buildArchive()` calls; if a new page needs lazy init, add the trigger inside `showPage`. `popupOrder` is initialized to `people.map((_, i) => i)` so popup navigation works even before the grid renders.
+
+### Rebalance helpers (untracked, local-only)
+
+- `measure_all_favs.ps1` — PowerShell BitmapDecoder script that writes `fav_dims.csv` (width/height per file in `images/favs/`).
+- `rebalance_favs.py` — reads dims + FAVORITES, brute-forces the best 3-column partition per page (anchors at indices 0/1/2 fixed), writes back to `index.html`. Run after appending new entries. Achievable floor is ~0.12 mean column-height spread; page 1's spread is anchor-bounded.
+- `check_spreads.py`, `count_mentions.py`, `count_arc_mentions.py`, `combined_leaderboard.py`, etc. — ad-hoc analysis scripts. None should be committed.
+
 ## Project Conventions
 
 ### Universities Counting Rule
 
 - Only count universities that have embeds (non-empty `igPosts`) when displaying the universities count on the landing stats (lines ~921–923)
+
+### Bare-name caption rule
+
+- Captions must use `First L` form (matching the headshot file). Bare first names like `Brent` / `Pearce` / `Sacha` won't link via the chip filter or count toward person stats. Use the console mention-histogram snippet (see session memory) to spot bare-name inconsistencies after edits.
 
 ## Persona note
 
