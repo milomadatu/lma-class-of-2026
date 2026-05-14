@@ -52,7 +52,7 @@ Landing stats at lines ~921–923: Seniors / Universities / States. (See Univers
 
 ## Event tag conventions (case-sensitive, used in FAVORITES)
 
-`In the Lab`, `Pie a Senior`, `Halloween`, `HS Volleyball`, `HS Water Polo`, `Senior Assassin`, `Flour Baby`, `VE Warriors`, `Soak a Senior`, `Winter Formal`, `Prom`, `Pep Rally`, `Trunk or Treat`, `Karaoke`, `Tustin Tiller Days`, `Tustin Soccer`, `Los Alamos`, `Senior Sunrise`, `Senior Blues`, `Senior Trip`, `Field Trip`, `New York`, `Bakersfield`, `PJ Day`, `Twin Day`, `BJ's Restaurant`, `FBLA`, `Friday Night Lights`, `Ricky's Birthday`, `Filipino Club Bonfire`, `SoFi Stadium`, `Shot by Jayden C`, `White Lies`, `Robotics`, `Not in the Class of 2026`.
+`In the Lab`, `Pie a Senior`, `Halloween`, `HS Volleyball`, `HS Water Polo`, `Senior Assassin`, `Flour Baby`, `VE Warriors`, `Soak a Senior`, `Winter Formal`, `Prom`, `Pep Rally`, `Trunk or Treat`, `Karaoke`, `Tustin Tiller Days`, `Tustin Soccer`, `Los Alamos`, `Senior Sunrise`, `Senior Blues`, `Senior Trip`, `Senior Field Day`, `Field Trip`, `New York`, `Bakersfield`, `PJ Day`, `Twin Day`, `BJ's Restaurant`, `FBLA`, `Friday Night Lights`, `Ricky's Birthday`, `Filipino Club Bonfire`, `SoFi Stadium`, `Shot by Jayden C`, `White Lies`, `Robotics`, `Not in the Class of 2026`.
 
 ## Carousel captions (timeline)
 
