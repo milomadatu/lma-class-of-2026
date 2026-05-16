@@ -1,6 +1,6 @@
 # LMA Class of 2026 Site
 
-Static senior-yearbook site. Single-file architecture: `index.html` is monolithic (HTML, CSS, JS all inline, ~3700 lines). No build step, no package.json. Hosted on GitHub at `milomadatu/lma-class-of-2026`, branch `master`.
+Static senior-yearbook site. Single-file architecture: `index.html` is monolithic (HTML, CSS, JS all inline, ~4700 lines). No build step, no package.json. Hosted on GitHub at `milomadatu/lma-class-of-2026`, branch `master`.
 
 ## Git Commit Rules
 
@@ -30,17 +30,18 @@ Static senior-yearbook site. Single-file architecture: `index.html` is monolithi
 
 | Array/object | Purpose | Approx line |
 |---|---|---|
-| `people` | Senior cards (101) | 1299 |
-| `GROUPS` | Friend groups | 1803 |
-| `VE_COMPANIES` | VE business cards (Siply/TrueVue/Sunmoon/Setta/Legacy) | 1884 |
-| `SURVEY_DATA` | Word cloud + pie charts (single source of truth) | 1958 |
-| `universities` | Map pins + IG embeds | 2098 |
-| `FAVORITES` | Gallery photos + captions | 3148 |
-| `PLACEHOLDER_QUOTE` | Sentinel for cards without surveys | 1585 |
+| `people` | Senior cards (101) | 1459 |
+| `GROUPS` | Friend groups | 1989 |
+| `VE_COMPANIES` | VE business cards (Siply/TrueVue/Sunmoon/Setta/Legacy) | 2081 |
+| `SURVEY_DATA` | Word cloud + pie charts (single source of truth) | 2158 |
+| `universities` | Map pins + IG embeds | 2305 |
+| `ARCHIVE_SECTIONS` | Timeline carousels | 2979 |
+| `FAVORITES` | Gallery photos + captions | 3935 |
+| `PLACEHOLDER_QUOTE` | Sentinel for cards without surveys | 1770 |
 
 `FAV_PER_PAGE = 12`. Desktop 3-col, mobile 2-col round-robin (col0=0,3,6,9 / col1=1,4,7,10 / col2=2,5,8,11).
 
-Landing stats at lines ~921–923: Seniors / Universities / States. (See Universities Counting Rule below.)
+Landing stats at lines ~1050–1052: Seniors / Universities / States. (See Universities Counting Rule below.)
 
 ## Caption conventions
 
@@ -52,11 +53,11 @@ Landing stats at lines ~921–923: Seniors / Universities / States. (See Univers
 
 ## Event tag conventions (case-sensitive, used in FAVORITES)
 
-`In the Lab`, `Pie a Senior`, `Halloween`, `HS Volleyball`, `HS Water Polo`, `Senior Assassin`, `Flour Baby`, `VE Warriors`, `Soak a Senior`, `Winter Formal`, `Prom`, `Pep Rally`, `Trunk or Treat`, `Karaoke`, `Tustin Tiller Days`, `Tustin Soccer`, `Los Alamos`, `Senior Sunrise`, `Senior Blues`, `Senior Trip`, `Senior Field Day`, `Field Trip`, `New York`, `Bakersfield`, `PJ Day`, `Twin Day`, `BJ's Restaurant`, `FBLA`, `Friday Night Lights`, `Ricky's Birthday`, `Filipino Club Bonfire`, `SoFi Stadium`, `Shot by Jayden C`, `White Lies`, `Robotics`, `Not in the Class of 2026`.
+`In the Lab`, `Pie a Senior`, `Halloween`, `HS Volleyball`, `HS Water Polo`, `Senior Assassin`, `Flour Baby`, `VE Warriors`, `Soak a Senior`, `Winter Formal`, `Prom`, `Pep Rally`, `Trunk or Treat`, `Karaoke`, `Tustin Tiller Days`, `Tustin Soccer`, `Los Alamos`, `Senior Sunrise`, `Senior Blues`, `Senior Trip`, `Senior Field Day`, `Mouse Ear Decoration`, `Field Trip`, `New York`, `Bakersfield`, `PJ Day`, `Twin Day`, `BJ's Restaurant`, `FBLA`, `Friday Night Lights`, `Ricky's Birthday`, `Filipino Club Bonfire`, `SoFi Stadium`, `Shot by Jayden C`, `White Lies`, `Robotics`, `Not in the Class of 2026`.
 
 ## Carousel captions (timeline)
 
-`ARCHIVE_SECTIONS` (line ~2784) holds the timeline carousel data. Image entries can carry a `caption` field (`First L` names, same convention as FAVORITES). Captions render only inside the `arc-lightbox` popup — no hover overlay on slides. Slides without `caption` (e.g. video reels) are excluded from the timeline chip filter and stay clickable.
+`ARCHIVE_SECTIONS` (line ~2979) holds the timeline carousel data. Image entries can carry a `caption` field (`First L` names, same convention as FAVORITES). Captions render only inside the `arc-lightbox` popup — no hover overlay on slides. Slides without `caption` (e.g. video reels) are excluded from the timeline chip filter and stay clickable.
 
 ## Group banners
 
@@ -82,7 +83,7 @@ Landing stats at lines ~921–923: Seniors / Universities / States. (See Univers
 
 ### Universities Counting Rule
 
-- Only count universities that have embeds (non-empty `igPosts`) when displaying the universities count on the landing stats (lines ~921–923)
+- Only count universities that have embeds (non-empty `igPosts`) when displaying the universities count on the landing stats (lines ~1050–1052)
 
 ### Bare-name caption rule
 
