@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LMA '26 — Archive Slideshow</title>
+<link rel="icon" href="data:,">
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #000; overflow: hidden; font-family: system-ui, -apple-system, sans-serif; color: #fff; }
+  .stage { position: relative; width: 100vw; height: 100vh; }
+  .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.8s ease; will-change: opacity; }
+  .slide.active { opacity: 1; }
+  .slide .bg { position: absolute; inset: -4%; background-size: cover; background-position: center; filter: blur(28px) brightness(0.55) saturate(1.1); transform: scale(1.12); transition: transform 9s ease-out; will-change: transform; }
+  .slide.active .bg { transform: scale(1.04); }
+  .slide .fg { position: absolute; inset: 0; background-size: contain; background-position: center; background-repeat: no-repeat; transform: scale(1.04); transition: transform 9s ease-out; will-change: transform; }
+  .slide.active .fg { transform: scale(1); }
+  .hud { position: fixed; bottom: 0; left: 0; right: 0; padding: 18px 24px; display: flex; justify-content: space-between; align-items: flex-end; background: linear-gradient(to top, rgba(0,0,0,0.55), transparent); pointer-events: none; z-index: 10; }
+  .title { font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.85); }
+  .counter { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); font-variant-numeric: tabular-nums; }
+  .hint { position: fixed; top: 14px; right: 18px; font-size: 10px; letter-spacing: 0.08em; color: rgba(255,255,255,0.4); z-index: 10; }
+  .loading { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; letter-spacing: 0.12em; color: rgba(255,255,255,0.6); }
+  .error { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #ff8080; padding: 2rem; text-align: center; }
+</style>
+</head>
+<body>
+<div class="loading" id="loading">Loading archive…</div>
+<div class="stage" id="stage" style="display:none"></div>
+<div class="hud" id="hud" style="display:none"><div class="title">Class of '26 · Archive</div><div class="counter" id="c"></div></div>
+<div class="hint" id="hint" style="display:none">SPACE pause · ← → step</div>
+<script>
+(async () => {
+  let urls;
+  try {
+    const html = await fetch('index.html').then(r => r.text());
+    const match = html.match(/const ARCHIVE_SECTIONS = (\[[\s\S]*?\n\]);/);
+    if (!match) throw new Error('ARCHIVE_SECTIONS not found');
+    const ARCHIVE_SECTIONS = new Function('return ' + match[1])();
+    const set = new Set();
+    ARCHIVE_SECTIONS.forEach(s => {
+      const folder = s.imgFolder || 'lfd';
+      (s.images || []).forEach(i => { if (i.file) set.add('images/' + folder + '/' + i.file); });
+    });
+    urls = [...set];
+    if (!urls.length) throw new Error('No archive images found');
+    for (let i = urls.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [urls[i], urls[j]] = [urls[j], urls[i]]; }
+  } catch (e) {
+    document.getElementById('loading').remove();
+    const err = document.createElement('div'); err.className = 'error';
+    err.textContent = 'Failed to load: ' + e.message;
+    document.body.appendChild(err);
+    return;
+  }
+
+  document.getElementById('loading').remove();
+  const stage = document.getElementById('stage'), counter = document.getElementById('c');
+  stage.style.display = ''; document.getElementById('hud').style.display = ''; document.getElementById('hint').style.display = '';
+
+  function makeSlide(url, active) {
+    const s = document.createElement('div'); s.className = 'slide' + (active ? ' active' : '');
+    const bg = document.createElement('div'); bg.className = 'bg'; bg.style.backgroundImage = "url('" + url + "')";
+    const fg = document.createElement('div'); fg.className = 'fg'; fg.style.backgroundImage = "url('" + url + "')";
+    s.append(bg, fg); return s;
+  }
+
+  let a = makeSlide(urls[0], true); stage.appendChild(a);
+  let b = makeSlide(urls[1] || urls[0], false); stage.appendChild(b);
+  let active = a, idle = b, idx = 0, timer, paused = false;
+
+  function show(n) {
+    idx = (n + urls.length) % urls.length;
+    const url = urls[idx];
+    idle.querySelector('.bg').style.backgroundImage = "url('" + url + "')";
+    idle.querySelector('.fg').style.backgroundImage = "url('" + url + "')";
+    idle.classList.remove('active');
+    void idle.offsetWidth;
+    requestAnimationFrame(() => {
+      idle.classList.add('active'); active.classList.remove('active');
+      [active, idle] = [idle, active];
+      counter.textContent = (idx + 1) + ' / ' + urls.length;
+      const pre = new Image(); pre.src = urls[(idx + 1) % urls.length];
+    });
+  }
+  function play() { timer = setInterval(() => show(idx + 1), 4500); }
+  counter.textContent = '1 / ' + urls.length;
+  play();
+  document.addEventListener('keydown', e => {
+    if (e.key === ' ') { paused = !paused; if (paused) clearInterval(timer); else play(); e.preventDefault(); }
+    if (e.key === 'ArrowRight') { clearInterval(timer); show(idx + 1); if (!paused) play(); }
+    if (e.key === 'ArrowLeft')  { clearInterval(timer); show(idx - 1); if (!paused) play(); }
+  });
+})();
+</script>
+</body>
+</html>
