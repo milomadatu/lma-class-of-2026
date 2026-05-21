@@ -45,7 +45,7 @@ Landing stats at lines ~1050–1052: Seniors / Universities / States. (See Unive
 
 ## Caption conventions
 
-- Names: `First L` abbreviation matching headshot file (e.g. `Milo M`, `Brandon Ca`, `Marie D`, `Matt C` not `Matthew C`).
+- Names: `First L` abbreviation matching headshot file (e.g. `Milo M`, `Brandon Ca`, `Marie D`, `Matt C` not `Matthew C`). Some files use the full first name when the senior goes by a nickname — match the file, not the nickname (e.g. `Christopher C` not `Chris C`, because the headshot is `Christopher C.webp`).
 - 2-name caption: `'A & B'`. 3+: `'A, B, C & D'` (Oxford comma omitted, ampersand before the last name).
 - Empty event: `event: ''`.
 - The smart fav-group matcher silently skips names not in the `people` array — non-class names like `Zane N`, `Nolan E`, `Julian A`, `Hudson G`, `Shriyes C`, `Mukhtaj S`, `Josh T` are valid in captions but won't link.
@@ -53,11 +53,20 @@ Landing stats at lines ~1050–1052: Seniors / Universities / States. (See Unive
 
 ## Event tag conventions (case-sensitive, used in FAVORITES)
 
-`In the Lab`, `Pie a Senior`, `Halloween`, `HS Volleyball`, `HS Water Polo`, `Senior Assassin`, `Flour Baby`, `VE Warriors`, `Soak a Senior`, `Winter Formal`, `Prom`, `Denim & White Dinner`, `Pep Rally`, `Trunk or Treat`, `Karaoke`, `Tustin Tiller Days`, `Tustin Soccer`, `Los Alamos`, `Senior Sunrise`, `Senior Blues`, `Senior Trip`, `Senior Field Day`, `Mouse Ear Decoration`, `Field Trip`, `New York`, `Bakersfield`, `PJ Day`, `Twin Day`, `BJ's Restaurant`, `FBLA`, `Friday Night Lights`, `Ricky's Birthday`, `Filipino Club Bonfire`, `SoFi Stadium`, `Shot by Jayden C`, `White Lies`, `Robotics`, `Not in the Class of 2026`.
+`In the Lab`, `Pie a Senior`, `Halloween`, `HS Volleyball`, `HS Water Polo`, `Senior Assassin`, `Flour Baby`, `VE Warriors`, `Soak a Senior`, `Winter Formal`, `Prom`, `Denim & White Dinner`, `Senior Skyzone`, `Pep Rally`, `Trunk or Treat`, `Karaoke`, `Tustin Tiller Days`, `Tustin Soccer`, `Los Alamos`, `Senior Sunrise`, `Senior Blues`, `Senior Trip`, `Senior Field Day`, `Mouse Ear Decoration`, `Field Trip`, `New York`, `Bakersfield`, `PJ Day`, `Twin Day`, `BJ's Restaurant`, `FBLA`, `Friday Night Lights`, `Ricky's Birthday`, `Filipino Club Bonfire`, `SoFi Stadium`, `Shot by Jayden C`, `White Lies`, `Robotics`, `Not in the Class of 2026`.
 
 ## Carousel captions (timeline)
 
 `ARCHIVE_SECTIONS` (line ~2979) holds the timeline carousel data. Image entries can carry a `caption` field (`First L` names, same convention as FAVORITES). Captions render only inside the `arc-lightbox` popup — no hover overlay on slides. Slides without `caption` (e.g. video reels) are excluded from the timeline chip filter and stay clickable.
+
+### Adding a new carousel section
+
+Three edits in `index.html`:
+1. Chip button in the anchor row (~line 1131)
+2. Timeline card with date label (~line 1148)
+3. `ARCHIVE_SECTIONS` entry (~line 2979) with `id: 'arc-XXX'`, `imgFolder`, `images` array, `posts: []`
+
+For type `'p'` sections sourced from Instagram (e.g. Last First Day, Denim & White Dinner), use the IG post ID as the filename so `file` and `post` match: `{file:'DYfA0ubOQAz.webp', post:'DYfA0ubOQAz', caption:'...'}`.
 
 ## Group banners
 
@@ -84,6 +93,12 @@ Landing stats at lines ~1050–1052: Seniors / Universities / States. (See Unive
 ### Universities Counting Rule
 
 - Only count universities that have embeds (non-empty `igPosts`) when displaying the universities count on the landing stats (lines ~1050–1052)
+- Don't add a school to the `universities` array without an embed. Schools like OCC, Santiago Canyon College (Sierra's commitment) live only in seniors' `role`/`bio` until an IG post is available.
+
+### Word cloud increments
+
+- One survey vote = +1 to an existing descriptor (`Small: 12 → 13` after Rebecca's "Small").
+- A brand-new descriptor enters at `value: 10` (e.g. `Memorable` from Betsy's survey).
 
 ### Bare-name caption rule
 
