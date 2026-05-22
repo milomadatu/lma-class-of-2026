@@ -1130,6 +1130,8 @@
     <button onclick="scrollToSection('arc-prom')">Prom</button>
     <button onclick="scrollToSection('arc-soak')">Soak a Senior</button>
     <button onclick="scrollToSection('arc-dwd')">Denim &amp; White Dinner</button>
+    <button onclick="scrollToSection('arc-skyzone')">Senior Skyzone</button>
+    <button onclick="scrollToSection('arc-awards')">Senior Awards Night</button>
     <button onclick="scrollToSection('arc-graduation')">Graduation</button>
   </div>
   <div class="archive-layout">
@@ -1251,6 +1253,26 @@
         <div class="timeline-card">
           <div class="timeline-left">
             <div class="timeline-title">Denim &amp; White Dinner</div>
+            <div class="timeline-date">May 2026</div>
+          </div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
+        </div>
+      </div>
+      <div class="timeline-item has-anchor" onclick="scrollToSection('arc-skyzone')">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-left">
+            <div class="timeline-title">Senior Skyzone</div>
+            <div class="timeline-date">May 2026</div>
+          </div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
+        </div>
+      </div>
+      <div class="timeline-item has-anchor" onclick="scrollToSection('arc-awards')">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-left">
+            <div class="timeline-title">Senior Awards Night</div>
             <div class="timeline-date">May 2026</div>
           </div>
           <div class="timeline-right"><span class="timeline-arrow">›</span></div>
@@ -2989,7 +3011,7 @@ function showPage(id, btn) {
 /* ── Archive data — add/remove shortcodes here to update carousels ── */
 const ARCHIVE_SECTIONS = [
   { id: 'arc-videos',  label: 'Videos',          cols: 2, type: 'reel', comingSoon: false,
-    posts: ['DNv8MtA5NXn', 'DOEzRUkkgSU', 'DXvO18RoLeC', 'DX0L0pIyCrM', 'DX2zWMCIFAJ', 'DYB8d9ptw-4', 'DYbk_WxNtx9'] },
+    posts: ['DNv8MtA5NXn', 'DOEzRUkkgSU', 'DXvO18RoLeC', 'DX0L0pIyCrM', 'DX2zWMCIFAJ', 'DYB8d9ptw-4', 'DYbk_WxNtx9', 'DYoRx6kN080'] },
   { id: 'arc-lfd',     label: 'Last First Day',   cols: 3, type: 'p',    comingSoon: false,
     images: [
       {file:'DNUB7KkyalX.webp', post:'DNUB7KkyalX', caption:'Evan M'},
@@ -3415,6 +3437,30 @@ const ARCHIVE_SECTIONS = [
       {file:'DYfDHzQOJpp.webp', post:'DYfDHzQOJpp', caption:'Katally L, Amreen I, Ava L & Kailee K'},
       {file:'DYfDKiKOkT7.webp', post:'DYfDKiKOkT7', caption:'James W, Milo M, Pearce W, Jayden O, Kiyomi P & Shirom M'}
     ],
+    posts: [] },
+  { id: 'arc-skyzone',     label: 'Senior Skyzone',   cols: 3, type: 'p',    comingSoon: false,
+    imgFolder: 'skyzone',
+    images: [
+      {file:'PandaChallenger.webp',    post:'', caption:'Max C & Shirom M'},
+      {file:'TheyBannedChillin.webp',  post:'', caption:'Kailee K, Rayan R, Uma J & Amreen I'},
+      {file:'FeetGame.webp',           post:'', caption:'Omar A, Marie D & Janae A'},
+      {file:'PostedintheZone.webp',    post:'', caption:'Santino S, Daemeon M, Josue G & Nathan H'},
+      {file:'Icee.webp',               post:'', caption:'Samana N, Parin L, Michael H, Abram M, Kiyomi P & Luna C'},
+      {file:'TwinZone.webp',           post:'', caption:'Josh S, Nathan S & Luke D'},
+      {file:'TwoThumbsTotheSky.webp',  post:'', caption:'Omar A & Evan M'},
+      {file:'AfricanBrothers.webp',    post:'', caption:'Daemeon M & Omar A'},
+      {file:'Kayakers.webp',           post:'', caption:'Katally L, Leslie T, Morgan M & Artin R'},
+      {file:'PercTrynnaCut.webp',      post:'', caption:'Pearce W, Omar A, Evan M, Josh S, Nathan S, Hunter W, Max C, Artin R, Richard C & Kailee K'},
+      {file:'WholeClassSkyzone.webp',  post:'', caption:'Class of 2026'},
+      {file:'InthePit.webp',           post:'', caption:'Artin R & Milo M'},
+      {file:'MightyClash.webp',        post:'', caption:'Rayan G & D Licciardo'},
+      {file:'MiloFalls.webp',          post:'', caption:'Milo M & Rayan G'},
+      {file:'GymstersJumpin.webp',     post:'', caption:'Artin R, Pearce W, Richard C & Arnav S'},
+      {file:'ConnorMattPitt.webp',     post:'', caption:'Connor P & Matt C'},
+      {file:'FallGuys.webp',           post:'', caption:'Christopher C, Jayden O, Elijah B, Shirom M, Cooper M, Jackson R & Zach A'}
+    ],
+    posts: [] },
+  { id: 'arc-awards',     label: 'Senior Awards Night', cols: 3, type: 'p',  comingSoon: true,
     posts: [] },
   { id: 'arc-graduation', label: 'Graduation',      cols: 3, type: 'p',    comingSoon: true,
     posts: [] },
@@ -4438,6 +4484,7 @@ const FAVORITES = [
   { src: 'images/favs/SkyzoneSquad.webp',             event: 'Senior Skyzone',        caption: 'Kailee K, Uma J, Leslie T, Morgan M & Katally L' },
   { src: 'images/favs/Gazelle.webp',                  event: 'Senior Skyzone',        caption: 'Artin R' },
   { src: 'images/favs/JahBowstoTino.webp',            event: 'Senior Skyzone',        caption: 'Santino S & Elijah B' },
+  { src: 'images/favs/AngelsTacos.webp',              event: '',                      caption: 'Milo M, Rayan G, Arnav S, Katally L, Leslie T, Morgan M, Jayden O, Josh S & Austin V' },
 ];
 
 let favOrder = FAVORITES.map((_, i) => i);
