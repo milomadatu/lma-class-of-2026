@@ -483,6 +483,46 @@
     pointer-events: none; opacity: 0; transition: opacity 0.2s;
   }
   .person-card:hover .person-card-tag { opacity: 1; }
+  .person-card.locked img { filter: blur(14px); transform: scale(1.12); }
+  .group-sheet-member.locked .group-sheet-member-photo img { filter: blur(10px); transform: scale(1.15); }
+  .popup.locked .popup-photo img { filter: blur(22px); transform: scale(1.12); }
+  .popup.locked .popup-name,
+  .popup.locked .popup-detail,
+  .popup.locked .popup-birthday,
+  .popup.locked .popup-quote,
+  .popup.locked .popup-bio,
+  .popup.locked .popup-links {
+    filter: blur(5px); user-select: none; pointer-events: none;
+  }
+  .popup-gate-mini {
+    display: none; align-items: center; gap: 6px;
+    margin: 14px auto 0; width: max-content; max-width: 100%;
+    padding: 5px 6px 5px 10px;
+    background: rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 999px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .popup-gate-mini:focus-within { background: #fff; border-color: var(--gold, #b8893a); }
+  .popup.locked .popup-gate-mini { display: inline-flex; }
+  .popup-gate-mini svg { width: 13px; height: 13px; color: rgba(0,0,0,0.45); flex-shrink: 0; }
+  .popup-gate-mini input {
+    border: 0; background: transparent; outline: none;
+    font-size: 13px; font-family: inherit; color: var(--ink);
+    width: 110px; padding: 2px 0;
+  }
+  .popup-gate-mini input::placeholder { color: rgba(0,0,0,0.35); font-size: 12px; }
+  .popup-gate-mini button {
+    border: 0; cursor: pointer; background: var(--gold, #b8893a); color: #fff;
+    width: 22px; height: 22px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 13px; line-height: 1; padding: 0;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .popup-gate-mini button:hover { opacity: 0.9; }
+  .popup-gate-mini button:active { transform: scale(0.94); }
+  .popup-gate-error { display: none; font-size: 11px; color: #c0392b; text-align: center; margin-top: 6px; }
+  .popup.locked .popup-gate-error.show { display: block; }
   @keyframes cardFadeUp {
     from { opacity: 0; transform: translateY(14px) scale(0.97); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -1132,6 +1172,7 @@
     <button onclick="scrollToSection('arc-dwd')">Denim &amp; White Dinner</button>
     <button onclick="scrollToSection('arc-skyzone')">Senior Skyzone</button>
     <button onclick="scrollToSection('arc-awards')">Senior Awards Night</button>
+    <button onclick="scrollToSection('arc-lastday')">Last Day of School</button>
     <button onclick="scrollToSection('arc-graduation')">Graduation</button>
   </div>
   <div class="archive-layout">
@@ -1274,6 +1315,16 @@
           <div class="timeline-left">
             <div class="timeline-title">Senior Awards Night</div>
             <div class="timeline-date">May 2026</div>
+          </div>
+          <div class="timeline-right"><span class="timeline-arrow">›</span></div>
+        </div>
+      </div>
+      <div class="timeline-item has-anchor" onclick="scrollToSection('arc-lastday')">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-left">
+            <div class="timeline-title">Last Day of School</div>
+            <div class="timeline-date">May 22, 2026</div>
           </div>
           <div class="timeline-right"><span class="timeline-arrow">›</span></div>
         </div>
@@ -1425,7 +1476,7 @@
 
 <!-- POPUP -->
 <div class="popup-overlay" id="popup" onclick="if(event.target===this)closePopup()">
-  <div class="popup">
+  <div class="popup" id="popup-card">
     <button class="popup-close" onclick="closePopup()">✕</button>
     <div class="popup-photo"><img id="popup-avatar-img" alt=""></div>
     <div class="popup-body">
@@ -1438,6 +1489,12 @@
         <a class="popup-ig" id="popup-ig" href="#" target="_blank" rel="noopener" aria-label="Instagram profile"></a>
         <a class="popup-email" id="popup-email"></a>
       </div>
+      <div class="popup-gate-mini" id="popup-gate">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <input type="password" id="popup-gate-input" placeholder="Passcode" autocomplete="off" onkeydown="if(event.key==='Enter')submitPopupGate()">
+        <button onclick="submitPopupGate()" aria-label="Unlock">→</button>
+      </div>
+      <div class="popup-gate-error" id="popup-gate-error"></div>
       <div class="popup-nav">
         <button class="popup-nav-btn" id="popup-prev" onclick="popupNav(-1)" aria-label="Previous person">←</button>
         <span class="popup-nav-pos" id="popup-nav-pos"></span>
@@ -1570,7 +1627,7 @@ const people = [
   {img:'images/Headshots/Nathan S.webp',name:'Nathan Saltzer',role:'IVC → UCLA — Business / Real Estate',ig:'@Nathan_saltzer',email:'nathans2411@mytusd.org',birthday:'February 5, 2008',quote:'Comparison is the thief of joy, be yourself and the right things will happen.',quoteBy:'',bio:'Nathan is heading to IVC, planning to transfer to UCLA to study business of real estate. His favorite memory was playing volleyball with his friends and music class. He will miss his friends and teachers who cared about all of them and the memories they made together.'},
   {img:'images/Headshots/Ella S.webp',name:'Ella Schubert',role:'Colorado State University — Pre-PA',ig:'@ellaschubert13',email:'ellas3528@mytusd.org',birthday:'April 26, 2008',quote:'Every end is just a new beginning',quoteBy:'',bio:"Ella is attending Colorado State University with plans to become a physician assistant and eventually start a family. Her favorite memory was traveling to trade shows in San Diego with her friends. She says she'll miss the everyday moments at Legacy — seeing friends, joking around, and the comfort of routine — but is excited to meet new people, try new things, and gain more independence."},
   {img:'images/Headshots/Iffah S.webp',name:'Iffah Sheikh',role:'IVC — College',ig:'@iffahsheikh08',email:'iffah.sheikh2008@gmail.com',birthday:'August 3, 2008',quote:'',quoteBy:'',bio:'Iffah is committed to IVC, planning to transfer to a UC to study Mechanical Engineering with a potential minor in Business Administration, then pursue a master\'s specializing in Aerospace or Biomedical Engineering — with a career goal of either managing teams designing commercial aircraft or building prosthetics. Her favorite memories were the small moments with friends walking around campus and larger events like senior sunrise and winter formal. She will miss the tight-knit community and seeing her friends everyday, and is most excited for more independence and meeting new people.'},
-  {img:'images/Headshots/Arnav S.webp',name:'Arnav Sheth',role:'4 Year College — Stanford',ig:'@arnav.sheth19',email:'arnavs5585@mytusd.org',birthday:'November 19, 2007',quote:'',quoteBy:'',bio:'Arnav is headed to Stanford, planning to launch a Y-Combinator startup with Artin Rastegar. His favorite memory was Music Tech class. He is most excited to dive into robotics and explore new opportunities.'},
+  {img:'images/Headshots/Arnav S.webp',name:'Arnav Sheth',role:'4 Year College — Stanford',ig:'@arnav.sheth19',email:'arnavs5585@mytusd.org',birthday:'November 19, 2007',quote:'',quoteBy:'',bio:'Arnav is headed to Stanford, planning to launch a Y-Combinator startup with Artin Rastegar. His favorite memory was Music Tech class. He is most excited to dive into robotics and explore new opportunities.',locked:true},
   {img:'images/Headshots/Nancy S.webp',name:'Nancy Silva',role:'University of San Francisco',ig:'@nancesilvaa',email:'nancysilv1231@gmail.com',birthday:'December 30, 2007',quote:'The question isn\'t what are we going to do — the question is what aren\'t we going to do?',quoteBy:'Ferris Bueller',bio:'Nancy is committed to the University of San Francisco, planning to move to SF for college. In ten years she pictures herself in San Diego — married, beachside, with some chickens. Her favorite memory was with Alice Nguyen. She will miss the weekly "Sneakyboo" hangouts and the perfect 80-degree weather most, and is most excited to become a local at a new café and order "the usual."'},
   {img:'images/Headshots/Sam S.webp',name:'Sam Skaron',role:'Santa Ana College — OT Program',ig:'@sam_skaron',email:'samanthas2313@mytusd.org',birthday:'March 12, 2008',quote:'School was my side quest',quoteBy:'',bio:"Sam is headed to Santa Ana College for its occupational therapy program. One of her favorite memories was hanging out inside with everyone whenever it rained. Having attended Legacy since 7th grade, she says she'll miss the same people, routines, and rules she's known for six years, and is most excited for more freedom and traveling. In 10 years, she hopes to have a career, a husband, and kids."},
   {img:'images/Headshots/Hannah S.webp',name:'Hannah Spiezer',role:'Occidental College — Psychology',ig:'@hannahspyer',email:'hannah.wontana@gmail.com',birthday:'March 17, 2008',quote:'There were ups and there were downs, but at least I didn\'t go bald. Oh sh*t.',quoteBy:'',bio:'Hannah is committed to Occidental College, planning to work as a psychologist in LA. Her favorite memory was graduating. She will miss Mr. Jones the most and is most excited to never touch a Surface Pro again.'},
@@ -1595,6 +1652,34 @@ const people = [
 
 let popupOrder = people.map((_, i) => i), popupIdx = -1;
 
+// ── Locked-card gate ──
+const LOCKED_PWD_HASH = '6b677d585c94a83649bbe80b365065465d1d48848e18204f7592a2b99e5c45bf';
+const LOCKED_UNLOCK_KEY = 'lma_unlock_v1';
+function isPersonLocked(p) {
+  return !!p?.locked && sessionStorage.getItem(LOCKED_UNLOCK_KEY) !== '1';
+}
+async function _sha256Hex(s) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+async function submitPopupGate() {
+  const inp = document.getElementById('popup-gate-input');
+  const err = document.getElementById('popup-gate-error');
+  const hex = await _sha256Hex(inp.value);
+  if (hex === LOCKED_PWD_HASH) {
+    sessionStorage.setItem(LOCKED_UNLOCK_KEY, '1');
+    document.getElementById('popup-card').classList.remove('locked');
+    err.classList.remove('show');
+    err.textContent = '';
+    renderGrid();
+  } else {
+    err.textContent = 'Incorrect passcode';
+    err.classList.add('show');
+    inp.value = '';
+    inp.focus();
+  }
+}
+
 function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
 const debouncedPeopleSearch = debounce(() => { renderGrid(); renderGroups(); }, 150);
 function renderGrid() {
@@ -1615,7 +1700,8 @@ function renderGrid() {
     const initials = p.name.split(' ').map(w=>w[0]).slice(0,2).join('');
     const bg = pastels[people.indexOf(p) % pastels.length];
     const pidx = people.indexOf(p);
-    return `<div class="person-card card-enter" data-pidx="${pidx}"
+    const locked = isPersonLocked(p);
+    return `<div class="person-card card-enter${locked ? ' locked' : ''}" data-pidx="${pidx}"
          ${rearranging ? 'draggable="true"' : `onclick="openPopup(${pidx})"`}
          style="animation-delay:${i * 30}ms">
       ${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async">` : `<div class="person-card-initials" style="background:${bg}">${initials}</div>`}
@@ -1805,6 +1891,13 @@ function isPlaceholder(s) { return !s || s.includes('_____'); }
 
 function openPopup(i) {
   const p = people[i];
+  const card = document.getElementById('popup-card');
+  const locked = isPersonLocked(p);
+  card.classList.toggle('locked', locked);
+  const gateInp = document.getElementById('popup-gate-input');
+  const gateErr = document.getElementById('popup-gate-error');
+  if (gateInp) gateInp.value = '';
+  if (gateErr) { gateErr.textContent = ''; gateErr.classList.remove('show'); }
   document.getElementById('popup-avatar-img').src = p.img;
   document.getElementById('popup-avatar-img').alt = p.name;
   document.getElementById('popup-name').textContent = p.name;
@@ -1902,10 +1995,11 @@ function openGroupSheet(gidx) {
     const idx = people.indexOf(p);
     const itn = p.name.split(' ').map(w => w[0]).slice(0, 2).join('');
     const bg = pastels[idx % pastels.length];
+    const locked = isPersonLocked(p);
     const photo = p.img
       ? `<img src="${p.img}" alt="${p.name}" loading="lazy">`
       : `<div class="group-sheet-member-initials" style="background:${bg}">${itn}</div>`;
-    return `<div class="group-sheet-member" onclick="openPopupFromSheet(${idx})">
+    return `<div class="group-sheet-member${locked ? ' locked' : ''}" onclick="openPopupFromSheet(${idx})">
       <div class="group-sheet-member-photo">${photo}</div>
       <div class="group-sheet-member-name">${p.name.split(' ')[0]}</div>
     </div>`;
@@ -2002,12 +2096,14 @@ function popupNav(dir) {
 }
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closePopup(); closeFavLightbox(); closeGroupSheet(); closeArcLightbox(); }
+  const t = e.target;
+  const inField = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
   if (document.getElementById('popup').classList.contains('open')) {
-    if (e.key === 'ArrowLeft') popupNav(-1);
-    if (e.key === 'ArrowRight') popupNav(1);
+    if (!inField && e.key === 'ArrowLeft') popupNav(-1);
+    if (!inField && e.key === 'ArrowRight') popupNav(1);
   } else if (document.getElementById('page-archive').classList.contains('active') && document.getElementById('favorites-view').offsetParent !== null && !document.getElementById('fav-lightbox')?.classList.contains('open')) {
-    if (e.key === 'ArrowLeft') favPageNav(-1);
-    if (e.key === 'ArrowRight') favPageNav(1);
+    if (!inField && e.key === 'ArrowLeft') favPageNav(-1);
+    if (!inField && e.key === 'ArrowRight') favPageNav(1);
   }
 });
 document.getElementById('ve-sheet-overlay').addEventListener('wheel', e => {
@@ -3011,7 +3107,7 @@ function showPage(id, btn) {
 /* ── Archive data — add/remove shortcodes here to update carousels ── */
 const ARCHIVE_SECTIONS = [
   { id: 'arc-videos',  label: 'Videos',          cols: 2, type: 'reel', comingSoon: false,
-    posts: ['DNv8MtA5NXn', 'DOEzRUkkgSU', 'DXvO18RoLeC', 'DX0L0pIyCrM', 'DX2zWMCIFAJ', 'DYB8d9ptw-4', 'DYbk_WxNtx9', 'DYoRx6kN080'] },
+    posts: ['DNv8MtA5NXn', 'DOEzRUkkgSU', 'DXvO18RoLeC', 'DX0L0pIyCrM', 'DX2zWMCIFAJ', 'DYB8d9ptw-4', 'DYbk_WxNtx9', 'DYoRx6kN080', 'DYpxgWzv6Z-', 'DYpyamHBU3c'] },
   { id: 'arc-lfd',     label: 'Last First Day',   cols: 3, type: 'p',    comingSoon: false,
     images: [
       {file:'DNUB7KkyalX.webp', post:'DNUB7KkyalX', caption:'Evan M'},
@@ -3460,7 +3556,33 @@ const ARCHIVE_SECTIONS = [
       {file:'FallGuys.webp',           post:'', caption:'Christopher C, Jayden O, Elijah B, Shirom M, Cooper M, Jackson R & Zach A'}
     ],
     posts: [] },
-  { id: 'arc-awards',     label: 'Senior Awards Night', cols: 3, type: 'p',  comingSoon: true,
+  { id: 'arc-awards',     label: 'Senior Awards Night', cols: 3, type: 'p',  comingSoon: false,
+    imgFolder: 'san',
+    images: [
+      {file:'TustinKiwanis.webp',         post:'', caption:'Mason N & Katally L'},
+      {file:'TustinAreaWomensClub.webp',  post:'', caption:'Amreen I & Katally L'},
+      {file:'OCPathways.webp',            post:'', caption:'Murad M, Ibrahim M & Arnav S'},
+      {file:'Elks.webp',                  post:'', caption:'Michael H'},
+      {file:'TSMA.webp',                  post:'', caption:'Destiny P & J Harrison'},
+      {file:'RayanSpeech.webp',           post:'', caption:'Rayan R'},
+      {file:'TIDE.webp',                  post:'', caption:'Carson C, Ellie C, Jianna D, Farishta I, Cooper M & T Isaacs'},
+      {file:'Electives.webp',             post:'', caption:'Abram M, Jayden T, Amreen I, Jeromy M, J Moe, D Licciardo, L Chung, M Ireland & R Jones'},
+      {file:'Math.webp',                  post:'', caption:'Noah H, Michael H, Katally L, Peyton T, A Stadel & D Fancy'},
+      {file:'Science.webp',               post:'', caption:'Kiana V, Mason N, Jaedon B, Brandon Ch, J Chang & Y Lee'},
+      {file:'History.webp',               post:'', caption:'Rayan G, Ryan Y, Matt C, Iffah S, E Zechiel & M Healey'},
+      {file:'English.webp',               post:'', caption:'Artin R, Destiny P, Arnav S, Morgan M, D Licciardo, J Murphy, A Ku & B Bruley'},
+      {file:'ASB.webp',                   post:'', caption:'Katally L, Rayan R, Kailee K, Audrey L, T Isaacs & J Murphy'},
+      {file:'BusinessofGaming.webp',      post:'', caption:'Noah H, Shirom M, Abram M & D Licciardo'},
+      {file:'FBLA.webp',                  post:'', caption:'Artin R, Sacha P, Rayan G & E Falat'},
+      {file:'Yearbook.webp',              post:'', caption:'Milo M, Leslie T & B Bruley'},
+      {file:'Robotics.webp',              post:'', caption:'Ryan Y, Brent L, Uma J & M Ireland'},
+      {file:'Athletics.webp',             post:'', caption:'Rebecca C, Kai A, Morgan M, Aryan L, Max C, Matt C, Artin R, Cash T, Mason N, Hunter W, Nathan S, Pearce W, Daemeon M, Josh S, Rayan G, Preston W, Ava L, Kailee K, Audrey L & S Kelly'},
+      {file:'GlobalCitizens.webp',        post:'', caption:'Jackson R, Logan W, M Freeland & M Ireland'},
+      {file:'MoePassingOut.webp',         post:'', caption:'J Moe, R Jones, Elijah B, Luna C & Rebecca C'},
+      {file:'TealCommitment.webp',        post:'', caption:'Peyton T, Uma J, Jianna D, Jaedon B, Ellie C, Murad M, Carson C, Mason N, Michael H, Katally L, Amreen I, Austin V, Arnav S, Rayan G, Farishta I & Iffah S'}
+    ],
+    posts: [] },
+  { id: 'arc-lastday',    label: 'Last Day of School', cols: 3, type: 'p',   comingSoon: true,
     posts: [] },
   { id: 'arc-graduation', label: 'Graduation',      cols: 3, type: 'p',    comingSoon: true,
     posts: [] },
@@ -4042,8 +4164,8 @@ const FAVORITES = [
   { src: 'images/favs/Larper.webp',                   event: '',                      caption: 'Jesiah H' },
   { src: 'images/favs/2GPATypaPic.webp',              event: 'In the Lab',            caption: 'Santino S' },
   { src: 'images/favs/SUVFleet.webp',                 event: '',                      caption: 'Sacha P, Artin R, Milo M & Arnav S' },
-  { src: 'images/favs/SlightlyPeDe.webp',             event: '',                      caption: 'Andrew C & Jayden C' },
   { src: 'images/favs/2sUp.webp',                     event: 'HS Volleyball',         caption: 'Kailee K & Uma J' },
+  { src: 'images/favs/SlightlyPeDe.webp',             event: '',                      caption: 'Andrew C & Jayden C' },
   { src: 'images/favs/SwaggedOut.webp',               event: '',                      caption: 'Kiana V & Aryanna M' },
   { src: 'images/favs/ChicknDaves.webp',              event: '',                      caption: 'Aryan L & Arnav S' },
   { src: 'images/favs/HoopinHomies.webp',             event: '',                      caption: 'Jesiah H, Jayden H & Brent L' },
@@ -4096,26 +4218,26 @@ const FAVORITES = [
   { src: 'images/favs/DigiMirror.webp',               event: '',                      caption: 'Kailee K, Amreen I, Rayan R, Santiago C, Jayden C & Josue G' },
   { src: 'images/favs/YahnDad.webp',                  event: 'Flour Baby',            caption: 'Ryan Y' },
   { src: 'images/favs/PiedGuys.webp',                 event: 'Pie a Senior',          caption: 'Jayden O, Mason N, Connor P, Josh S, Brandon Ca & Jayden C' },
-  { src: 'images/favs/JussABebe.webp',                event: 'Flour Baby',            caption: 'Amreen I, Aiza Q & Uma J' },
   { src: 'images/favs/CashBebe.webp',                 event: 'Flour Baby',            caption: 'Cash T' },
+  { src: 'images/favs/JussABebe.webp',                event: 'Flour Baby',            caption: 'Amreen I, Aiza Q & Uma J' },
   { src: 'images/favs/FunniestJoke.webp',             event: '',                      caption: 'Jayden O & Evelynn N' },
-  { src: 'images/favs/RocketLeagueW.webp',            event: '',                      caption: 'Hunter W & Nico M' },
   { src: 'images/favs/MadScientist.webp',             event: '',                      caption: 'Jesiah H, Evelynn N & Leslie T' },
+  { src: 'images/favs/RocketLeagueW.webp',            event: '',                      caption: 'Hunter W & Nico M' },
   { src: 'images/favs/LastGame.webp',                 event: 'Tustin Soccer',         caption: 'Baran C, Josue G & Nico M' },
   { src: 'images/favs/Monkeys.webp',                  event: 'Karaoke',               caption: 'Nico M' },
-  { src: 'images/favs/SDSUFratLeader.webp',           event: '',                      caption: 'Sacha P & Kai A' },
   { src: 'images/favs/TradeOffer.webp',               event: '',                      caption: 'Milo M, Santino S & Brent L' },
   { src: 'images/favs/RickysBirthday.webp',           event: "Ricky's Birthday",      caption: 'Arnav S, Baran C, Brandon Ca, Richard C, James W, Aryan L, Jayden O, Pearce W, Rayan G, Katally L & Milo M' },
+  { src: 'images/favs/SDSUFratLeader.webp',           event: '',                      caption: 'Sacha P & Kai A' },
   { src: 'images/favs/Kona.webp',                     event: '',                      caption: 'Amani C & Kiyomi P' },
-  { src: 'images/favs/JulianSneak.webp',              event: 'Soak a Senior',         caption: 'Santiago C, Daemeon M, Rayan R, Amreen I, Audrey L & Julian A' },
   { src: 'images/favs/Mario.webp',                    event: 'Karaoke',               caption: 'Milo M' },
   { src: 'images/favs/PPAP.webp',                     event: '',                      caption: 'Leslie T & Santino S' },
-  { src: 'images/favs/PepBoys.webp',                  event: 'Pep Rally',             caption: 'Sacha P, Jesiah H, Santiago C, Nathan H & Jayden T' },
+  { src: 'images/favs/JulianSneak.webp',              event: 'Soak a Senior',         caption: 'Santiago C, Daemeon M, Rayan R, Amreen I, Audrey L & Julian A' },
   { src: 'images/favs/TheThinker.webp',               event: '',                      caption: 'Nathan H' },
   { src: 'images/favs/G6.webp',                       event: 'Pep Rally',             caption: 'Cash T, Milo M, Matt C & Hunter W' },
-  { src: 'images/favs/Anteatersforasummer.webp',      event: '',                      caption: 'Rayan R, Sacha P, Amreen I & Brandon Ca' },
+  { src: 'images/favs/PepBoys.webp',                  event: 'Pep Rally',             caption: 'Sacha P, Jesiah H, Santiago C, Nathan H & Jayden T' },
   { src: 'images/favs/WaterPoloSeniorNight.webp',     event: 'HS Water Polo',         caption: 'Aryan L, Hunter W & Josh S' },
   { src: 'images/favs/Pied.webp',                     event: 'Pie a Senior',          caption: 'Nathan S & Connor P' },
+  { src: 'images/favs/Anteatersforasummer.webp',      event: '',                      caption: 'Rayan R, Sacha P, Amreen I & Brandon Ca' },
   { src: 'images/favs/Sushi.webp',                    event: '',                      caption: 'Iffah S, Danya I & Farishta I' },
   { src: 'images/favs/CholoSquat.webp',               event: 'Trunk or Treat',        caption: 'Jayden O, Daemeon M & Jayden C' },
   { src: 'images/favs/TillerDays.webp',               event: 'Tustin Tiller Days',    caption: 'Nyala A, Luke D, Aryanna M & Nancy S' },
@@ -4125,9 +4247,9 @@ const FAVORITES = [
   { src: 'images/favs/YbSquad.webp',                  event: 'Pep Rally',             caption: 'Veronika A, Hunter W & Matt C' },
   { src: 'images/favs/PeepAsleep.webp',               event: 'VE Warriors',           caption: 'Josue G & Andrew C' },
   { src: 'images/favs/Quadruplets.webp',              event: 'Flour Baby',            caption: 'Rayan R' },
-  { src: 'images/favs/LTattacksChild.webp',           event: 'Flour Baby',            caption: 'Santiago C & Leslie T' },
-  { src: 'images/favs/SpiderverseGlazers.webp',       event: '',                      caption: 'Evan M, Abram M & Connor P' },
   { src: 'images/favs/Einstein.webp',                 event: 'In the Lab',            caption: 'Santino S' },
+  { src: 'images/favs/SpiderverseGlazers.webp',       event: '',                      caption: 'Evan M, Abram M & Connor P' },
+  { src: 'images/favs/LTattacksChild.webp',           event: 'Flour Baby',            caption: 'Santiago C & Leslie T' },
   { src: 'images/favs/ThumbsUpDanya.webp',            event: '',                      caption: 'Danya I' },
   { src: 'images/favs/CPTwoTwos.webp',                event: '',                      caption: 'Connor P' },
   { src: 'images/favs/VELeaders.webp',                event: 'VE Warriors',           caption: 'Jianna D, Ellie C, Aiza Q, Farishta I, Peyton T & Iffah S' },
@@ -4143,15 +4265,15 @@ const FAVORITES = [
   { src: 'images/favs/RGEN.webp',                     event: 'Senior Blues',          caption: 'Rayan G & Evelynn N' },
   { src: 'images/favs/BlueCollar.webp',               event: 'Halloween',             caption: 'Nathan S, Andrew C & Kai A' },
   { src: 'images/favs/IVCGooners.webp',               event: '',                      caption: 'Jesiah H, Hudson G, Milo M, Andrew C, Baran C & Josh T' },
-  { src: 'images/favs/Dennys.webp',                   event: '',                      caption: 'Sacha P & Brandon Ca' },
-  { src: 'images/favs/SkateBros.webp',                event: '',                      caption: 'Sacha P, Brent L & Daemeon M' },
   { src: 'images/favs/Jeromy&Moe.webp',               event: '',                      caption: 'Jeromy M & J Moe' },
   { src: 'images/favs/BabyYotis.webp',                event: '',                      caption: 'Pearce W & Aryan L' },
-  { src: 'images/favs/Omoggers.webp',                 event: 'Flour Baby',            caption: 'Evan M, Milo M & Brent L' },
+  { src: 'images/favs/Dennys.webp',                   event: '',                      caption: 'Sacha P & Brandon Ca' },
   { src: 'images/favs/Psych.webp',                    event: '',                      caption: 'Abram M, Kiana V & Aryanna M' },
   { src: 'images/favs/Parents.webp',                  event: 'Flour Baby',            caption: 'Evan M, Nancy S, Aryanna M, Miriam Y & Kiana V' },
-  { src: 'images/favs/UCLAmom.webp',                  event: 'Flour Baby',            caption: 'Amreen I' },
+  { src: 'images/favs/SkateBros.webp',                event: '',                      caption: 'Sacha P, Brent L & Daemeon M' },
   { src: 'images/favs/Halloweekend.webp',             event: 'Halloween',             caption: 'Nolan E, Andrew C, Rayan G & Nathan S' },
+  { src: 'images/favs/UCLAmom.webp',                  event: 'Flour Baby',            caption: 'Amreen I' },
+  { src: 'images/favs/Omoggers.webp',                 event: 'Flour Baby',            caption: 'Evan M, Milo M & Brent L' },
   { src: 'images/favs/SantaClaus.webp',               event: 'Los Alamos',            caption: 'Aryan L, Kai A, Jesiah H, Baran C, Nolan E, Daemeon M, Andrew C, Sacha P & Brandon Ca' },
   { src: 'images/favs/Hikers.webp',                   event: 'Los Alamos',            caption: 'Aryan L, Kai A, Jesiah H, Baran C, Nolan E, Daemeon M, Andrew C, Sacha P & Brandon Ca' },
   { src: 'images/favs/DynamicDuo.webp',               event: '',                      caption: 'Baran C & Josue G' },
@@ -4167,324 +4289,329 @@ const FAVORITES = [
   { src: 'images/favs/YayArea.webp',                  event: '',                      caption: 'Artin R & Milo M' },
   { src: 'images/favs/FlourBabyCarrier.webp',         event: 'Flour Baby',            caption: 'Santino S' },
   { src: 'images/favs/3OfTheSneakyBoos.webp',         event: '',                      caption: 'Nancy S, Kiana V & Aryanna M' },
-  { src: 'images/favs/TripleTrouble.webp',            event: '',                      caption: 'Miriam Y, Danya I & Aryanna M' },
   { src: 'images/favs/Squad.webp',                    event: 'HS Volleyball',         caption: 'Sacha P, Andrew C, Baran C, Daemeon M & Omar A' },
   { src: 'images/favs/PBSlides.webp',                 event: '',                      caption: 'Luna C, Jaedon B & Iffah S' },
+  { src: 'images/favs/TripleTrouble.webp',            event: '',                      caption: 'Miriam Y, Danya I & Aryanna M' },
   { src: 'images/favs/Lineup.webp',                   event: '',                      caption: 'Max C, Omar A, Sacha P, Katally L, Rayan G, Arnav S, Abram M & Jackson R' },
-  { src: 'images/favs/AllYouCan.webp',                event: '',                      caption: 'Josh K, Milo M, Aryan L, Pearce W & Jayden O' },
   { src: 'images/favs/Hearts.webp',                   event: '',                      caption: 'Milo M & James W' },
+  { src: 'images/favs/AllYouCan.webp',                event: '',                      caption: 'Josh K, Milo M, Aryan L, Pearce W & Jayden O' },
   { src: 'images/favs/MattPushesEN.webp',             event: '',                      caption: 'Matt C & Evelynn N' },
-  { src: 'images/favs/Kawaii.webp',                   event: '',                      caption: 'Evelynn N, Carson C & Leslie T' },
   { src: 'images/favs/JCSchool.webp',                 event: 'Shot by Jayden C',      caption: '' },
+  { src: 'images/favs/Kawaii.webp',                   event: '',                      caption: 'Evelynn N, Carson C & Leslie T' },
   { src: 'images/favs/AryNElla.webp',                 event: '',                      caption: 'Aryanna M & Ella S' },
   { src: 'images/favs/Yesthisiscdm.webp',             event: '',                      caption: 'Santiago C, Jayden C, Kailee K, Josue G & Rayan R' },
   { src: 'images/favs/Ultras.webp',                   event: 'HS Volleyball',         caption: 'Nathan H, Andrew C, Baran C, Sacha P & Jayden C' },
   { src: 'images/favs/DarkMoonEmoji.webp',            event: 'Flour Baby',            caption: 'Kiana V & Nancy S' },
-  { src: 'images/favs/AbramCar.webp',                 event: '',                      caption: 'Connor P, Abram M & Santino S' },
-  { src: 'images/favs/HandSteeple.webp',              event: '',                      caption: 'Jayden T' },
-  { src: 'images/favs/TuffAtBeckman.webp',            event: 'HS Volleyball',         caption: 'Milo M & Brandon Ca' },
-  { src: 'images/favs/SPJGCream.webp',                event: 'Pie a Senior',          caption: 'Sacha P & Josue G' },
-  { src: 'images/favs/RushHour.webp',                 event: 'HS Volleyball',         caption: 'Daemeon M & Kailee K' },
-  { src: 'images/favs/YBStrongestSoldiers.webp',      event: '',                      caption: 'Cash T, Brandon Ca & Hunter W' },
   { src: 'images/favs/TuffestParents.webp',           event: 'Flour Baby',            caption: 'Ryan Y, Evan M & Nico M' },
+  { src: 'images/favs/AbramCar.webp',                 event: '',                      caption: 'Connor P, Abram M & Santino S' },
+  { src: 'images/favs/SPJGCream.webp',                event: 'Pie a Senior',          caption: 'Sacha P & Josue G' },
   { src: 'images/favs/ShiromNancy.webp',              event: '',                      caption: 'Shirom M & Nancy S' },
+  { src: 'images/favs/HandSteeple.webp',              event: '',                      caption: 'Jayden T' },
+  { src: 'images/favs/RushHour.webp',                 event: 'HS Volleyball',         caption: 'Daemeon M & Kailee K' },
   { src: 'images/favs/Milo&TinoFieldTrip.webp',       event: 'Field Trip',            caption: 'Milo M & Santino S' },
+  { src: 'images/favs/TuffAtBeckman.webp',            event: 'HS Volleyball',         caption: 'Milo M & Brandon Ca' },
+  { src: 'images/favs/YBStrongestSoldiers.webp',      event: '',                      caption: 'Cash T, Brandon Ca & Hunter W' },
   { src: 'images/favs/Halloween.webp',                event: 'Halloween',             caption: 'Kailee K & Uma J' },
   { src: 'images/favs/Ithinkthisiscdm.webp',          event: '',                      caption: 'Amreen I & Kailee K' },
   { src: 'images/favs/PizzaAtAmreens.webp',           event: 'Halloween',             caption: 'Amreen I, Josue G, Baran C & Jayden C' },
-  { src: 'images/favs/JHCream.webp',                  event: 'Pie a Senior',          caption: 'Jesiah H & Kai A' },
-  { src: 'images/favs/PhoJam.webp',                   event: '',                      caption: 'James W' },
-  { src: 'images/favs/WholeLottAsians.webp',          event: '',                      caption: 'Jayden O, Max C, Rayan G & Katally L' },
-  { src: 'images/favs/PeepinBC.webp',                 event: '',                      caption: 'Brandon Ch & Evan M' },
-  { src: 'images/favs/ChudvsFoid.webp',               event: '',                      caption: 'Elijah B & Katally L' },
-  { src: 'images/favs/FlexinTheTool.webp',            event: 'Senior Assassin',       caption: 'Aryan L' },
   { src: 'images/favs/Belligerent.webp',              event: 'HS Volleyball',         caption: 'Sacha P, Baran C & Jayden C' },
+  { src: 'images/favs/JHCream.webp',                  event: 'Pie a Senior',          caption: 'Jesiah H & Kai A' },
+  { src: 'images/favs/PeepinBC.webp',                 event: '',                      caption: 'Brandon Ch & Evan M' },
   { src: 'images/favs/LuhTwans.webp',                 event: '',                      caption: 'James W & Arnav S' },
+  { src: 'images/favs/PhoJam.webp',                   event: '',                      caption: 'James W' },
+  { src: 'images/favs/ChudvsFoid.webp',               event: '',                      caption: 'Elijah B & Katally L' },
   { src: 'images/favs/3GuysReadyForProm.webp',        event: 'Prom',                  caption: 'Daemeon M, Andrew C & Baran C' },
+  { src: 'images/favs/WholeLottAsians.webp',          event: '',                      caption: 'Jayden O, Max C, Rayan G & Katally L' },
+  { src: 'images/favs/FlexinTheTool.webp',            event: 'Senior Assassin',       caption: 'Aryan L' },
   { src: 'images/favs/Goldenrod.webp',                event: 'Prom',                  caption: 'Kailee K, Amreen I, Jayden C, Brandon Ca & Jayden O' },
   { src: 'images/favs/USO.webp',                      event: 'Winter Formal',         caption: 'Jianna D, Iffah S, Samana N, Luna C, Ellie C & Farishta I' },
   { src: 'images/favs/GreenGoggles.webp',             event: 'Senior Assassin',       caption: 'Baran C, Andrew C & Sacha P' },
-  { src: 'images/favs/Scroll&Think.webp',             event: '',                      caption: 'Santino S & Baran C' },
-  { src: 'images/favs/Warming.webp',                  event: 'SoFi Stadium',          caption: 'Baran C, Milo M & Aryan L' },
-  { src: 'images/favs/SiplyGoons.webp',               event: 'VE Warriors',           caption: 'Santiago C, Milo M & Josue G' },
-  { src: 'images/favs/JessGng.webp',                  event: 'Prom',                  caption: 'James W & Richard C' },
-  { src: 'images/favs/ZotZotZot.webp',                event: '',                      caption: 'Ruth Z, Ellie C, Jianna D & Farishta I' },
-  { src: 'images/favs/JamesVan.webp',                 event: '',                      caption: 'Santino S, Preston W, James W & Nico M' },
   { src: 'images/favs/Daycare.webp',                  event: 'HS Volleyball',         caption: 'Andrew C, Brandon Ca, Baran C & Sacha P' },
+  { src: 'images/favs/Scroll&Think.webp',             event: '',                      caption: 'Santino S & Baran C' },
+  { src: 'images/favs/JessGng.webp',                  event: 'Prom',                  caption: 'James W & Richard C' },
   { src: 'images/favs/MogWarPT2.webp',                event: '',                      caption: 'Baran C & Aryan L' },
+  { src: 'images/favs/Warming.webp',                  event: 'SoFi Stadium',          caption: 'Baran C, Milo M & Aryan L' },
+  { src: 'images/favs/ZotZotZot.webp',                event: '',                      caption: 'Ruth Z, Ellie C, Jianna D & Farishta I' },
   { src: 'images/favs/BackseatDrivers.webp',          event: '',                      caption: 'Kailee K, Amreen I & Santiago C' },
+  { src: 'images/favs/SiplyGoons.webp',               event: 'VE Warriors',           caption: 'Santiago C, Milo M & Josue G' },
+  { src: 'images/favs/JamesVan.webp',                 event: '',                      caption: 'Santino S, Preston W, James W & Nico M' },
   { src: 'images/favs/Sunmoon.webp',                  event: 'VE Warriors',           caption: 'Austin V, Rayan R, Uma J, Amreen I, Kailee K & Aiza Q' },
   { src: 'images/favs/Artin&RayanThinking.webp',      event: '',                      caption: 'Artin R & Rayan G' },
   { src: 'images/favs/BCBBQ.webp',                    event: '',                      caption: 'Brandon Ch, Evan M, Michael H, Murad M, Richard C, Rayan G, Arnav S, Aryan L, Baran C, Milo M & Andrew C' },
-  { src: 'images/favs/SlyDog.webp',                   event: '',                      caption: 'Aryan L & Evelynn N' },
-  { src: 'images/favs/PeepinThruWindow.webp',         event: 'VE Warriors',           caption: 'Brent L' },
-  { src: 'images/favs/FeelinAryanL.webp',             event: 'VE Warriors',           caption: 'Baran C, Aryan L & Nathan H' },
-  { src: 'images/favs/Oblivion.webp',                 event: '',                      caption: 'Jesiah H, Andrew C, Daemeon M & Baran C' },
   { src: 'images/favs/Victory.webp',                  event: '',                      caption: 'Christopher C' },
+  { src: 'images/favs/SlyDog.webp',                   event: '',                      caption: 'Aryan L & Evelynn N' },
+  { src: 'images/favs/FeelinAryanL.webp',             event: 'VE Warriors',           caption: 'Baran C, Aryan L & Nathan H' },
   { src: 'images/favs/QZsVNikeTech.webp',             event: '',                      caption: 'Milo M & Josue G' },
+  { src: 'images/favs/PeepinThruWindow.webp',         event: 'VE Warriors',           caption: 'Brent L' },
+  { src: 'images/favs/Oblivion.webp',                 event: '',                      caption: 'Jesiah H, Andrew C, Daemeon M & Baran C' },
+  { src: 'images/favs/LTCross.webp',                  event: '',                      caption: 'Leslie T' },
   { src: 'images/favs/DoUNoticeMe.webp',              event: 'Pep Rally',             caption: 'Milo M' },
   { src: 'images/favs/Meniscus.webp',                 event: 'In the Lab',            caption: 'Amani C, Danya I & Destiny P' },
-  { src: 'images/favs/LTCross.webp',                  event: '',                      caption: 'Leslie T' },
   { src: 'images/favs/Raymen.webp',                   event: '',                      caption: 'Milo M, Brent L & Daemeon M' },
   { src: 'images/favs/MogOff.webp',                   event: '',                      caption: 'Brent L, Evan M & Shirom M' },
-  { src: 'images/favs/UCantParkThere.webp',           event: '',                      caption: 'Josue G & Jayden C' },
   { src: 'images/favs/AbramTuff.webp',                event: 'Senior Blues',          caption: 'Abram M' },
   { src: 'images/favs/ItsSuperman.webp',              event: '',                      caption: 'Carson C, Cash T & Hunter W' },
-  { src: 'images/favs/SpartanTino.webp',              event: '',                      caption: 'Santino S' },
+  { src: 'images/favs/UCantParkThere.webp',           event: '',                      caption: 'Josue G & Jayden C' },
   { src: 'images/favs/PineappleMan.webp',             event: 'Senior Assassin',       caption: 'Aryan L' },
-  { src: 'images/favs/Trunk or Treat.webp',           event: 'Trunk or Treat',        caption: 'Baran C, Josue G & Daemeon M' },
   { src: 'images/favs/AryanLTribute.webp',            event: '',                      caption: 'Aryan L' },
+  { src: 'images/favs/SpartanTino.webp',              event: '',                      caption: 'Santino S' },
+  { src: 'images/favs/Trunk or Treat.webp',           event: 'Trunk or Treat',        caption: 'Baran C, Josue G & Daemeon M' },
+  { src: 'images/favs/Scuba.webp',                    event: 'HS Volleyball',         caption: 'Kailee K & Uma J' },
   { src: 'images/favs/ZAandDI.webp',                  event: 'In the Lab',            caption: 'Zach A & Danya I' },
   { src: 'images/favs/FinestEsscentialsEmployee.webp', event: 'Flour Baby',           caption: 'Milo M & Mukhtaj S' },
-  { src: 'images/favs/Scuba.webp',                    event: 'HS Volleyball',         caption: 'Kailee K & Uma J' },
   { src: 'images/favs/KVandAM.webp',                  event: 'Senior Blues',          caption: 'Aryanna M & Kiana V' },
   { src: 'images/favs/PiedNathan.webp',               event: 'Pie a Senior',          caption: 'Amreen I & Nathan S' },
-  { src: 'images/favs/FBLA.webp',                     event: 'FBLA',                  caption: 'Sacha P, Rayan G & Artin R' },
   { src: 'images/favs/RedCross.webp',                 event: '',                      caption: 'Uma J & Rayan R' },
   { src: 'images/favs/Dybala.webp',                   event: '',                      caption: 'Josue G' },
-  { src: 'images/favs/Janae&Omar.webp',               event: 'Prom',                  caption: 'Janae A & Omar A' },
+  { src: 'images/favs/FBLA.webp',                     event: 'FBLA',                  caption: 'Sacha P, Rayan G & Artin R' },
   { src: 'images/favs/DoomScroll.webp',               event: '',                      caption: 'Brandon Ch' },
-  { src: 'images/favs/LibraryGoonCar.webp',           event: '',                      caption: 'Amreen I, Kailee K, Josue G, Santiago C, Rayan R & Jayden C' },
   { src: 'images/favs/InterCompany.webp',             event: '',                      caption: 'Jayden C, James W, Milo M, Rayan G, Elijah B, Max C, Jayden O, Nathan S, Katally L, Kailee K, Brandon Ca & Pearce W' },
+  { src: 'images/favs/Janae&Omar.webp',               event: 'Prom',                  caption: 'Janae A & Omar A' },
+  { src: 'images/favs/LibraryGoonCar.webp',           event: '',                      caption: 'Amreen I, Kailee K, Josue G, Santiago C, Rayan R & Jayden C' },
+  { src: 'images/favs/CompSciGeniuses.webp',          event: '',                      caption: 'Milo M, Brandon Ch & Evan M' },
   { src: 'images/favs/ThumbsUp.webp',                 event: 'HS Volleyball',         caption: 'Uma J, Jayden O & Katally L' },
   { src: 'images/favs/JGLocked.webp',                 event: '',                      caption: 'Josue G' },
-  { src: 'images/favs/CompSciGeniuses.webp',          event: '',                      caption: 'Milo M, Brandon Ch & Evan M' },
   { src: 'images/favs/RankingChips.webp',             event: '',                      caption: 'Pearce W & Evelynn N' },
   { src: 'images/favs/TheMack.webp',                  event: '',                      caption: 'Josue G & Andrew C' },
-  { src: 'images/favs/DueceDown.webp',                event: '',                      caption: 'Santiago C & Jayden C' },
   { src: 'images/favs/PJDay.webp',                    event: 'PJ Day',                caption: 'Brandon Ca & Max C' },
   { src: 'images/favs/PushinP.webp',                  event: 'PJ Day',                caption: 'Santino S, Pearce W & Aryan L' },
-  { src: 'images/favs/DMoneyTruck.webp',              event: '',                      caption: 'Daemeon M' },
+  { src: 'images/favs/DueceDown.webp',                event: '',                      caption: 'Santiago C & Jayden C' },
   { src: 'images/favs/SummitOne.webp',                event: 'New York',              caption: 'Aiza Q, Amreen I & Uma J' },
-  { src: 'images/favs/HeyTea.webp',                   event: '',                      caption: 'Kailee K, Aiza Q, Uma J, Rayan R, Amreen I, Daemeon M & Jayden C' },
   { src: 'images/favs/KaivJesiah.webp',               event: '',                      caption: 'Kai A & Jesiah H' },
+  { src: 'images/favs/DMoneyTruck.webp',              event: '',                      caption: 'Daemeon M' },
+  { src: 'images/favs/HeyTea.webp',                   event: '',                      caption: 'Kailee K, Aiza Q, Uma J, Rayan R, Amreen I, Daemeon M & Jayden C' },
+  { src: 'images/favs/UCBUCLA.webp',                  event: 'HS Volleyball',         caption: 'Rayan G & Katally L' },
   { src: 'images/favs/2+2+2+2.webp',                  event: '',                      caption: 'Luke D, Paloma A & Nyala A' },
   { src: 'images/favs/PopIt.webp',                    event: '',                      caption: 'Uma J & Leslie T' },
-  { src: 'images/favs/UCBUCLA.webp',                  event: 'HS Volleyball',         caption: 'Rayan G & Katally L' },
   { src: 'images/favs/CollaborationTime.webp',        event: '',                      caption: 'Jayden C, Sacha P, Milo M & Santiago C' },
   { src: 'images/favs/JuzzSleep.webp',                event: '',                      caption: 'Kailee K, Amreen I, Casey C & Izaiah S' },
-  { src: 'images/favs/Mlem.webp',                     event: '',                      caption: 'Aryanna M, Kailee K & Ella S' },
   { src: 'images/favs/Popsicles.webp',                event: '',                      caption: 'Santiago C, Rayan R & Amreen I' },
   { src: 'images/favs/Calpico.webp',                  event: '',                      caption: 'Amreen I & Leslie T' },
-  { src: 'images/favs/Dormir.webp',                   event: '',                      caption: 'Josue G' },
+  { src: 'images/favs/Mlem.webp',                     event: '',                      caption: 'Aryanna M, Kailee K & Ella S' },
   { src: 'images/favs/NathanFuego.webp',              event: 'In the Lab',            caption: 'Nathan H' },
-  { src: 'images/favs/ASBThingy.webp',                event: '',                      caption: 'Megan Q, Amreen I, Josephine L, Avery K, Hannah N & Aiza Q' },
   { src: 'images/favs/Photobooth.webp',               event: 'Prom',                  caption: 'Evan M, Nancy S, Aryanna M & Ryan Y' },
+  { src: 'images/favs/Dormir.webp',                   event: '',                      caption: 'Josue G' },
+  { src: 'images/favs/ASBThingy.webp',                event: '',                      caption: 'Megan Q, Amreen I, Josephine L, Avery K, Hannah N & Aiza Q' },
+  { src: 'images/favs/Precision.webp',                event: 'In the Lab',            caption: 'Evan M, Connor P & Abram M' },
   { src: 'images/favs/ChemStuff.webp',                event: '',                      caption: 'Leslie T, Janae A & Murad M' },
   { src: 'images/favs/Mars.webp',                     event: 'Karaoke',               caption: 'Santino S & Preston W' },
-  { src: 'images/favs/Precision.webp',                event: 'In the Lab',            caption: 'Evan M, Connor P & Abram M' },
   { src: 'images/favs/Twins.webp',                    event: '',                      caption: 'Aryan L' },
   { src: 'images/favs/Albanians.webp',                event: '',                      caption: 'Omar A, Andrew C, James W, Jayden C & Jesiah H' },
-  { src: 'images/favs/UCHardworking.webp',            event: '',                      caption: 'Artin R & Katally L' },
   { src: 'images/favs/FlippedOff.webp',               event: 'In the Lab',            caption: 'Santiago C, Uma J & Josue G' },
   { src: 'images/favs/ActuallyTakingLabNotes.webp',   event: 'In the Lab',            caption: 'Marie D & Kiana V' },
+  { src: 'images/favs/UCHardworking.webp',            event: '',                      caption: 'Artin R & Katally L' },
   { src: 'images/favs/Minuteman.webp',                event: 'Los Alamos',            caption: 'Sacha P, Baran C, Jesiah H, Brandon Ca, Daemeon M, Kai A, Andrew C & Nolan E' },
-  { src: 'images/favs/Teamers.webp',                  event: 'Senior Assassin',       caption: 'Kailee K, Uma J, Amreen I & Rayan R' },
-  { src: 'images/favs/Bruddas.webp',                  event: 'Los Alamos',            caption: 'Kai A & Aryan L' },
-  { src: 'images/favs/Chillaxing.webp',               event: '',                      caption: 'Jesiah H' },
-  { src: 'images/favs/Peekaboo.webp',                 event: '',                      caption: 'Luna C & Peyton T' },
   { src: 'images/favs/BakoBros.webp',                 event: 'VE Warriors',           caption: 'Rayan R, Aryanna M, Amreen I & Uma J' },
+  { src: 'images/favs/Teamers.webp',                  event: 'Senior Assassin',       caption: 'Kailee K, Uma J, Amreen I & Rayan R' },
+  { src: 'images/favs/Chillaxing.webp',               event: '',                      caption: 'Jesiah H' },
   { src: 'images/favs/ThinkerStack.webp',             event: 'VE Warriors',           caption: 'Andrew C, Sacha P, Kai A & Brandon Ca' },
+  { src: 'images/favs/Bruddas.webp',                  event: 'Los Alamos',            caption: 'Kai A & Aryan L' },
+  { src: 'images/favs/Peekaboo.webp',                 event: '',                      caption: 'Luna C & Peyton T' },
   { src: 'images/favs/AuraFarmers.webp',              event: '',                      caption: 'Richard C, Pearce W & Rayan G' },
   { src: 'images/favs/Hiking.webp',                   event: '',                      caption: 'Baran C, Leslie T, Nathan H, Rayan R & Uma J' },
-  { src: 'images/favs/DubCouch.webp',                 event: 'Prom',                  caption: 'Milo M, Richard C, Arnav S, Rayan G & Pearce W' },
   { src: 'images/favs/CookinwithBK.webp',             event: 'Senior Assassin',       caption: 'Aryan L' },
-  { src: 'images/favs/JGWet.webp',                    event: 'Soak a Senior',         caption: 'Josue G' },
   { src: 'images/favs/ArtinYap.webp',                 event: '',                      caption: 'Evelynn N, Artin R & Leslie T' },
+  { src: 'images/favs/DubCouch.webp',                 event: 'Prom',                  caption: 'Milo M, Richard C, Arnav S, Rayan G & Pearce W' },
+  { src: 'images/favs/JGWet.webp',                    event: 'Soak a Senior',         caption: 'Josue G' },
+  { src: 'images/favs/Stinky.webp',                   event: 'Halloween',             caption: 'Jayden O, Jayden C, Josue G & Baran C' },
   { src: 'images/favs/ShiromBesties.webp',            event: 'Prom',                  caption: 'Shirom M, Betsy G & Paloma A' },
   { src: 'images/favs/TustinLegends.webp',            event: '',                      caption: 'Kailee K & Rebecca C' },
-  { src: 'images/favs/Stinky.webp',                   event: 'Halloween',             caption: 'Jayden O, Jayden C, Josue G & Baran C' },
+  { src: 'images/favs/EastBay.webp',                  event: 'In the Lab',            caption: 'Elijah B, Rayan G & Daemeon M' },
   { src: 'images/favs/SeltzerExperiment.webp',        event: 'In the Lab',            caption: 'Leslie T, Evelynn N & Danya I' },
   { src: 'images/favs/Clappin.webp',                  event: 'VE Warriors',           caption: 'Jayden T, Cash T & Hunter W' },
-  { src: 'images/favs/EastBay.webp',                  event: 'In the Lab',            caption: 'Elijah B, Rayan G & Daemeon M' },
   { src: 'images/favs/Huggins.webp',                  event: '',                      caption: 'Baran C & Daemeon M' },
   { src: 'images/favs/Larpers.webp',                  event: '',                      caption: 'Santino S, Milo M & Preston W' },
-  { src: 'images/favs/HugItOut.webp',                 event: '',                      caption: 'James W & Santino S' },
   { src: 'images/favs/Bonitos.webp',                  event: 'Winter Formal',         caption: 'Cash T & Matt C' },
-  { src: 'images/favs/VuongDaughter.webp',            event: 'Flour Baby',            caption: 'Kiana V' },
   { src: 'images/favs/JuicyJacob.webp',               event: '',                      caption: 'Santino S' },
+  { src: 'images/favs/HugItOut.webp',                 event: '',                      caption: 'James W & Santino S' },
+  { src: 'images/favs/VuongDaughter.webp',            event: 'Flour Baby',            caption: 'Kiana V' },
+  { src: 'images/favs/WofoTuff.webp',                 event: 'Winter Formal',         caption: 'Audrey L, Aryanna M & Kiana V' },
   { src: 'images/favs/Girlies.webp',                  event: 'Prom',                  caption: 'Leslie T, Kailee K, Aiza Q & Petra M' },
   { src: 'images/favs/Flash.webp',                    event: '',                      caption: 'Andrew C, Santiago C, Brandon Ca & Kai A' },
-  { src: 'images/favs/WofoTuff.webp',                 event: 'Winter Formal',         caption: 'Audrey L, Aryanna M & Kiana V' },
+  { src: 'images/favs/HoldMeBack.webp',               event: '',                      caption: 'Zane N & James W' },
   { src: 'images/favs/StickUp.webp',                  event: 'Senior Assassin',       caption: 'Abram M, Santiago C, Rayan R, Andrew C & Jayden T' },
   { src: 'images/favs/CalculusGoats.webp',            event: 'In the Lab',            caption: 'Morgan M & Katally L' },
-  { src: 'images/favs/HoldMeBack.webp',               event: '',                      caption: 'Zane N & James W' },
   { src: 'images/favs/TrollingJH.webp',               event: 'Senior Assassin',       caption: 'Milo M, Jesiah H & Evelynn N' },
   { src: 'images/favs/Zen.webp',                      event: 'VE Warriors',           caption: 'Michael H' },
-  { src: 'images/favs/StandByMe.webp',                event: 'Los Alamos',            caption: 'Andrew C, Baran C, Sacha P, Daemeon M, Jesiah H, Kai A, Nolan E, Brandon Ca & Aryan L' },
-  { src: 'images/favs/WeLuvMax.webp',                 event: 'HS Volleyball',         caption: 'Milo M, Brandon Ca & James W' },
   { src: 'images/favs/LayUp.webp',                    event: '',                      caption: 'Christopher C & Evan M' },
-  { src: 'images/favs/TuffAtSiply.webp',              event: '',                      caption: 'Kiana V & Danya I' },
-  { src: 'images/favs/Lonzo.webp',                    event: 'Senior Assassin',       caption: 'Milo M' },
   { src: 'images/favs/JGCutzComp.webp',               event: '',                      caption: 'Jesiah H, Shirom M, Nathan H, Josue G, Ibrahim M, Sacha P & Kai A' },
-  { src: 'images/favs/Twizzies.webp',                 event: 'Twin Day',              caption: 'Kailee K & Morgan M' },
+  { src: 'images/favs/StandByMe.webp',                event: 'Los Alamos',            caption: 'Andrew C, Baran C, Sacha P, Daemeon M, Jesiah H, Kai A, Nolan E, Brandon Ca & Aryan L' },
+  { src: 'images/favs/TuffAtSiply.webp',              event: '',                      caption: 'Kiana V & Danya I' },
   { src: 'images/favs/ImproperLabSafety.webp',        event: 'In the Lab',            caption: 'Grace D & Luna C' },
-  { src: 'images/favs/KKandUJ.webp',                  event: 'In the Lab',            caption: 'Kailee K & Uma J' },
+  { src: 'images/favs/WeLuvMax.webp',                 event: 'HS Volleyball',         caption: 'Milo M, Brandon Ca & James W' },
+  { src: 'images/favs/Lonzo.webp',                    event: 'Senior Assassin',       caption: 'Milo M' },
   { src: 'images/favs/GojoNEm.webp',                  event: '',                      caption: 'Preston W & James W' },
+  { src: 'images/favs/Twizzies.webp',                 event: 'Twin Day',              caption: 'Kailee K & Morgan M' },
+  { src: 'images/favs/KKandUJ.webp',                  event: 'In the Lab',            caption: 'Kailee K & Uma J' },
   { src: 'images/favs/Tritons.webp',                  event: '',                      caption: 'Michael H, Andrew L & Peyton T' },
   { src: 'images/favs/Silencio.webp',                 event: '',                      caption: 'Santino S, Josue G & Daemeon M' },
   { src: 'images/favs/VillainsGallery.webp',          event: 'Senior Assassin',       caption: 'Abram M, Jayden T, Santiago C, Andrew C & Rayan R' },
-  { src: 'images/favs/TUPE.webp',                     event: '',                      caption: 'James W, Milo M & Jesiah H' },
-  { src: 'images/favs/JaydenT.webp',                  event: '',                      caption: 'Jayden T' },
-  { src: 'images/favs/JGWhip.webp',                   event: '',                      caption: 'Kailee K, Amreen I, Santiago C, Jayden C & Josue G' },
-  { src: 'images/favs/Gamblers.webp',                 event: 'Prom',                  caption: 'Katally L, Rayan G, Max C, Arnav S & James W' },
-  { src: 'images/favs/TTown.webp',                    event: 'Friday Night Lights',   caption: 'Nancy S & Aryanna M' },
-  { src: 'images/favs/PTCloseUp.webp',                event: 'Prom',                  caption: 'Peyton T' },
   { src: 'images/favs/ThreeMusketeers.webp',          event: 'In the Lab',            caption: 'Jeromy M, Zach A & Matt I' },
+  { src: 'images/favs/TUPE.webp',                     event: '',                      caption: 'James W, Milo M & Jesiah H' },
+  { src: 'images/favs/Gamblers.webp',                 event: 'Prom',                  caption: 'Katally L, Rayan G, Max C, Arnav S & James W' },
   { src: 'images/favs/VEWarriors.webp',               event: 'VE Warriors',           caption: 'Milo M, Ayden V, Santino S, Zane N & James W' },
+  { src: 'images/favs/JaydenT.webp',                  event: '',                      caption: 'Jayden T' },
+  { src: 'images/favs/TTown.webp',                    event: 'Friday Night Lights',   caption: 'Nancy S & Aryanna M' },
   { src: 'images/favs/StrongestofToday.webp',         event: '',                      caption: 'Aryan L & Artin R' },
+  { src: 'images/favs/JGWhip.webp',                   event: '',                      caption: 'Kailee K, Amreen I, Santiago C, Jayden C & Josue G' },
+  { src: 'images/favs/PTCloseUp.webp',                event: 'Prom',                  caption: 'Peyton T' },
   { src: 'images/favs/PressingMatt.webp',             event: '',                      caption: 'Alex G, Matt I & Milo M' },
   { src: 'images/favs/Sunrose.webp',                  event: 'Senior Sunrise',        caption: 'Kai A, Jayden C, Milo M, Omar A, Pearce W, Nathan H, Sacha P, Santiago C, Santino S, Brent L, Richard C, Brandon Ca, Baran C, Josue G & Andrew C' },
   { src: 'images/favs/SpecialGrade.webp',             event: 'VE Warriors',           caption: 'Josue G, Kai A, Baran C & Aryan L' },
-  { src: 'images/favs/Infiltration.webp',             event: 'HS Volleyball',         caption: 'Nathan S, Pearce W & Katally L' },
-  { src: 'images/favs/WalkEmDown.webp',               event: 'Senior Assassin',       caption: 'Daemeon M' },
-  { src: 'images/favs/KingNQueen.webp',               event: 'Prom',                  caption: 'Aryanna M & Artin R' },
-  { src: 'images/favs/ApplesAndBananas.webp',         event: '',                      caption: 'Aryan L' },
   { src: 'images/favs/Bullish.webp',                  event: 'New York',              caption: 'Santiago C' },
+  { src: 'images/favs/Infiltration.webp',             event: 'HS Volleyball',         caption: 'Nathan S, Pearce W & Katally L' },
+  { src: 'images/favs/KingNQueen.webp',               event: 'Prom',                  caption: 'Aryanna M & Artin R' },
   { src: 'images/favs/PantsOnFire.webp',              event: 'White Lies',            caption: 'Mason N & Connor P' },
+  { src: 'images/favs/WalkEmDown.webp',               event: 'Senior Assassin',       caption: 'Daemeon M' },
+  { src: 'images/favs/ApplesAndBananas.webp',         event: '',                      caption: 'Aryan L' },
+  { src: 'images/favs/OptimalAngle.webp',             event: '',                      caption: 'Amreen I, Santiago C & Jayden C' },
   { src: 'images/favs/Balloon.webp',                  event: 'VE Warriors',           caption: 'Michael H, Jaedon B, Peyton T, Destiny P, Iffah S, Cooper M, Jayden T, Jianna D & Farishta I' },
   { src: 'images/favs/Breakfast.webp',                event: '',                      caption: 'Jianna D, Samana N, Danya I, Luna C, Kiyomi P, Ellie C, Amani C, Jaedon B & Farishta I' },
-  { src: 'images/favs/OptimalAngle.webp',             event: '',                      caption: 'Amreen I, Santiago C & Jayden C' },
   { src: 'images/favs/JGTuff.webp',                   event: '',                      caption: 'Josue G' },
   { src: 'images/favs/VEatLMA.webp',                  event: 'VE Warriors',           caption: 'Nathan S, Jayden O, Josh S, Max C & Rayan G' },
   { src: 'images/favs/GargYap.webp',                  event: '',                      caption: 'Artin R, Kiana V, Rayan G, Seth P, Logan W, Jayden O & Rayan R' },
-  { src: 'images/favs/FinancialSuccess.webp',         event: 'VE Warriors',           caption: 'Jaedon B, Ellie C & Peyton T' },
-  { src: 'images/favs/InNOut.webp',                   event: 'Winter Formal',         caption: 'Milo M, Aryan L & Andrew C' },
-  { src: 'images/favs/FingerHeart.webp',              event: '',                      caption: 'Michael H & Cooper M' },
-  { src: 'images/favs/HipsDontLie.webp',              event: '',                      caption: 'Artin R & Baran C' },
   { src: 'images/favs/PoolBoy.webp',                  event: '',                      caption: 'Jayden C, Milo M & Baran C' },
+  { src: 'images/favs/FinancialSuccess.webp',         event: 'VE Warriors',           caption: 'Jaedon B, Ellie C & Peyton T' },
+  { src: 'images/favs/FingerHeart.webp',              event: '',                      caption: 'Michael H & Cooper M' },
   { src: 'images/favs/PreHoops.webp',                 event: '',                      caption: 'Milo M, Nico M & Brent L' },
+  { src: 'images/favs/InNOut.webp',                   event: 'Winter Formal',         caption: 'Milo M, Aryan L & Andrew C' },
+  { src: 'images/favs/HipsDontLie.webp',              event: '',                      caption: 'Artin R & Baran C' },
+  { src: 'images/favs/SelfieB4SAS.webp',              event: 'Soak a Senior',         caption: 'Luna C, Amani C, Farishta I & Shirom M' },
   { src: 'images/favs/BakoLocked.webp',               event: 'VE Warriors',           caption: 'Farishta I, Peyton T & Santiago C' },
   { src: 'images/favs/Penthouse.webp',                event: 'New York',              caption: 'Jianna D, Iffah S & Ellie C' },
-  { src: 'images/favs/SelfieB4SAS.webp',              event: 'Soak a Senior',         caption: 'Luna C, Amani C, Farishta I & Shirom M' },
   { src: 'images/favs/NowAFunnyOne.webp',             event: 'Winter Formal',         caption: 'Destiny P, Grace D, Kiyomi P, Amani C, Farishta I, Luna C, Samana N, Jianna D, Iffah S, Ellie C, Michael H, Peyton T, Murad M & Jaedon B' },
   { src: 'images/favs/FirstDayofSoakASenior.webp',    event: 'Soak a Senior',         caption: 'Brent L, Santino S, Baran C, Josue G, Matt C, Nathan S & Kailee K' },
   { src: 'images/favs/LoganYap.webp',                 event: '',                      caption: 'Seth P, Logan W & Jayden O' },
-  { src: 'images/favs/SBBeach.webp',                  event: '',                      caption: 'Aryanna M, Miriam Y, Ella S, Nancy S & Nyala A' },
-  { src: 'images/favs/Ditch.webp',                    event: '',                      caption: 'Brent L' },
-  { src: 'images/favs/SiplySquad.webp',               event: 'VE Warriors',           caption: 'Uma J, Kai A, Santiago C, Josue G, Milo M, James W, Julian A, Elijah B, Nolan E, Daemeon M, Brandon Ca & Jayden C' },
-  { src: 'images/favs/BoomGirl.webp',                 event: '',                      caption: 'Amani C' },
   { src: 'images/favs/SipSetSun.webp',                event: 'VE Warriors',           caption: 'Danya I, Iffah S & Farishta I' },
+  { src: 'images/favs/SBBeach.webp',                  event: '',                      caption: 'Aryanna M, Miriam Y, Ella S, Nancy S & Nyala A' },
+  { src: 'images/favs/SiplySquad.webp',               event: 'VE Warriors',           caption: 'Uma J, Kai A, Santiago C, Josue G, Milo M, James W, Julian A, Elijah B, Nolan E, Daemeon M, Brandon Ca & Jayden C' },
   { src: 'images/favs/Geekin.webp',                   event: '',                      caption: 'Max C' },
+  { src: 'images/favs/Ditch.webp',                    event: '',                      caption: 'Brent L' },
+  { src: 'images/favs/BoomGirl.webp',                 event: '',                      caption: 'Amani C' },
+  { src: 'images/favs/JHandSP.webp',                  event: '',                      caption: 'Jesiah H & Sacha P' },
   { src: 'images/favs/HandInHand.webp',               event: '',                      caption: 'Michael H & Jayden T' },
   { src: 'images/favs/BloodBench.webp',               event: '',                      caption: 'Rayan R & Amreen I' },
-  { src: 'images/favs/JHandSP.webp',                  event: '',                      caption: 'Jesiah H & Sacha P' },
   { src: 'images/favs/BaranPlank.webp',               event: '',                      caption: 'Hannah S, Max C, Josh S & Baran C' },
   { src: 'images/favs/CPWork.webp',                   event: '',                      caption: 'Jayden C, Andrew C, Brandon Ch & Evan M' },
-  { src: 'images/favs/Nurse&Construction.webp',       event: 'Halloween',             caption: 'Kai A & Nathan S' },
   { src: 'images/favs/KV&AL.webp',                    event: '',                      caption: 'Audrey L & Kiana V' },
-  { src: 'images/favs/Takeout.webp',                  event: '',                      caption: 'Cooper M, Ellie C, Jianna D, Iffah S & Hunter W' },
   { src: 'images/favs/Bernadino.webp',                event: '',                      caption: 'Austin V, Aiza Q, Amreen I, Rayan R, Katally L, Kailee K, Peyton T, Farishta I, Samana N, Jianna D & Ellie C' },
-  { src: 'images/favs/PlayGamesAlot.webp',            event: '',                      caption: 'Santiago C, Milo M, Jayden C & Jesiah H' },
-  { src: 'images/favs/CarsonTutor.webp',              event: '',                      caption: 'Carson C & Michelle N' },
-  { src: 'images/favs/Spiderman.webp',                event: '',                      caption: 'Baran C' },
-  { src: 'images/favs/Cluely.webp',                   event: '',                      caption: 'Milo M, Nico M & Brandon Ch' },
+  { src: 'images/favs/Nurse&Construction.webp',       event: 'Halloween',             caption: 'Kai A & Nathan S' },
+  { src: 'images/favs/Takeout.webp',                  event: '',                      caption: 'Cooper M, Ellie C, Jianna D, Iffah S & Hunter W' },
   { src: 'images/favs/Frolf.webp',                    event: '',                      caption: 'Sacha P & Daemeon M' },
+  { src: 'images/favs/PlayGamesAlot.webp',            event: '',                      caption: 'Santiago C, Milo M, Jayden C & Jesiah H' },
+  { src: 'images/favs/Spiderman.webp',                event: '',                      caption: 'Baran C' },
   { src: 'images/favs/DmoneySeniorNight.webp',        event: 'HS Volleyball',         caption: 'Daemeon M & Kai A' },
+  { src: 'images/favs/CarsonTutor.webp',              event: '',                      caption: 'Carson C & Michelle N' },
+  { src: 'images/favs/Cluely.webp',                   event: '',                      caption: 'Milo M, Nico M & Brandon Ch' },
   { src: 'images/favs/Kaba.webp',                     event: '',                      caption: 'Abram M, Milo M & Jesiah H' },
   { src: 'images/favs/Readytosell.webp',              event: 'VE Warriors',           caption: 'Iffah S, Jianna D, Peyton T, Ellie C & Farishta I' },
-  { src: 'images/favs/MrsChungsClass.webp',           event: '',                      caption: 'Amani C, Zach A, Iffah S, Samana N, Emily W, Ellie C, Jianna D, Farishta I & Aiza Q' },
   { src: 'images/favs/Tiara.webp',                    event: '',                      caption: 'Amani C, Destiny P, Danya I, Iffah S & Farishta I' },
-  { src: 'images/favs/BehindtheBooth.webp',           event: 'Winter Formal',         caption: 'Ellie C, Jianna D, Samana N, Aiza Q, Farishta I, Iffah S, Jaedon B, Michael H, Luna C & Kiyomi P' },
   { src: 'images/favs/WhosInTheBack.webp',            event: '',                      caption: 'Amreen I, Kailee K & Baran C' },
-  { src: 'images/favs/Raverside.webp',                event: '',                      caption: 'Milo M, James W & Preston W' },
-  { src: 'images/favs/MomMadePizzaRolls.webp',        event: '',                      caption: 'Baran C & Santiago C' },
-  { src: 'images/favs/HoeDown.webp',                  event: 'Halloween',             caption: 'Rayan G, Josh S & Nathan S' },
-  { src: 'images/favs/TapedOnLies.webp',              event: 'White Lies',            caption: 'Nathan S, Josh S & Santino S' },
+  { src: 'images/favs/MrsChungsClass.webp',           event: '',                      caption: 'Amani C, Zach A, Iffah S, Samana N, Emily W, Ellie C, Jianna D, Farishta I & Aiza Q' },
+  { src: 'images/favs/BehindtheBooth.webp',           event: 'Winter Formal',         caption: 'Ellie C, Jianna D, Samana N, Aiza Q, Farishta I, Iffah S, Jaedon B, Michael H, Luna C & Kiyomi P' },
   { src: 'images/favs/FlexedUp.webp',                 event: '',                      caption: 'Josue G & Abram M' },
+  { src: 'images/favs/Raverside.webp',                event: '',                      caption: 'Milo M, James W & Preston W' },
+  { src: 'images/favs/HoeDown.webp',                  event: 'Halloween',             caption: 'Rayan G, Josh S & Nathan S' },
   { src: 'images/favs/LockedTFIn.webp',               event: '',                      caption: 'Josue G & Baran C' },
+  { src: 'images/favs/MomMadePizzaRolls.webp',        event: '',                      caption: 'Baran C & Santiago C' },
+  { src: 'images/favs/TapedOnLies.webp',              event: 'White Lies',            caption: 'Nathan S, Josh S & Santino S' },
   { src: 'images/favs/FNLBlackOut.webp',              event: 'Friday Night Lights',   caption: 'Nyala A, Aryanna M & Miriam Y' },
   { src: 'images/favs/TrioBingoFlingo.webp',          event: '',                      caption: 'Katally L, Leslie T & Evelynn N' },
-  { src: 'images/favs/MET.webp',                      event: 'Winter Formal',         caption: 'Destiny P, Samana N, Jianna D, Jayden T, Peyton T, Grace D, Murad M, Amani C, Farishta I & Iffah S' },
   { src: 'images/favs/ConcreteJungle.webp',           event: 'New York',              caption: 'Ava L & Uma J' },
-  { src: 'images/favs/SubwaySurfers.webp',            event: 'New York',              caption: 'Sacha P, Julian A, Rayan R & Santiago C' },
   { src: 'images/favs/CodeOrange.webp',               event: 'Robotics',              caption: 'Nima P & Santino S' },
+  { src: 'images/favs/MET.webp',                      event: 'Winter Formal',         caption: 'Destiny P, Samana N, Jianna D, Jayden T, Peyton T, Grace D, Murad M, Amani C, Farishta I & Iffah S' },
+  { src: 'images/favs/SubwaySurfers.webp',            event: 'New York',              caption: 'Sacha P, Julian A, Rayan R & Santiago C' },
   { src: 'images/favs/Zao.webp',                      event: 'New York',              caption: 'Aiza Q, Rayan R & Uma J' },
   { src: 'images/favs/BigBandJG.webp',                event: '',                      caption: 'Baran C & Josue G' },
-  { src: 'images/favs/KKbby.webp',                    event: 'Flour Baby',            caption: 'Kailee K' },
   { src: 'images/favs/TakeCare.webp',                 event: "BJ's Restaurant",       caption: 'Daemeon M, Nyala A & Sierra M' },
-  { src: 'images/favs/CentralPark.webp',              event: 'New York',              caption: 'Amreen I & Uma J' },
   { src: 'images/favs/ChickFilBaby.webp',             event: 'Flour Baby',            caption: 'Jayden C' },
+  { src: 'images/favs/KKbby.webp',                    event: 'Flour Baby',            caption: 'Kailee K' },
+  { src: 'images/favs/CentralPark.webp',              event: 'New York',              caption: 'Amreen I & Uma J' },
   { src: 'images/favs/JGblood.webp',                  event: '',                      caption: 'Josue G' },
   { src: 'images/favs/Polaroids.webp',                event: 'New York',              caption: 'Uma J, Rayan R, Santiago C & Ava L' },
-  { src: 'images/favs/Sharpe.webp',                   event: '',                      caption: 'Josh T & Omar A' },
-  { src: 'images/favs/SlimeString.webp',              event: 'Bakersfield',           caption: 'Leslie T, Uma J & Rayan R' },
   { src: 'images/favs/CommitedBayandI.webp',          event: '',                      caption: 'Nancy S & Kiana V' },
-  { src: 'images/favs/MatchaFellas.webp',             event: '',                      caption: 'Sacha P & Baran C' },
-  { src: 'images/favs/HotelLobby.webp',               event: '',                      caption: 'Uma J & Leslie T' },
-  { src: 'images/favs/RedefineVE.webp',               event: 'VE Warriors',           caption: 'Uma J & Kailee K' },
-  { src: 'images/favs/WhyYallLike2SoMuch.webp',       event: 'Tustin Tiller Days',    caption: 'Brandon Ca, Uma J & Jayden O' },
   { src: 'images/favs/TsNotNapTime.webp',             event: '',                      caption: 'Nancy S & Aryanna M' },
+  { src: 'images/favs/Sharpe.webp',                   event: '',                      caption: 'Josh T & Omar A' },
+  { src: 'images/favs/MatchaFellas.webp',             event: '',                      caption: 'Sacha P & Baran C' },
   { src: 'images/favs/Pinkout.webp',                  event: 'Friday Night Lights',   caption: 'Amreen I, Uma J, Kailee K & Ava L' },
+  { src: 'images/favs/SlimeString.webp',              event: 'Bakersfield',           caption: 'Leslie T, Uma J & Rayan R' },
+  { src: 'images/favs/RedefineVE.webp',               event: 'VE Warriors',           caption: 'Uma J & Kailee K' },
   { src: 'images/favs/TuffFourTustinTillers.webp',    event: 'Tustin Tiller Days',    caption: 'Uma J, Amreen I, Katally L & Kailee K' },
+  { src: 'images/favs/HotelLobby.webp',               event: '',                      caption: 'Uma J & Leslie T' },
+  { src: 'images/favs/WhyYallLike2SoMuch.webp',       event: 'Tustin Tiller Days',    caption: 'Brandon Ca, Uma J & Jayden O' },
   { src: 'images/favs/GreenLineTest.webp',            event: '',                      caption: 'Aryanna M & Kiana V' },
   { src: 'images/favs/Sandwiched.webp',               event: '',                      caption: 'Jayden C' },
-  { src: 'images/favs/EvanLounging.webp',             event: '',                      caption: 'Evan M' },
   { src: 'images/favs/Hulk.webp',                     event: '',                      caption: 'Kai A' },
   { src: 'images/favs/PassedGreenLineTest.webp',      event: '',                      caption: 'Aryanna M & Kiana V' },
+  { src: 'images/favs/EvanLounging.webp',             event: '',                      caption: 'Evan M' },
   { src: 'images/favs/Despacito.webp',                event: 'Senior Trip',           caption: 'Rayan G, Arnav S, Austin V, Sacha P, Richard C & Abram M' },
   { src: 'images/favs/PostedUpWithSticks.webp',       event: 'Senior Assassin',       caption: 'Morgan M, Luke D & Alethia D' },
   { src: 'images/favs/PizookieTuesday.webp',          event: "BJ's Restaurant",       caption: 'Abram M, Andrew C, Aryanna M, Brent L, Adam E, Kiana V, Milo M & Evan M' },
   { src: 'images/favs/CongaLine.webp',                event: 'Prom',                  caption: 'James W, Artin R, Max C, Elijah B, Rayan G & Milo M' },
-  { src: 'images/favs/TheBigGame.webp',                event: '',                      caption: 'Arnav S & Rayan G' },
-  { src: 'images/favs/DennyBoys.webp',                event: '',                      caption: 'Pearce W & Rayan G' },
   { src: 'images/favs/PreProm.webp',                  event: 'Prom',                  caption: 'Katally L, Leslie T, Uma J, Amreen I, Kailee K, Evelynn N & Petra M' },
+  { src: 'images/favs/DennyBoys.webp',                event: '',                      caption: 'Pearce W & Rayan G' },
+  { src: 'images/favs/TheBigGame.webp',                event: '',                      caption: 'Arnav S & Rayan G' },
   { src: 'images/favs/YCTrio.webp',                   event: 'Senior Trip',           caption: 'Rayan G, Arnav S & Richard C' },
   { src: 'images/favs/KawaiiPt2.webp',                event: '',                      caption: 'Evelynn N, Carson C & Leslie T' },
   { src: 'images/favs/HeartAtRickyBday.webp',         event: "Ricky's Birthday",      caption: 'Milo M & Pearce W' },
   { src: 'images/favs/CalcGoatsProm.webp',            event: 'Prom',                  caption: 'Katally L & Morgan M' },
   { src: 'images/favs/TeamSeniors.webp',              event: 'Senior Field Day',      caption: 'Jeromy M, Matt I, Zach A, Eden W, Logan W, Ryan Y, Christopher C, Shirom M & Jackson R' },
-  { src: 'images/favs/KiyomiSamanaDanya.webp',        event: 'Senior Field Day',      caption: 'Kiyomi P, Samana N & Danya I' },
-  { src: 'images/favs/Panda.webp',                    event: '',                      caption: 'Max C' },
-  { src: 'images/favs/ClosedOnSunday.webp',           event: 'Senior Field Day',      caption: 'Katally L & Aiza Q' },
   { src: 'images/favs/MiriamElla.webp',               event: 'Senior Field Day',      caption: 'Ella S & Miriam Y' },
+  { src: 'images/favs/Panda.webp',                    event: '',                      caption: 'Max C' },
+  { src: 'images/favs/KiyomiSamanaDanya.webp',        event: 'Senior Field Day',      caption: 'Kiyomi P, Samana N & Danya I' },
   { src: 'images/favs/NyalaKianaPaloma.webp',         event: 'Senior Field Day',      caption: 'Nyala A, Kiana V & Paloma A' },
-  { src: 'images/favs/ShadedGravel.webp',             event: 'Senior Field Day',      caption: 'Ellie C, Jaedon B, Jayden T, Luna C & Amani C' },
   { src: 'images/favs/Pinays.webp',                   event: '',                      caption: 'Leslie T & Ava L' },
+  { src: 'images/favs/ClosedOnSunday.webp',           event: 'Senior Field Day',      caption: 'Katally L & Aiza Q' },
+  { src: 'images/favs/ShadedGravel.webp',             event: 'Senior Field Day',      caption: 'Ellie C, Jaedon B, Jayden T, Luna C & Amani C' },
   { src: 'images/favs/ASBPresentsSFD.webp',           event: 'Senior Field Day',      caption: 'Rayan R, Aiza Q, Amreen I, Kailee K & Katally L' },
   { src: 'images/favs/EyeForAnEye.webp',              event: '',                      caption: 'Hunter W & Leslie T' },
   { src: 'images/favs/ArkansasUclaStanford.webp',      event: '',                      caption: 'Amreen I, Aryanna M & Arnav S' },
-  { src: 'images/favs/BestPresentationEver.webp',     event: '',                      caption: 'Carson C & Michael H' },
-  { src: 'images/favs/PostPresentation.webp',         event: '',                      caption: 'Ace Z, Luna C, Michael H, Grace D, Murad M & Carson C' },
   { src: 'images/favs/ENandMY.webp',                  event: 'Mouse Ear Decoration',  caption: 'Miriam Y & Evelynn N' },
+  { src: 'images/favs/PostPresentation.webp',         event: '',                      caption: 'Ace Z, Luna C, Michael H, Grace D, Murad M & Carson C' },
+  { src: 'images/favs/BestPresentationEver.webp',     event: '',                      caption: 'Carson C & Michael H' },
   { src: 'images/favs/LeaningTower.webp',             event: 'Mouse Ear Decoration',  caption: 'Jayden T' },
   { src: 'images/favs/SouthAsia.webp',                event: '',                      caption: 'Aryan L, Arnav S & Ibrahim M' },
   { src: 'images/favs/MySon.webp',                    event: '',                      caption: 'Milo M & Mason C' },
-  { src: 'images/favs/MattandCPsEars.webp',           event: 'Mouse Ear Decoration',  caption: 'Matt C & Connor P' },
-  { src: 'images/favs/CornyAhhAbram.webp',            event: '',                      caption: 'Abram M' },
   { src: 'images/favs/ArtsandCrafts.webp',            event: 'Mouse Ear Decoration',  caption: 'Nancy S, Jayden T, Hunter W, Jianna D & Sierra M' },
+  { src: 'images/favs/CornyAhhAbram.webp',            event: '',                      caption: 'Abram M' },
+  { src: 'images/favs/MattandCPsEars.webp',           event: 'Mouse Ear Decoration',  caption: 'Matt C & Connor P' },
   { src: 'images/favs/NoahCooperZach.webp',           event: 'Mouse Ear Decoration',  caption: 'Noah H, Cooper M & Zach A' },
   { src: 'images/favs/PrivateSchoolZone.webp',        event: 'Mouse Ear Decoration',  caption: 'Leslie T, Evelynn N & Audrey L' },
   { src: 'images/favs/PickandChoose.webp',            event: 'Mouse Ear Decoration',  caption: 'Audrey L, Cash T, Luna C, Abram M, Parin L, Samana N & Artin R' },
   { src: 'images/favs/ArtinThinker.webp',             event: '',                      caption: 'Artin R' },
   { src: 'images/favs/ChickenPotPie.webp',            event: '',                      caption: 'Josue G, Andrew C & Omar A' },
-  { src: 'images/favs/LocoMocoGMOAT.webp',            event: '',                      caption: 'Andrew C, Jesiah H & Jayden C' },
-  { src: 'images/favs/ThreeStooges.webp',             event: 'Twin Day',              caption: 'Milo M, Jesiah H & Josue G' },
   { src: 'images/favs/Top2SneakyBoos.webp',           event: 'Prom',                  caption: 'Aryanna M & Kiana V' },
-  { src: 'images/favs/InTheRafters.webp',             event: '',                      caption: 'Daemeon M & Nathan H' },
-  { src: 'images/favs/SiplyStuntin.webp',             event: 'VE Warriors',           caption: 'Evan M, Cash T, Daemeon M, Brandon Ca, Julian A & James W' },
   { src: 'images/favs/YBGASEE.webp',                  event: '',                      caption: 'Carson C & Arnav S' },
+  { src: 'images/favs/LocoMocoGMOAT.webp',            event: '',                      caption: 'Andrew C, Jesiah H & Jayden C' },
+  { src: 'images/favs/InTheRafters.webp',             event: '',                      caption: 'Daemeon M & Nathan H' },
   { src: 'images/favs/ConkedOut.webp',                event: '',                      caption: 'Evan M & Abram M' },
+  { src: 'images/favs/ThreeStooges.webp',             event: 'Twin Day',              caption: 'Milo M, Jesiah H & Josue G' },
+  { src: 'images/favs/SiplyStuntin.webp',             event: 'VE Warriors',           caption: 'Evan M, Cash T, Daemeon M, Brandon Ca, Julian A & James W' },
   { src: 'images/favs/YoungThugMeme.webp',            event: '',                      caption: 'Shriyes C & Preston W' },
   { src: 'images/favs/Jeffy.webp',                    event: '',                      caption: 'Michael H' },
-  { src: 'images/favs/IntheModelX.webp',              event: '',                      caption: 'Milo M, Carson C, Brent L & Arnav S' },
-  { src: 'images/favs/ParinvsAbram.webp',             event: 'Senior Skyzone',        caption: 'Abram M & Parin L' },
   { src: 'images/favs/LastConvoWBigJ.webp',           event: '',                      caption: 'Brandon Ca, Iffah S & Jayden H' },
-  { src: 'images/favs/SuitandTie.webp',               event: '',                      caption: 'Murad M' },
-  { src: 'images/favs/YaraYaraPhonk.webp',            event: 'Senior Skyzone',        caption: 'Parin L, Evan M & Leslie T' },
   { src: 'images/favs/PlaidShirt.webp',               event: '',                      caption: 'Brandon Ch' },
-  { src: 'images/favs/Cleopatra.webp',                event: '',                      caption: 'Luke D, Aryanna M & Amreen I' },
-  { src: 'images/favs/FunkDunk.webp',                 event: 'Senior Skyzone',        caption: 'Nico M' },
+  { src: 'images/favs/IntheModelX.webp',              event: '',                      caption: 'Milo M, Carson C, Brent L & Arnav S' },
+  { src: 'images/favs/SuitandTie.webp',               event: '',                      caption: 'Murad M' },
   { src: 'images/favs/Shirom2s.webp',                 event: '',                      caption: 'Shirom M' },
+  { src: 'images/favs/ParinvsAbram.webp',             event: 'Senior Skyzone',        caption: 'Abram M & Parin L' },
+  { src: 'images/favs/Cleopatra.webp',                event: '',                      caption: 'Luke D, Aryanna M & Amreen I' },
   { src: 'images/favs/LiccvJahStaredown.webp',        event: 'Senior Skyzone',        caption: 'D Licciardo & Elijah B' },
+  { src: 'images/favs/YaraYaraPhonk.webp',            event: 'Senior Skyzone',        caption: 'Parin L, Evan M & Leslie T' },
+  { src: 'images/favs/FunkDunk.webp',                 event: 'Senior Skyzone',        caption: 'Nico M' },
   { src: 'images/favs/OnHisHead.webp',                event: 'Senior Skyzone',        caption: 'Nico M & Preston W' },
   { src: 'images/favs/DuelOfTheFates.webp',           event: 'Senior Skyzone',        caption: 'Aryanna M, Max C, Andrew C, Ibrahim M & D Licciardo' },
-  { src: 'images/favs/AnimeMen.webp',                 event: 'Senior Skyzone',        caption: 'Pearce W & Richard C' },
-  { src: 'images/favs/LicctotheMax.webp',             event: 'Senior Skyzone',        caption: 'D Licciardo, Max C, Aryanna M, Santino S & Ibrahim M' },
-  { src: 'images/favs/SkyzoneSquad.webp',             event: 'Senior Skyzone',        caption: 'Kailee K, Uma J, Leslie T, Morgan M & Katally L' },
   { src: 'images/favs/Gazelle.webp',                  event: 'Senior Skyzone',        caption: 'Artin R' },
+  { src: 'images/favs/BigSpoonLittleSpoon.webp',      event: '',                      caption: 'Milo M & James W' },
+  { src: 'images/favs/AnimeMen.webp',                 event: 'Senior Skyzone',        caption: 'Pearce W & Richard C' },
   { src: 'images/favs/JahBowstoTino.webp',            event: 'Senior Skyzone',        caption: 'Santino S & Elijah B' },
+  { src: 'images/favs/BorntoPresent.webp',            event: 'VE Warriors',           caption: 'Baran C, Austin V, Isaac H, Liv K, Sacha P, Santiago C & Iffah S' },
+  { src: 'images/favs/LicctotheMax.webp',             event: 'Senior Skyzone',        caption: 'D Licciardo, Max C, Aryanna M, Santino S & Ibrahim M' },
   { src: 'images/favs/AngelsTacos.webp',              event: '',                      caption: 'Milo M, Rayan G, Arnav S, Katally L, Leslie T, Morgan M, Jayden O, Josh S & Austin V' },
+  { src: 'images/favs/RickyCouch.webp',               event: '',                      caption: 'Pearce W & Richard C' },
+  { src: 'images/favs/SkyzoneSquad.webp',             event: 'Senior Skyzone',        caption: 'Kailee K, Uma J, Leslie T, Morgan M & Katally L' },
+  { src: 'images/favs/TrueVueXInnOut.webp',           event: 'VE Warriors',           caption: 'Matt C & Leslie T' },
+  { src: 'images/favs/Esscentials.webp',              event: '',                      caption: 'Milo M, Evan M & Carson C' },
 ];
 
 let favOrder = FAVORITES.map((_, i) => i);
