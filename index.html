@@ -483,6 +483,13 @@
     pointer-events: none; opacity: 0; transition: opacity 0.2s;
   }
   .person-card:hover .person-card-tag { opacity: 1; }
+  .site-footer {
+    max-width: 1200px; margin: 32px auto 24px; padding: 16px 24px 0;
+    border-top: 0.5px solid var(--border);
+    font-size: 11px; color: var(--ink-3); text-align: center; line-height: 1.6;
+  }
+  .site-footer a { color: var(--ink-3); text-decoration: underline; text-underline-offset: 2px; }
+  .site-footer a:hover { color: var(--gold, #b8893a); }
   .person-card.locked img { filter: blur(14px); transform: scale(1.12); }
   .group-sheet-member.locked .group-sheet-member-photo img { filter: blur(10px); transform: scale(1.15); }
   .popup.locked .popup-photo img { filter: blur(22px); transform: scale(1.12); }
@@ -998,6 +1005,17 @@
 
     /* Popup */
     .popup { width: calc(100vw - 2rem); }
+
+    /* Locked-card gate — bigger tap targets on touch devices */
+    .popup-gate-mini { padding: 7px 8px 7px 12px; gap: 8px; margin-top: 16px; }
+    .popup-gate-mini svg { width: 14px; height: 14px; }
+    .popup-gate-mini input { font-size: 14px; width: 130px; padding: 4px 0; }
+    .popup-gate-mini input::placeholder { font-size: 13px; }
+    .popup-gate-mini button { width: 30px; height: 30px; font-size: 15px; }
+
+    /* Footer */
+    .site-footer { margin: 28px 1rem 20px; padding: 14px 4px 0; font-size: 10.5px; line-height: 1.55; }
+    .site-footer a { display: inline-block; padding: 2px 0; }
 
     /* Stats */
     .pie-section { grid-template-columns: 1fr; }
@@ -3582,7 +3600,60 @@ const ARCHIVE_SECTIONS = [
       {file:'TealCommitment.webp',        post:'', caption:'Peyton T, Uma J, Jianna D, Jaedon B, Ellie C, Murad M, Carson C, Mason N, Michael H, Katally L, Amreen I, Austin V, Arnav S, Rayan G, Farishta I & Iffah S'}
     ],
     posts: [] },
-  { id: 'arc-lastday',    label: 'Last Day of School', cols: 3, type: 'p',   comingSoon: true,
+  { id: 'arc-lastday',    label: 'Last Day of School', cols: 3, type: 'p',   comingSoon: false,
+    imgFolder: 'ld',
+    images: [
+      {file:'ByeSiply.webp',           post:'', caption:'Isaac H, Josue G, Evan M, Nathan H, Cash T, Nico M, Ruth Z, Preston W, Brandon Ca, Julian A, Andrew C, Milo M, Sacha P, Nik B, Jayden C, Uma J, Kiana V, Iffah S, Nancy S & T Isaacs'},
+      {file:'TopThreeSneakyboos.webp', post:'', caption:'Aryanna M, Milo M & Kiana V'},
+      {file:'BestThirdPeriod.webp',    post:'', caption:'Shirom M, Jackson R, Murad M, Justin T, Brandon Ch, Matt I, Destiny P, Zach A, Jeromy M, Connor P, Matt C, Kiyomi P, Danya I, Samana N, Pearce W, Evelynn N, Leslie T, Evan M, Janae A, Abram M, Omar A, Santino S, Milo M, Grace D, Amani C, Eden W, Luna C & J Chang'},
+      {file:'BruceWaynes.webp',        post:'', caption:'Austin V, Rayan G, Arnav S & Ibrahim M'},
+      {file:'AryKiana.webp',           post:'', caption:'Aryanna M & Kiana V'},
+      {file:'Airballing.webp',         post:'', caption:'Aryanna M & Luke D'},
+      {file:'MeetMeHalfway.webp',      post:'', caption:'Jayden O, Parin L, Josh S, Sacha P & Nathan S'},
+      {file:'TuffonCulver.webp',       post:'', caption:'Milo M & Omar A'},
+      {file:'Carried.webp',            post:'', caption:'Jayden C, Ibrahim M, Jayden O, Parin L, Evan M, Max C, Milo M, Andrew C, James W & Josh S'},
+      {file:'TuffCollab.webp',         post:'', caption:'Kiana V, Aryanna M & Janae A'},
+      {file:'PrestonWSbs.webp',        post:'', caption:'Kiana V, Preston W & Aryanna M'},
+      {file:'RastegarTuff.webp',       post:'', caption:'Kiana V, Aryanna M, Artin R, Evan M & Nathan S'},
+      {file:'WhatHandsignisthis.webp', post:'', caption:'Santiago C, Andrew C & Milo M'},
+      {file:'EDC.webp',                post:'', caption:'Andrew C & Artin R'},
+      {file:'LimbonotBrent.webp',      post:'', caption:'Brandon Ca, Andrew C & Artin R'},
+      {file:'DiscoLines.webp',         post:'', caption:'Jayden C, Ibrahim M, James W, Daemeon M, Jesiah H, Nathan S, Sacha P, Josh S, Rayan G, Max C, Matt C, Connor P, Hunter W, Austin V, Brandon Ca, Nico M, Arnav S, Parin L, Milo M, Pearce W & Aryan L'},
+      {file:'YQueFue.webp',            post:'', caption:'Andrew C, Jayden C, Santino S, Milo M, Parin L, Nathan H, Brandon Ca & Matt C'},
+      {file:'Subtronics.webp',         post:'', caption:'Class of 2026'},
+      {file:'ArtinnSantino.webp',      post:'', caption:'Artin R & Santino S'},
+      {file:'LastPepRally.webp',       post:'', caption:'Class of 2026'},
+      {file:'ReadytoSurf.webp',        post:'', caption:'Nyala A & Janae A'},
+      {file:'SwagSurfin.webp',         post:'', caption:'Daemeon M, Josue G, Baran C, Kai A, Brandon Ca, Artin R & Cash T'},
+      {file:'WheresTheBoard.webp',     post:'', caption:'Hannah S, Hunter W, Preston W, Josh S, Aryan L & Matt C'},
+      {file:'GreatPark.webp',          post:'', caption:'Jesiah H, Santino S, James W & Milo M'},
+      {file:'BestFifthPeriod.webp',    post:'', caption:'Preston W, Nima P, Ryan Y, Brandon Ca, Santiago C, Josue G, Parin L, Andrew C, Kai A, Sacha P, James W, Brent L, Ibrahim M, Jesiah H, Jayden C, Iffah S, Uma J, Kailee K, Ruth Z & J Chang'},
+      {file:'ByeByeShriShri.webp',     post:'', caption:'Milo M & Shriyes C'},
+      {file:'MiloTheoAdrian.webp',     post:'', caption:'Milo M, Theo W & Adrian Z'},
+      {file:'SiplyMarketing.webp',     post:'', caption:'Milo M & Nik B'},
+      {file:'MiloBigJ.webp',           post:'', caption:'Milo M & Jayden H'},
+      {file:'BananaWithLicc.webp',     post:'', caption:'Jayden T, Iffah S, Farishta I, Luna C, Destiny P, Jaedon B & D Licciardo'},
+      {file:'ChickeninLot.webp',       post:'', caption:'Jesiah H, Baran C, Andrew C, Sacha P, Evan M, Brent L, Santino S & Daemeon M'},
+      {file:'Realest.webp',            post:'', caption:'Abram M, Evelynn N, Ryan Y, Evan M, Nancy S & Kiana V'},
+      {file:'Tuffest.webp',            post:'', caption:'Murad M, Peyton T & Jeromy M'},
+      {file:'Blue.webp',               post:'', caption:'Iffah S, Jianna D & Destiny P'},
+      {file:'RetroASB.webp',           post:'', caption:'Rayan R, Aiza Q, Carson C, Kailee K & T Isaacs'},
+      {file:'ThankuASB.webp',          post:'', caption:'Aiza Q, Kailee K & Rayan R'},
+      {file:'BestVE.webp',             post:'', caption:'Carson C & T Isaacs'},
+      {file:'Kiss.webp',               post:'', caption:'Sacha P & Andrew C'},
+      {file:'GoatCompanyBanner.webp',  post:'', caption:'Kiana V & Nancy S'},
+      {file:'TurninSurfaces.webp',     post:'', caption:'Nancy S, Leslie T, Evelynn N, Murad M, Peyton T & Grace D'},
+      {file:'Team.webp',               post:'', caption:'Ibrahim M, James W, Brent L & Milo M'},
+      {file:'ForeheadKisses.webp',     post:'', caption:'Andrew C, Sacha P, Santiago C & Nathan H'},
+      {file:'SunmoonTrio.webp',        post:'', caption:'Morgan M, Ava L & Alethia D'},
+      {file:'RememberSunmoon.webp',    post:'', caption:'Kiyomi P & Jayden T'},
+      {file:'YCStartup.webp',          post:'', caption:'Milo M, Artin R & Arnav S'},
+      {file:'SantinoFunCorner.webp',   post:'', caption:'Milo M & Santino S'},
+      {file:'GreatestCoders.webp',     post:'', caption:'Milo M & Brandon Ch'},
+      {file:'DanyaandAbram.webp',      post:'', caption:'Abram M & Danya I'},
+      {file:'KabaLastDay.webp',        post:'', caption:'Santino S, Milo M & Jaedon B'},
+      {file:'JamesVanLastRide.webp',   post:'', caption:'Brent L, James W, Max C, Preston W & Santino S'}
+    ],
     posts: [] },
   { id: 'arc-graduation', label: 'Graduation',      cols: 3, type: 'p',    comingSoon: true,
     posts: [] },
@@ -4241,7 +4312,7 @@ const FAVORITES = [
   { src: 'images/favs/Sushi.webp',                    event: '',                      caption: 'Iffah S, Danya I & Farishta I' },
   { src: 'images/favs/CholoSquat.webp',               event: 'Trunk or Treat',        caption: 'Jayden O, Daemeon M & Jayden C' },
   { src: 'images/favs/TillerDays.webp',               event: 'Tustin Tiller Days',    caption: 'Nyala A, Luke D, Aryanna M & Nancy S' },
-  { src: 'images/favs/MIB.webp',                      event: '',                      caption: 'Cooper M & Jayden T' },
+  { src: 'images/favs/ProfessionallyWet.webp',        event: '',                      caption: 'Cooper M & Jayden T' },
   { src: 'images/favs/Haas.webp',                     event: '',                      caption: 'Artin R' },
   { src: 'images/favs/BrandonSon.webp',               event: '',                      caption: 'Brandon Ch & Samana N' },
   { src: 'images/favs/YbSquad.webp',                  event: 'Pep Rally',             caption: 'Veronika A, Hunter W & Matt C' },
@@ -4363,7 +4434,7 @@ const FAVORITES = [
   { src: 'images/favs/PiedNathan.webp',               event: 'Pie a Senior',          caption: 'Amreen I & Nathan S' },
   { src: 'images/favs/RedCross.webp',                 event: '',                      caption: 'Uma J & Rayan R' },
   { src: 'images/favs/Dybala.webp',                   event: '',                      caption: 'Josue G' },
-  { src: 'images/favs/FBLA.webp',                     event: 'FBLA',                  caption: 'Sacha P, Rayan G & Artin R' },
+  { src: 'images/favs/FBLATrio.webp',                 event: 'FBLA',                  caption: 'Sacha P, Rayan G & Artin R' },
   { src: 'images/favs/DoomScroll.webp',               event: '',                      caption: 'Brandon Ch' },
   { src: 'images/favs/InterCompany.webp',             event: '',                      caption: 'Jayden C, James W, Milo M, Rayan G, Elijah B, Max C, Jayden O, Nathan S, Katally L, Kailee K, Brandon Ca & Pearce W' },
   { src: 'images/favs/Janae&Omar.webp',               event: 'Prom',                  caption: 'Janae A & Omar A' },
@@ -4963,5 +5034,9 @@ function launchConfetti() {
   }, { passive: true });
 })();
 </script>
+<footer class="site-footer">
+  <div>© 2026 Milo Madolora · Class of 2026 yearbook · Student-made, not officially affiliated with Legacy Magnet Academy.</div>
+  <div>No tracking, no analytics, no personal data collected. To request that your photo or any content be removed, email <a href="mailto:milomadatu@gmail.com">milomadatu@gmail.com</a>.</div>
+</footer>
 </body>
 </html>
