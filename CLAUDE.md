@@ -53,7 +53,7 @@ Landing stats at lines ~1050–1052: Seniors / Universities / States. (See Unive
 
 ## Event tag conventions (case-sensitive, used in FAVORITES)
 
-`In the Lab`, `Pie a Senior`, `Halloween`, `HS Volleyball`, `HS Water Polo`, `Senior Assassin`, `Flour Baby`, `VE Warriors`, `Soak a Senior`, `Winter Formal`, `Prom`, `Denim & White Dinner`, `Senior Skyzone`, `Senior Awards Night`, `Last Day of School`, `Pep Rally`, `Trunk or Treat`, `Karaoke`, `Tustin Tiller Days`, `Tustin Soccer`, `Los Alamos`, `Senior Sunrise`, `Senior Blues`, `Senior Trip`, `Senior Field Day`, `Mouse Ear Decoration`, `Field Trip`, `New York`, `Bakersfield`, `PJ Day`, `Twin Day`, `BJ's Restaurant`, `FBLA`, `Friday Night Lights`, `Ricky's Birthday`, `Filipino Club Bonfire`, `SoFi Stadium`, `Shot by Jayden C`, `White Lies`, `Robotics`, `Not in the Class of 2026`.
+`In the Lab`, `Pie a Senior`, `Halloween`, `HS Volleyball`, `HS Water Polo`, `Senior Assassin`, `Flour Baby`, `VE Warriors`, `Soak a Senior`, `Winter Formal`, `Prom`, `Denim & White Dinner`, `Senior Skyzone`, `Senior Awards Night`, `Last Day of School`, `Senior Sunset`, `Graduation`, `Grad Nite`, `Pep Rally`, `Trunk or Treat`, `Karaoke`, `Tustin Tiller Days`, `Tustin Soccer`, `Los Alamos`, `Senior Sunrise`, `Senior Blues`, `Senior Trip`, `Senior Field Day`, `Mouse Ear Decoration`, `Field Trip`, `New York`, `Bakersfield`, `PJ Day`, `Twin Day`, `BJ's Restaurant`, `FBLA`, `Friday Night Lights`, `Ricky's Birthday`, `Filipino Club Bonfire`, `SoFi Stadium`, `Shot by Jayden C`, `White Lies`, `Robotics`, `Not in the Class of 2026`.
 
 ## Carousel captions (timeline)
 
