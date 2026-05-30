@@ -438,6 +438,14 @@
   .carousel-track { display: flex; gap: 8px; will-change: transform; transition: transform 0.72s cubic-bezier(0.16,1,0.3,1); }
   .carousel-track.cols-3 .carousel-slide { flex: 0 0 calc(33.333% - 5.5px); min-width: 0; }
   .carousel-track.cols-2 .carousel-slide { flex: 0 0 calc(50% - 4px); min-width: 0; }
+  .carousel-track.cols-1 .carousel-slide { flex: 0 0 100%; min-width: 0; }
+  .carousel-track.cols-2 .carousel-slide.carousel-slide-video { flex: 0 0 100%; }
+  .carousel-track.cols-3 .carousel-slide.carousel-slide-video { flex: 0 0 100%; }
+  .carousel-slide-video {
+    background: #000; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .carousel-slide-video iframe { display: block; width: 100%; aspect-ratio: 16/9; border: 0; }
   .carousel-slide blockquote.instagram-media { border-radius: 12px !important; }
   .carousel-slide a.local-img-link { display: block; border-radius: 12px; overflow: hidden; line-height: 0; }
   .carousel-slide a.local-img-link img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; border-radius: 12px; }
@@ -511,12 +519,33 @@
   }
   .person-card:hover .person-card-tag { opacity: 1; }
   .site-footer {
-    max-width: 1200px; margin: 32px auto 24px; padding: 16px 24px 0;
+    max-width: 1200px; margin: 32px auto 24px; padding: 20px 24px 0;
     border-top: 0.5px solid var(--border);
     font-size: 11px; color: var(--ink-3); text-align: center; line-height: 1.6;
   }
   .site-footer a { color: var(--ink-3); text-decoration: underline; text-underline-offset: 2px; }
   .site-footer a:hover { color: var(--gold, #b8893a); }
+  .site-footer-about { max-width: 580px; margin: 0 auto 16px; }
+  .site-footer-eyebrow {
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.14em; color: var(--gold, #b8893a); margin-bottom: 10px;
+  }
+  .site-footer-about p { font-size: 12.5px; color: var(--ink-2); line-height: 1.6; margin: 0 0 12px; }
+  .site-footer-about p:last-child { margin-bottom: 0; }
+  .site-footer-links {
+    display: flex; flex-wrap: wrap; gap: 6px 12px;
+    justify-content: center; margin-top: 4px;
+  }
+  .site-footer-links a {
+    font-size: 12px; font-weight: 600; color: var(--gold, #b8893a);
+    text-decoration: none; padding: 4px 10px; border-radius: 999px;
+    border: 1px solid rgba(184,137,58,0.25);
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .site-footer-links a:hover {
+    background: var(--gold, #b8893a); color: #fff; border-color: var(--gold, #b8893a);
+  }
+  .site-footer-fine { padding-top: 14px; border-top: 0.5px solid var(--border); margin-top: 18px; }
   .person-card.locked img { filter: blur(14px); transform: scale(1.12); }
   .group-sheet-member.locked .group-sheet-member-photo img { filter: blur(10px); transform: scale(1.15); }
   .popup.locked .popup-photo img { filter: blur(22px); transform: scale(1.12); }
@@ -1159,6 +1188,24 @@
       <!-- Events calendar -->
       <div class="events-strip" id="events-strip"></div>
     </div>
+    <footer class="site-footer">
+      <div class="site-footer-about">
+        <div class="site-footer-eyebrow">A note from Milo</div>
+        <p>I've had a lot of fun documenting senior year with all of you guys. Check out all the work Katally, Leslie, Uma, Evelynn, Amreen, Rayan, and I have been doing — on Instagram and right here.</p>
+        <div class="site-footer-links">
+          <a href="https://www.instagram.com/legacydecisions.26/" target="_blank" rel="noopener">@legacydecisions.26</a>
+          <a href="https://www.instagram.com/26seniorarchives/" target="_blank" rel="noopener">@26seniorarchives</a>
+          <a href="https://www.instagram.com/legacy.classof2026/" target="_blank" rel="noopener">@legacy.classof2026</a>
+          <a href="https://github.com/milomadatu/lma-class-of-2026" target="_blank" rel="noopener" aria-label="View source on GitHub">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="vertical-align:-2px;margin-right:5px"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>Source
+          </a>
+        </div>
+      </div>
+      <div class="site-footer-fine">
+        <div>© 2026 Milo Madolora · Class of 2026 yearbook · Student-made, not officially affiliated with Legacy Magnet Academy.</div>
+        <div>No tracking, no analytics, no personal data collected. To request that your photo or any content be removed, email <a href="mailto:milomadatu@gmail.com">milomadatu@gmail.com</a>.</div>
+      </div>
+    </footer>
   </div>
 
   <!-- ARCHIVE -->
@@ -3173,6 +3220,7 @@ function showPage(id, btn) {
 /* ── Archive data — add/remove shortcodes here to update carousels ── */
 const ARCHIVE_SECTIONS = [
   { id: 'arc-videos',  label: 'Videos',          cols: 2, type: 'reel', comingSoon: false,
+    youtube: [{id: 'ufM5CuacPFo', start: 2584, caption: 'LMA Commencement — Class of 2026'}],
     posts: ['DNv8MtA5NXn', 'DOEzRUkkgSU', 'DXvO18RoLeC', 'DX0L0pIyCrM', 'DX2zWMCIFAJ', 'DYB8d9ptw-4', 'DYbk_WxNtx9', 'DYoRx6kN080', 'DYpxgWzv6Z-', 'DYpyamHBU3c'] },
   { id: 'arc-lfd',     label: 'Last First Day',   cols: 3, type: 'p',    comingSoon: false,
     images: [
@@ -3728,7 +3776,12 @@ function makeCarouselHTML(sec) {
     const url = `https://www.instagram.com/${sec.type}/${id}/`;
     return `<div class="carousel-slide"><blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:12px;box-shadow:var(--shadow-sm);margin:0;max-width:100%;min-width:0;width:100%;"></blockquote></div>`;
   });
-  const slides = [...imgSlides, ...embedSlides].join('');
+  const ytSlides = (sec.youtube || []).map(({id, start, caption}) => {
+    const startParam = start ? `?start=${start}` : '';
+    const title = (caption || sec.label || 'video').replace(/"/g, '&quot;');
+    return `<div class="carousel-slide carousel-slide-video"><iframe src="https://www.youtube-nocookie.com/embed/${id}${startParam}" title="${title}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
+  });
+  const slides = [...imgSlides, ...embedSlides, ...ytSlides].join('');
   return `<div class="carousel-outer">
     <button class="carousel-arrow prev-arrow" disabled aria-label="Previous">${ARROW_PREV}</button>
     <div class="carousel-viewport"><div class="carousel-track cols-${sec.cols}">${slides}</div></div>
@@ -4215,27 +4268,44 @@ function initCarousels(root) {
     const resetBtn = outer.closest('.archive-section')?.querySelector('.carousel-reset') || null;
     if (!viewport || !track) return;
 
-    let idx = 0, timer = null, _sw = 0;
+    let idx = 0, timer = null, _positions = null, maxIdx = 0;
     const cols = track.classList.contains('cols-3') ? 3 : track.classList.contains('cols-2') ? 2 : 1;
     const slides = [...track.querySelectorAll('.carousel-slide')];
-    const maxIdx = Math.max(0, slides.length - cols);
 
-    function slideW() {
-      if (!_sw) _sw = slides[0] ? slides[0].offsetWidth + 8 : viewport.clientWidth;
-      return _sw;
+    function computePositions() {
+      _positions = [];
+      let off = 0;
+      for (let i = 0; i < slides.length; i++) {
+        _positions.push(off);
+        off += slides[i].offsetWidth + 8;
+      }
+      const trackW = slides.length ? _positions[slides.length - 1] + slides[slides.length - 1].offsetWidth : 0;
+      const vpW = viewport.clientWidth;
+      const targetPos = Math.max(0, trackW - vpW);
+      maxIdx = 0;
+      for (let i = 0; i < _positions.length; i++) {
+        if (_positions[i] <= targetPos + 1) maxIdx = i;
+        else break;
+      }
+    }
+
+    function positions() {
+      if (!_positions) computePositions();
+      return _positions;
     }
 
     function goTo(i, animate) {
+      if (!_positions) computePositions();
       idx = Math.max(0, Math.min(i, maxIdx));
-      const sw = slideW();
+      const pos = _positions[idx] || 0;
       track.style.transition = animate === false ? 'none' : 'transform 0.72s cubic-bezier(0.16,1,0.3,1)';
-      track.style.transform = `translateX(-${idx * sw}px)`;
+      track.style.transform = `translateX(-${pos}px)`;
       if (prev) prev.disabled = idx <= 0;
       if (next) next.disabled = idx >= maxIdx;
       if (resetBtn) resetBtn.classList.toggle('visible', idx > 0);
     }
 
-    viewport._swReset = () => { _sw = 0; requestAnimationFrame(() => goTo(idx, false)); };
+    viewport._swReset = () => { _positions = null; requestAnimationFrame(() => goTo(idx, false)); };
     _carouselRO.observe(viewport);
     requestAnimationFrame(() => goTo(0, false));
 
@@ -5107,6 +5177,20 @@ function launchConfetti() {
   }).join('');
 })();
 
+/* ── Hidden hello in the console ── */
+console.log(
+  `%c[ lma '26 ]
+
+  seniors      ${typeof people !== 'undefined' ? people.length : '101'}
+  photos       ${typeof FAVORITES !== 'undefined' ? FAVORITES.length : '500'}
+  carousels    ${typeof ARCHIVE_SECTIONS !== 'undefined' ? ARCHIVE_SECTIONS.length : '17'}
+  universities ${typeof universities !== 'undefined' ? universities.filter(u => u.igPosts && u.igPosts.length).length : '—'}
+  built        Aug 2025 – May 2026
+
+  ping milomadatu@gmail.com`,
+  'color:#c8a84b;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;'
+);
+
 /* ── Graduation celebration — confetti + elapsed time tooltip ── */
 (function() {
   const KEY = 'lma_grad_confetti_v1';
@@ -5145,9 +5229,5 @@ function launchConfetti() {
   }, { passive: true });
 })();
 </script>
-<footer class="site-footer">
-  <div>© 2026 Milo Madolora · Class of 2026 yearbook · Student-made, not officially affiliated with Legacy Magnet Academy.</div>
-  <div>No tracking, no analytics, no personal data collected. To request that your photo or any content be removed, email <a href="mailto:milomadatu@gmail.com">milomadatu@gmail.com</a>.</div>
-</footer>
 </body>
 </html>
